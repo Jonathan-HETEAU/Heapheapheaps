@@ -27,4 +27,7 @@ python3 tools/build.py all --src src
 python3 -m http.server -d site
 ```
 
-The examples of the guides (`guides/examples/`) are compiled by `tools/check-examples.sh` (needs Haxe and the libraries).
+Checking the examples (needs Haxe and the libraries as haxelib dev libraries):
+
+- `tools/check-examples.sh` compiles the examples of the guides (`guides/examples/`).
+- `python3 tools/snippets/check.py --src src` type checks every ```` ```haxe ```` example of the doc comments and READMEs of the libraries, in the context described in `tools/snippets/context.py`.
