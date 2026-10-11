@@ -1,0 +1,55 @@
+name: Publish
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    - cron: "17 4 * * *"
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install markdown==3.7
+      - name: Clone the documented repositories
+        run: |
+          python3 - <<'PY'
+          import json, subprocess
+          for r in json.load(open("sources.json"))["repos"]:
+              subprocess.run(["git", "clone", "--depth", "1", "--branch", r["branch"],
+                  "https://github.com/%s.git" % r["github"], "src/" + r["id"]], check=True)
+          PY
+      - run: python3 tools/build.py all --src src
+      - name: Commit the regenerated Markdown content
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A content
+          git diff --cached --quiet || (git commit -m "Regenerate the documentation content" && git push)
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

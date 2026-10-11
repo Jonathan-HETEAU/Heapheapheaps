@@ -1,0 +1,4524 @@
+# hlsteam API (full text)
+
+> hlsteam is a Haxe wrapper of the Steamworks API for HashLink (native library `steam.hdll`): initialization and callbacks (`steam.Api`), achievements, stats and leaderboards, cloud files, Workshop (UGC), friends, lobbies and matchmaking, networking, game servers, timeline and Steam Input controllers. See the README for the setup.
+
+# steam.Api
+
+**class** · package [`steam`](README.md) · source [`steam/Api.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Api.hx)
+
+The entry point of the Steam API: call `init` at startup, then use the functions of this class (achievements, stats, leaderboards, overlay, ownership) and of the other classes of the `steam` package. The Steam callbacks are run by `sync`, called automatically by the main loop.
+
+## Static variables
+
+### active
+
+```haxe
+static var active(default, null):Bool
+```
+
+* Whether the Steam API is detected & initialized or not. If false, all calls will fail
+
+### appId
+
+```haxe
+static var appId(default, null):Int
+```
+
+The Steam app id given to `init`.
+
+### controllers
+
+```haxe
+static var controllers(default, null):Controller
+```
+
+* The Steam Controller API
+
+### whenGamepadTextInputDismissed
+
+```haxe
+static var whenGamepadTextInputDismissed:() -> Void
+```
+
+Called when the gamepad text input is closed, with the entered text, or `null` if it was cancelled.
+
+### whenAchievementStored
+
+```haxe
+static var whenAchievementStored:() -> Void
+```
+
+Called when an achievement was stored, with its API name.
+
+### whenLeaderboardScoreDownloaded
+
+```haxe
+static var whenLeaderboardScoreDownloaded:() -> Void
+```
+
+Called with each score downloaded by `downloadLeaderboardScore`.
+
+### whenLeaderboardScoreUploaded
+
+```haxe
+static var whenLeaderboardScoreUploaded:() -> Void
+```
+
+Called when a score was uploaded by `uploadLeaderboardScore`.
+
+### onOverlay
+
+```haxe
+static var onOverlay:() -> Void
+```
+
+Called when the Steam overlay is opened (`true`) or closed (`false`).
+
+## Static methods
+
+### init
+
+```haxe
+static function init(appId_:Int):Bool
+```
+
+* @param appId_	Your Steam APP ID (the numbers on the end of your store page URL - store.steampowered.com/app/XYZ)
+
+### registerGlobalEvent
+
+```haxe
+static function registerGlobalEvent(event:Int, callb:() -> Void):Void
+```
+
+Sets the function called for a Steam callback, by its callback id (`k_iCallback` of the Steamworks structure). Used by the classes of the `steam` package.
+
+### setNotificationPosition
+
+```haxe
+static function setNotificationPosition(pos:SteamNotificationPosition):Void
+```
+
+Not implemented: does nothing.
+
+### sync
+
+```haxe
+static function sync():Void
+```
+
+Runs the Steam callbacks and stores the stats if requested. Called by the main loop after `init`.
+
+### clearAchievement
+
+```haxe
+static function clearAchievement(id:String):Bool
+```
+
+* Clear an achievement
+* @param   id  achievement identifier
+* @return
+
+### downloadLeaderboardScore
+
+```haxe
+static function downloadLeaderboardScore(id:String):Bool
+```
+
+Requests the score of the user in the leaderboard, received by `whenLeaderboardScoreDownloaded`. Returns `false` if Steam is not active.
+
+### getAchievement
+
+```haxe
+static function getAchievement(id:String):Bool
+```
+
+* Returns achievement status.
+* @param id Achievement API name.
+* @return true, if achievement already achieved, false otherwise.
+
+### getAchievementDescription
+
+```haxe
+static function getAchievementDescription(id:String):String
+```
+
+* Returns human-readable achievement description.
+* @param id Achievement API name.
+* @return UTF-8 string with achievement description.
+
+### getAchievementName
+
+```haxe
+static function getAchievementName(id:String):String
+```
+
+* Returns human-readable achievement name.
+* @param id Achievement API name.
+* @return UTF-8 string with achievement name.
+
+### getCurrentGameLanguage
+
+```haxe
+static function getCurrentGameLanguage():String
+```
+
+Returns the language selected by the user for the game (`english`, `french`...), or `null`.
+
+### getCurrentBetaName
+
+```haxe
+static function getCurrentBetaName():String
+```
+
+Returns the name of the beta branch the user is on, or `null`.
+
+### getStatFloat
+
+```haxe
+static function getStatFloat(id:String):Float
+```
+
+* Get a stat from steam as a float
+* Kinda awkwardly returns 0 on errors and uses 0 for checking success
+* @param   id
+* @return
+
+### getStatInt
+
+```haxe
+static function getStatInt(id:String):Int
+```
+
+* Get a stat from steam as an integer
+* Kinda awkwardly returns 0 on errors and uses 0 for checking success
+* @param   id
+* @return
+
+### getUser
+
+```haxe
+static function getUser():Null<Null<User>>
+```
+
+Returns the current user, or `null` if Steam is not active.
+
+### indicateAchievementProgress
+
+```haxe
+static function indicateAchievementProgress(id:String, curProgress:Int, maxProgress:Int):Bool
+```
+
+Shows a progress notification for the achievement.
+
+### isOverlayEnabled
+
+```haxe
+static function isOverlayEnabled():Bool
+```
+
+Tells if the Steam overlay is enabled.
+
+### isDlcInstalled
+
+```haxe
+static function isDlcInstalled(appid:Int):Bool
+```
+
+Tells if the DLC of the given app id is installed.
+
+### getAppInstallDir
+
+```haxe
+static function getAppInstallDir(appid:Int):String
+```
+
+Returns the install folder of the app, or `null`.
+
+### isAppOwned
+
+```haxe
+static function isAppOwned(appid:Int):Bool
+```
+
+Tells if the user owns the app (from its app ownership ticket). Returns `false` if the native library doesn't have this function.
+
+### isAppInstalled
+
+```haxe
+static function isAppInstalled(appid:Int):Bool
+```
+
+Tells if the app is installed. Returns `false` if the native library doesn't have this function.
+
+### BOverlayNeedsPresent
+
+```haxe
+static function BOverlayNeedsPresent():Bool
+```
+
+Tells if the overlay needs the game to present a frame (when the game doesn't render continuously).
+
+### isSteamInBigPictureMode
+
+```haxe
+static function isSteamInBigPictureMode():Bool
+```
+
+Tells if Steam runs in Big Picture mode.
+
+### isSteamRunningOnSteamDeck
+
+```haxe
+static function isSteamRunningOnSteamDeck():Bool
+```
+
+Tells if the game runs on a Steam Deck.
+
+### isSteamRunning
+
+```haxe
+static function isSteamRunning():Bool
+```
+
+Tells if the Steam client is running.
+
+### openOverlay
+
+```haxe
+static function openOverlay(url:String):Void
+```
+
+Opens the web page in the Steam overlay.
+
+### restartIfNecessary
+
+```haxe
+static function restartIfNecessary(appId:Int):Bool
+```
+
+Tells if the game was not launched by Steam: Steam then restarts it, and the game should exit. Call it before `init`.
+
+### shutdown
+
+```haxe
+static function shutdown():Void
+```
+
+Shuts down the Steam API.
+
+### setAchievement
+
+```haxe
+static function setAchievement(id:String):Bool
+```
+
+Unlocks the achievement. Call `storeStats` to send it.
+
+### isAchievementHidden
+
+```haxe
+static function isAchievementHidden(id:String):Bool
+```
+
+* Returns achievement "hidden" flag.
+* @param id Achievement API name.
+* @return true, if achievement is flagged as hidden, false otherwise.
+
+### getNumAchievements
+
+```haxe
+static function getNumAchievements():Int
+```
+
+* Returns amount of achievements.
+* Used for iterating achievements. In general games should not need these functions because they should have a
+* list of existing achievements compiled into them.
+
+### getAchievementAPIName
+
+```haxe
+static function getAchievementAPIName(index:Int):String
+```
+
+* Returns achievement API name from its index in achievement list.
+* @param index Achievement index in range [0,getNumAchievements].
+* @return Achievement API name.
+
+### setStatFloat
+
+```haxe
+static function setStatFloat(id:String, val:Float):Bool
+```
+
+* Sets a steam stat as a float
+* @param   id Stat API name
+* @param   val
+* @return
+
+### setStatInt
+
+```haxe
+static function setStatInt(id:String, val:Int):Bool
+```
+
+* Sets a steam stat as an int
+* @param   id Stat API name
+* @param   val
+* @return
+
+### storeStats
+
+```haxe
+static function storeStats():Bool
+```
+
+Sends the changed stats and achievements to the server.
+
+### uploadLeaderboardScore
+
+```haxe
+static function uploadLeaderboardScore(score:LeaderboardScore):Bool
+```
+
+Uploads a score to its leaderboard, if it is better than the previous one (`whenLeaderboardScoreUploaded` is called). Returns `false` if Steam is not active.
+
+### getAuthTicket
+
+```haxe
+static function getAuthTicket(?onReady:() -> Void):Bytes
+```
+
+Returns an authentication session ticket, to send to a server which checks it with Steam, or `null`. `onReady` is called with `true` when the ticket is valid, or `false` on error or after 15 seconds.
+
+### getEncryptedAppTicket
+
+```haxe
+static function getEncryptedAppTicket(data:Bytes, onReady:() -> Void):Void
+```
+
+Requests an encrypted app ticket containing the data (or `null`), given to `onReady` (`null` on failure).
+
+### customTrace
+
+```haxe
+static dynamic function customTrace(str:String):Void
+```
+
+Prints a log message of the API. Prints it with `Sys.println` by default.
+
+### isSubscribed
+
+```haxe
+static function isSubscribed():Bool
+```
+
+Tells if the user owns the game (or has it through a free weekend or Family Sharing).
+
+### isSubscribedFromFamilySharing
+
+```haxe
+static function isSubscribedFromFamilySharing():Bool
+```
+
+Tells if the user has the game through Family Sharing.
+
+### isSubscribedFromFreeWeekend
+
+```haxe
+static function isSubscribedFromFreeWeekend():Bool
+```
+
+Tells if the user has the game through a free weekend.
+
+### getEarliestPurchaseUnixTime
+
+```haxe
+static function getEarliestPurchaseUnixTime(appId:Int):Int
+```
+
+Returns the time of the first purchase of the app, in seconds since 1970.
+
+---
+
+# steam.AsyncCall
+
+**abstract** · package [`steam`](README.md) · source [`steam/AsyncCall.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/AsyncCall.hx)
+
+A pending asynchronous Steam call: its callback is called when it completes, unless it is cancelled.
+
+Underlying type: `steam._AsyncCall.AsyncData`
+
+## Methods
+
+### cancel
+
+```haxe
+inline function cancel():Void
+```
+
+Cancels the call: its callback won't be called.
+
+---
+
+# steam.AvatarSize
+
+**enum** · package [`steam`](README.md) · module [`steam.User`](User.md) · source [`steam/User.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/User.hx)
+
+The size of an avatar image.
+
+## Constructors
+
+### Small
+
+```haxe
+Small
+```
+
+32x32 pixels.
+
+### Medium
+
+```haxe
+Medium
+```
+
+64x64 pixels.
+
+### Large
+
+```haxe
+Large
+```
+
+184x184 pixels or more.
+
+---
+
+# steam.Callback
+
+**typedef** · package [`steam`](README.md) · source [`steam/Callback.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Callback.hx)
+
+Type parameters: `<T>`
+
+The callback of an asynchronous Steam call: the result, and `true` if the call failed.
+
+Alias for: `(steam.Callback.T, Bool) -> Void`
+
+---
+
+# steam.Changed
+
+**enum** · package [`steam`](README.md) · module [`steam.User`](User.md) · source [`steam/User.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/User.hx)
+
+The information of a user that changed (Steamworks `EPersonaChange`), given to the `User.requestInformation` callback.
+
+## Constructors
+
+### Name
+
+```haxe
+Name
+```
+
+The name.
+
+### Status
+
+```haxe
+Status
+```
+
+The online status.
+
+### ComeOnline
+
+```haxe
+ComeOnline
+```
+
+The user came online.
+
+### GoneOffline
+
+```haxe
+GoneOffline
+```
+
+The user went offline.
+
+### GamePlayed
+
+```haxe
+GamePlayed
+```
+
+The game played.
+
+### GameServer
+
+```haxe
+GameServer
+```
+
+The game server.
+
+### Avatar
+
+```haxe
+Avatar
+```
+
+The avatar.
+
+### JoinedSource
+
+```haxe
+JoinedSource
+```
+
+The user joined a group chat or lobby.
+
+### LeftSource
+
+```haxe
+LeftSource
+```
+
+The user left a group chat or lobby.
+
+### RelationshipChanged
+
+```haxe
+RelationshipChanged
+```
+
+The relationship with the user.
+
+### NameFirstSet
+
+```haxe
+NameFirstSet
+```
+
+The name was received for the first time.
+
+### FacebookInfo
+
+```haxe
+FacebookInfo
+```
+
+The Facebook information.
+
+### Nickname
+
+```haxe
+Nickname
+```
+
+The nickname given by the current user.
+
+### SteamLevel
+
+```haxe
+SteamLevel
+```
+
+The Steam level.
+
+---
+
+# steam.ChatMessageType
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Lobby`](Lobby.md) · source [`steam/Lobby.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Lobby.hx)
+
+The type of a lobby chat message (Steamworks `EChatEntryType`).
+
+Underlying type: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `Invalid` | `0` | Invalid. |
+| `ChatMsg` | `1` | Normal text message from another user |
+| `Typing` | `2` | Another user is typing (not used in multi-user chat) |
+| `InviteGame` | `3` | Invite from other user into that users current game |
+| `LeftConversation` | `6` | user has left the conversation ( closed chat window ) |
+| `Entered` | `7` | user has entered the conversation (used in multi-user chat and group chat) |
+| `WasKicked` | `8` | user was kicked (data: 64-bit steamid of actor performing the kick) |
+| `WasBanned` | `9` | user was banned (data: 64-bit steamid of actor performing the ban) |
+| `Disconnected` | `10` | user disconnected |
+| `HistoricalChat` | `11` | a chat message from user's chat history or offilne message |
+| `LinkBlocked` | `14` | a link was removed by the chat filter |
+
+---
+
+# steam.Cloud
+
+**class** · package [`steam`](README.md) · source [`steam/Cloud.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Cloud.hx)
+
+Steam Cloud: the files of the user stored by Steam and synchronized between computers (Steamworks `ISteamRemoteStorage`).
+
+## Static methods
+
+### count
+
+```haxe
+static function count():Int
+```
+
+Returns the number of files.
+
+### exists
+
+```haxe
+static function exists(name:String):Bool
+```
+
+Tells if the file exists.
+
+### size
+
+```haxe
+static function size(name:String):Int
+```
+
+Returns the size of the file, in bytes.
+
+### quota
+
+```haxe
+static function quota():{ total:Float, available:Float }
+```
+
+Returns the total and available space, in bytes.
+
+### read
+
+```haxe
+static function read(name:String):Bytes
+```
+
+Returns the content of the file, or `null` if it doesn't exist.
+
+### share
+
+```haxe
+static function share(name:String, onResult:() -> Void):AsyncCall
+```
+
+Shares the file publicly: `onResult` is called with the UID of the shared file, or `null` on error.
+
+### write
+
+```haxe
+static function write(name:String, data:Bytes):Bool
+```
+
+Writes the file. Returns `false` on error.
+
+### delete
+
+```haxe
+static function delete(name:String):Bool
+```
+
+Deletes the file. Returns `false` on error.
+
+### isEnabled
+
+```haxe
+static function isEnabled():Bool
+```
+
+Tells if Steam Cloud is enabled for the game and for the account.
+
+### isEnabledForApp
+
+```haxe
+static function isEnabledForApp():Bool
+```
+
+Tells if the user enabled Steam Cloud for the game.
+
+### isEnabledForAccount
+
+```haxe
+static function isEnabledForAccount():Bool
+```
+
+Tells if Steam Cloud is enabled for the account.
+
+### enable
+
+```haxe
+static function enable(b:Bool):Void
+```
+
+Enables or disables Steam Cloud for the game.
+
+---
+
+# steam.ComparisonFilter
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Matchmaking`](Matchmaking.md) · source [`steam/Matchmaking.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Matchmaking.hx)
+
+A comparison of a lobby list filter (Steamworks `ELobbyComparison`): how the lobby value compares to the filter value.
+
+Underlying type: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `LessThanEqual` | `-2` | Less than or equal. |
+| `LessThan` | `-1` | Less than. |
+| `Equal` | `0` | Equal. |
+| `GreaterThan` | `1` | Greater than. |
+| `GreaterThanEqual` | `2` | Greater than or equal. |
+| `NotEqual` | `3` | Not equal. |
+
+---
+
+# steam.Controller
+
+**class** · package [`steam`](README.md) · source [`steam/Controller.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Controller.hx)
+
+* The Steam Controller API. Used by API.hx, should never be created manually by the user.
+* API.hx creates and initializes this by default.
+* Access it via API.controller static variable
+
+## Static variables
+
+### MAX_SINGLE_PULSE_TIME
+
+```haxe
+static inline var MAX_SINGLE_PULSE_TIME:Int = 65535
+```
+
+The maximum duration of a single haptic pulse, in microseconds.
+
+## Variables
+
+### MAX_CONTROLLERS
+
+```haxe
+var MAX_CONTROLLERS(get, null):Int
+```
+
+* The maximum number of controllers steam can recognize. Use this for array upper bounds.
+
+### MAX_ANALOG_ACTIONS
+
+```haxe
+var MAX_ANALOG_ACTIONS(get, null):Int
+```
+
+* The maximum number of analog actions steam can recognize. Use this for array upper bounds.
+
+### MAX_DIGITAL_ACTIONS
+
+```haxe
+var MAX_DIGITAL_ACTIONS(get, null):Int
+```
+
+* The maximum number of digital actions steam can recognize. Use this for array upper bounds.
+
+### MAX_ORIGINS
+
+```haxe
+var MAX_ORIGINS(get, null):Int
+```
+
+* The maximum number of origins steam can assign to one action. Use this for array upper bounds.
+
+### MAX_ANALOG_VALUE
+
+```haxe
+var MAX_ANALOG_VALUE(get, null):Float
+```
+
+* The maximum value steam will report for an analog action.
+
+### MIN_ANALOG_VALUE
+
+```haxe
+var MIN_ANALOG_VALUE(get, null):Float
+```
+
+* The minimum value steam will report for an analog action.
+
+### active
+
+```haxe
+var active(default, null):Bool
+```
+
+* Whether the controller API is initialized or not. If false, all calls will fail.
+
+## Methods
+
+### activateActionSet
+
+```haxe
+function activateActionSet(controller:Int, actionSet:Int):Void
+```
+
+* Reconfigure the controller to use the specified action set (ie 'Menu', 'Walk' or 'Drive')
+* This is cheap, and can be safely called repeatedly. It's often easier to repeatedly call it in
+* your state loops, instead of trying to place it in all of your state transitions.
+*
+* @param   controller  handle received from getConnectedControllers()
+* @param   actionSet   handle received from getActionSetHandle()
+* @return  1 = success, 0 = failure
+
+### getCurrentActionSet
+
+```haxe
+function getCurrentActionSet(controller:Int):Int
+```
+
+* Get the handle of the current action set
+*
+* @param   controller  handle received from getConnectedControllers()
+* @return  handle of the current action set
+
+### getActionSetHandle
+
+```haxe
+function getActionSetHandle(name:String):Int
+```
+
+* Lookup the handle for an Action Set. Best to do this once on startup, and store the handles for all future API calls.
+*
+* @param   name identifier for the action set specified in your vdf file (ie, 'Menu', 'Walk' or 'Drive')
+* @return  action set handle
+
+### getAnalogActionData
+
+```haxe
+function getAnalogActionData(controller:Int, action:Int, ?data:ControllerAnalogActionData):ControllerAnalogActionData
+```
+
+* Returns the current state of the supplied analog game action
+*
+* @param   controller  handle received from getConnectedControllers()
+* @param   action  handle received from getActionSetHandle()
+* @param   data    existing ControllerAnalogActionData structure you want to fill (optional)
+* @return  data structure containing analog x,y values & other data
+
+### getAnalogActionHandle
+
+```haxe
+function getAnalogActionHandle(name:String):Int
+```
+
+* Lookup the handle for an analog (continuos range) action. Best to do this once on startup, and store the handles for all future API calls.
+*
+* @param   name    identifier for the action specified in your vdf file (ie, 'Jump', 'Fire', or 'Move')
+* @return  action analog action handle
+
+### getAnalogActionOrigins
+
+```haxe
+function getAnalogActionOrigins(controller:Int, actionSet:Int, action:Int, ?originsOut:Array<EControllerActionOrigin>):Int
+```
+
+* Get the origin(s) for an analog action with an action set. Use this to display the appropriate on-screen prompt for the action.
+* NOTE: Users can change their action origins at any time, and Valve says this is a cheap call and recommends you poll it continuosly
+* to update your on-screen glyph visuals, rather than calling it rarely and caching the values.
+*
+* @param   controller  handle received from getConnectedControllers()
+* @param   actionSet   handle received from getActionSetHandle()
+* @param   action  handle received from getAnalogActionHandle()
+* @param   originsOut  existing array of EControllerActionOrigins you want to fill (optional)
+* @return the number of origins supplied in originsOut.
+
+### getConnectedControllers
+
+```haxe
+function getConnectedControllers():Array<Int>
+```
+
+* Enumerate currently connected controllers
+*
+* NOTE: the native steam controller handles are uint64's and too large to easily pass to Haxe,
+* so the "true" values are left on the C++ side and haxe only deals with 0-based integer indeces
+* that map back to the "true" values on the C++ side
+*
+* @return controller handles
+
+### getDigitalActionData
+
+```haxe
+function getDigitalActionData(controller:Int, action:Int):ControllerDigitalActionData
+```
+
+* Returns the current state of the supplied digital game action
+*
+* @param   controller  handle received from getConnectedControllers()
+* @param   action  handle received from getDigitalActionHandle()
+* @return
+
+### getDigitalActionHandle
+
+```haxe
+function getDigitalActionHandle(name:String):Int
+```
+
+* Lookup the handle for a digital (true/false) action. Best to do this once on startup, and store the handles for all future API calls.
+*
+* @param   name    identifier for the action specified in your vdf file (ie, 'Jump', 'Fire', or 'Move')
+* @return  digital action handle
+
+### getDigitalActionOrigins
+
+```haxe
+function getDigitalActionOrigins(controller:Int, actionSet:Int, action:Int, ?originsOut:Array<EControllerActionOrigin>):Int
+```
+
+* Get the origin(s) for a digital action with an action set. Use this to display the appropriate on-screen prompt for the action.
+*
+* @param   controller  handle received from getConnectedControllers()
+* @param   actionSet   handle received from getActionSetHandle()
+* @param   action  handle received from getDigitalActionHandle()
+* @param   originsOut  existing array of EControllerActionOrigins you want to fill (optional)
+* @return the number of origins supplied in originsOut.
+
+### getGlyphForActionOrigin
+
+```haxe
+function getGlyphForActionOrigin(origin:EControllerActionOrigin):String
+```
+
+* Get a local path to art for on-screen glyph for a particular origin
+* @param   origin
+* @return
+
+### getStringForActionOrigin
+
+```haxe
+function getStringForActionOrigin(origin:EControllerActionOrigin):String
+```
+
+* Returns a localized string (from Steam's language setting) for the specified origin
+* @param   origin
+* @return
+
+### showBindingPanel
+
+```haxe
+function showBindingPanel(controller:Int):Bool
+```
+
+* Activates the Steam overlay and shows the input configuration (binding) screen
+* @return false if overlay is disabled / unavailable, or if the Steam client is not in Big Picture mode
+
+### showGamepadTextInput
+
+```haxe
+function showGamepadTextInput(inputMode:EGamepadTextInputMode, lineMode:EGamepadTextInputLineMode, description:String, ?charMax:Int = 0xFFFFFF, ?existingText:String = ""):Bool
+```
+
+* Activates the Big Picture text input dialog which only supports gamepad input
+* @param   inputMode   NORMAL or PASSWORD
+* @param   lineMode    SINGLE_LINE or MULTIPLE_LINES
+* @param   description User-facing description of what's being entered, e.g. "Please enter your name"
+* @param   charMax Maximum number of characters
+* @param   existingText    Text to pre-fill the dialog with, if any
+* @return
+
+### getEnteredGamepadTextInput
+
+```haxe
+function getEnteredGamepadTextInput():String
+```
+
+* Returns the text that the player has entered using showGamepadTextInput()
+* @return
+
+### shutdown
+
+```haxe
+function shutdown():Void
+```
+
+* Must be called when ending use of this API
+
+### hapticPulseRumble
+
+```haxe
+function hapticPulseRumble(controller:Int, targetPad:ESteamControllerPad, durationMilliSec:Int, strength:Float):Void
+```
+
+* Trigger a haptic pulse in a slightly friendlier way
+* @param   controller  handle received from getConnectedControllers()
+* @param   targetPad   which pad you want to pulse
+* @param   durationMilliSec    duration of the pulse, in milliseconds (1/1000 sec)
+* @param   strength    value between 0 and 1, general intensity of the pulsing
+
+### triggerHapticPulse
+
+```haxe
+function triggerHapticPulse(controller:Int, targetPad:ESteamControllerPad, durationMicroSec:Int):Void
+```
+
+* Trigger a single haptic pulse (low-level)
+* @param   controller  handle received from getConnectedControllers()
+* @param   targetPad   which pad you want to pulse
+* @param   durationMicroSec    duration of the pulse, in microseconds (1/1000 ms)
+
+### triggerRepeatedHapticPulse
+
+```haxe
+function triggerRepeatedHapticPulse(controller:Int, targetPad:ESteamControllerPad, durationMicroSec:Int, offMicroSec:Int, repeat:Int, flags:Int):Void
+```
+
+* Trigger a repeated haptic pulse (low-level)
+* @param   controller  handle received from getConnectedControllers()
+* @param   targetPad   which pad you want to pulse
+* @param   durationMicroSec    duration of the pulse, in microseconds (1/1,000 ms)
+* @param   offMicroSec offset between pulses, in microseconds (1/1,000 ms)
+* @param   repeat  number of pulses
+* @param   flags   special behavior flags
+
+### triggerVibration
+
+```haxe
+function triggerVibration(controller:Int, leftSpeed:Int, rightSpeed:Int):Void
+```
+
+* Trigger a vibration event on supported controllers
+* @param   controller  handle received from getConnectedControllers()
+* @param   leftSpeed   how fast the left motor should vibrate (0-65,535)
+* @param   rightSpeed  how fast the right motor should vibrate (0-65,535)
+
+### setLEDColor
+
+```haxe
+function setLEDColor(controller:Int, rgb:Int, ?flags:Int = ESteamControllerLEDFlags.SET_COLOR):Void
+```
+
+* Set the controller LED color on supported controllers.
+* @param   controller  handle received from getConnectedControllers()
+* @param   rgb an RGB color in 0xRRGGBB format
+* @param   flags   bit-masked flags combined from values defined in ESteamControllerLEDFlags
+
+### resetLEDColor
+
+```haxe
+function resetLEDColor(controller:Int):Void
+```
+
+Restores the LED color set by the user.
+
+### getGamepadIndexForController
+
+```haxe
+function getGamepadIndexForController(controller:Int):Int
+```
+
+Returns the XInput gamepad index of the controller, or `-1` if it is not emulating a gamepad.
+
+### getControllerForGamepadIndex
+
+```haxe
+function getControllerForGamepadIndex(index:Int):Int
+```
+
+Returns the controller emulating the XInput gamepad index.
+
+### getMotionData
+
+```haxe
+function getMotionData(controller:Int, ?data:ControllerMotionData):ControllerMotionData
+```
+
+* Returns the current state of the supplied analog game action
+*
+* @param   controller  handle received from getConnectedControllers()
+* @param   data    existing ControllerMotionData structure you want to fill (optional)
+* @return  data structure containing motion data values
+
+### showDigitalActionOrigins
+
+```haxe
+function showDigitalActionOrigins(controller:Int, digitalActionHandle:Int, scale:Float, xPosition:Float, yPosition:Float):Void
+```
+
+* Attempt to display origins of given action in the controller HUD, for the currently active action set
+* Returns false is overlay is disabled / unavailable, or the user is not in Big Picture mode
+* @param   controller  handle received from getConnectedControllers()
+* @param   digitalActionHandle handle received from getDigitalActionHandle()
+* @param   scale   scale multiplier to apply to the on-screen display (1.0 is 1:1 size)
+* @param   xPosition   position of the on-screen display (0.5 is the center)
+* @param   yPosition   position of the on-screen display (0.5 is the center)
+
+### showAnalogActionOrigins
+
+```haxe
+function showAnalogActionOrigins(controller:Int, analogActionHandle:Int, scale:Float, xPosition:Float, yPosition:Float):Void
+```
+
+* Attempt to display origins of given action in the controller HUD, for the currently active action set
+* Returns false is overlay is disabled / unavailable, or the user is not in Big Picture mode
+* @param   controller  handle received from getConnectedControllers()
+* @param   analogActionHandle  handle received from getDigitalActionHandle()
+* @param   scale   scale multiplier to apply to the on-screen display (1.0 is 1:1 size)
+* @param   xPosition   position of the on-screen display (0.5 is the center)
+* @param   yPosition   position of the on-screen display (0.5 is the center)
+
+---
+
+# steam.ControllerActionSetHandle
+
+**typedef** · package [`steam`](README.md) · module [`steam.Api`](Api.md) · source [`steam/Api.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Api.hx)
+
+A handle of a controller action set.
+
+Alias for: `Int`
+
+---
+
+# steam.ControllerAnalogActionData
+
+**class** · package [`steam`](README.md) · module [`steam.Controller`](Controller.md) · source [`steam/Controller.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Controller.hx)
+
+The state of an analog action.
+
+## Constructor
+
+### new
+
+```haxe
+function new():Void
+```
+
+Creates empty data.
+
+## Variables
+
+### bActive
+
+```haxe
+var bActive:Bool
+```
+
+Tells if the action is available in the current action set.
+
+### eMode
+
+```haxe
+var eMode:EControllerSourceMode
+```
+
+The mode of the source of the action.
+
+### x
+
+```haxe
+var x:Float
+```
+
+The X value.
+
+### y
+
+```haxe
+var y:Float
+```
+
+The Y value.
+
+---
+
+# steam.ControllerAnalogActionHandle
+
+**typedef** · package [`steam`](README.md) · module [`steam.Api`](Api.md) · source [`steam/Api.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Api.hx)
+
+A handle of an analog controller action.
+
+Alias for: `Int`
+
+---
+
+# steam.ControllerDigitalActionData
+
+**abstract** · package [`steam`](README.md) · module [`steam.Controller`](Controller.md) · source [`steam/Controller.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Controller.hx)
+
+The state of a digital action.
+
+Underlying type: `Int`
+
+Implicit casts from: `Int`
+
+Implicit casts to: `Int`
+
+## Static variables
+
+### bState
+
+```haxe
+static var bState(get, null):Bool
+```
+
+Tells if the action is pressed.
+
+### bActive
+
+```haxe
+static var bActive(get, null):Bool
+```
+
+Tells if the action is available in the current action set.
+
+---
+
+# steam.ControllerDigitalActionHandle
+
+**typedef** · package [`steam`](README.md) · module [`steam.Api`](Api.md) · source [`steam/Api.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Api.hx)
+
+A handle of a digital (button) controller action.
+
+Alias for: `Int`
+
+---
+
+# steam.ControllerHandle
+
+**typedef** · package [`steam`](README.md) · module [`steam.Api`](Api.md) · source [`steam/Api.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Api.hx)
+
+A handle of a connected controller (Steam Input).
+
+Alias for: `Int64`
+
+---
+
+# steam.ControllerMotionData
+
+**class** · package [`steam`](README.md) · module [`steam.Controller`](Controller.md) · source [`steam/Controller.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Controller.hx)
+
+The motion data of a controller.
+
+## Constructor
+
+### new
+
+```haxe
+function new():Void
+```
+
+Creates empty data.
+
+## Variables
+
+### rotQuatX
+
+```haxe
+var rotQuatX:Float
+```
+
+The X of the sensor-fused absolute rotation quaternion (drifts in heading).
+
+### rotQuatY
+
+```haxe
+var rotQuatY:Float
+```
+
+The Y of the absolute rotation quaternion.
+
+### rotQuatZ
+
+```haxe
+var rotQuatZ:Float
+```
+
+The Z of the absolute rotation quaternion.
+
+### rotQuatW
+
+```haxe
+var rotQuatW:Float
+```
+
+The W of the absolute rotation quaternion.
+
+### posAccelX
+
+```haxe
+var posAccelX:Float
+```
+
+The X positional acceleration.
+
+### posAccelY
+
+```haxe
+var posAccelY:Float
+```
+
+The Y positional acceleration.
+
+### posAccelZ
+
+```haxe
+var posAccelZ:Float
+```
+
+The Z positional acceleration.
+
+### rotVelX
+
+```haxe
+var rotVelX:Float
+```
+
+The X angular velocity.
+
+### rotVelY
+
+```haxe
+var rotVelY:Float
+```
+
+The Y angular velocity.
+
+### rotVelZ
+
+```haxe
+var rotVelZ:Float
+```
+
+The Z angular velocity.
+
+## Methods
+
+### toString
+
+```haxe
+function toString():String
+```
+
+Returns a description of the data.
+
+---
+
+# steam.DistanceFilter
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Matchmaking`](Matchmaking.md) · source [`steam/Matchmaking.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Matchmaking.hx)
+
+The geographic distance of the lobbies to list (Steamworks `ELobbyDistanceFilter`).
+
+Underlying type: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `Close` | `0` | The same region only. |
+| `Default` | `1` | The same or nearby regions. |
+| `Far` | `2` | About half-way around the globe. |
+| `Worldwide` | `3` | No filtering. |
+
+---
+
+# steam.EControllerActionOrigin
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Controller`](Controller.md) · source [`steam/Controller.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Controller.hx)
+
+A physical input of a controller bound to an action (Steamworks `EControllerActionOrigin`). Converts from a number or a name (`"XBOXONE_A"`), and to its name.
+
+Underlying type: `Int`
+
+Implicit casts from: `String`
+
+Implicit casts to: `Int`, `String`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `NONE` | `0` | No origin. |
+| `A` | `1` | Steam Controller: A button. |
+| `B` | `2` | Steam Controller: B button. |
+| `X` | `3` | Steam Controller: X button. |
+| `Y` | `4` | Steam Controller: Y button. |
+| `LEFTBUMPER` | `5` | Steam Controller: left bumper. |
+| `RIGHTBUMPER` | `6` | Steam Controller: right bumper. |
+| `LEFTGRIP` | `7` | Steam Controller: left grip. |
+| `RIGHTGRIP` | `8` | Steam Controller: right grip. |
+| `START` | `9` | Steam Controller: start button. |
+| `BACK` | `10` | Steam Controller: back button. |
+| `LEFTPAD_TOUCH` | `11` | Steam Controller: left trackpad, touch. |
+| `LEFTPAD_SWIPE` | `12` | Steam Controller: left trackpad, swipe. |
+| `LEFTPAD_CLICK` | `13` | Steam Controller: left trackpad, click. |
+| `LEFTPAD_DPADNORTH` | `14` | Steam Controller: left trackpad, up. |
+| `LEFTPAD_DPADSOUTH` | `15` | Steam Controller: left trackpad, down. |
+| `LEFTPAD_DPADWEST` | `16` | Steam Controller: left trackpad, left. |
+| `LEFTPAD_DPADEAST` | `17` | Steam Controller: left trackpad, right. |
+| `RIGHTPAD_TOUCH` | `18` | Steam Controller: right trackpad, touch. |
+| `RIGHTPAD_SWIPE` | `19` | Steam Controller: right trackpad, swipe. |
+| `RIGHTPAD_CLICK` | `20` | Steam Controller: right trackpad, click. |
+| `RIGHTPAD_DPADNORTH` | `21` | Steam Controller: right trackpad, up. |
+| `RIGHTPAD_DPADSOUTH` | `22` | Steam Controller: right trackpad, down. |
+| `RIGHTPAD_DPADWEST` | `23` | Steam Controller: right trackpad, left. |
+| `RIGHTPAD_DPADEAST` | `24` | Steam Controller: right trackpad, right. |
+| `LEFTTRIGGER_PULL` | `25` | Steam Controller: left trigger, pull. |
+| `LEFTTRIGGER_CLICK` | `26` | Steam Controller: left trigger, click. |
+| `RIGHTTRIGGER_PULL` | `27` | Steam Controller: right trigger, pull. |
+| `RIGHTTRIGGER_CLICK` | `28` | Steam Controller: right trigger, click. |
+| `LEFTSTICK_MOVE` | `29` | Steam Controller: left stick, move. |
+| `LEFTSTICK_CLICK` | `30` | Steam Controller: left stick, click. |
+| `LEFTSTICK_DPADNORTH` | `31` | Steam Controller: left stick, up. |
+| `LEFTSTICK_DPADSOUTH` | `32` | Steam Controller: left stick, down. |
+| `LEFTSTICK_DPADWEST` | `33` | Steam Controller: left stick, left. |
+| `LEFTSTICK_DPADEAST` | `34` | Steam Controller: left stick, right. |
+| `GYRO_MOVE` | `35` | Steam Controller: gyro, move. |
+| `GYRO_PITCH` | `36` | Steam Controller: gyro, pitch. |
+| `GYRO_YAW` | `37` | Steam Controller: gyro, yaw. |
+| `GYRO_ROLL` | `38` | Steam Controller: gyro, roll. |
+| `PS4_X` | `39` | PS4 controller: cross button. |
+| `PS4_CIRCLE` | `40` | PS4 controller: circle button. |
+| `PS4_TRIANGLE` | `41` | PS4 controller: triangle button. |
+| `PS4_SQUARE` | `42` | PS4 controller: square button. |
+| `PS4_LEFTBUMPER` | `43` | PS4 controller: left bumper. |
+| `PS4_RIGHTBUMPER` | `44` | PS4 controller: right bumper. |
+| `PS4_OPTIONS` | `45` | PS4 controller: Options button. |
+| `PS4_SHARE` | `46` | PS4 controller: Share button. |
+| `PS4_LEFTPAD_TOUCH` | `47` | PS4 controller: left trackpad, touch. |
+| `PS4_LEFTPAD_SWIPE` | `48` | PS4 controller: left trackpad, swipe. |
+| `PS4_LEFTPAD_CLICK` | `49` | PS4 controller: left trackpad, click. |
+| `PS4_LEFTPAD_DPADNORTH` | `50` | PS4 controller: left trackpad, up. |
+| `PS4_LEFTPAD_DPADSOUTH` | `51` | PS4 controller: left trackpad, down. |
+| `PS4_LEFTPAD_DPADWEST` | `52` | PS4 controller: left trackpad, left. |
+| `PS4_LEFTPAD_DPADEAST` | `53` | PS4 controller: left trackpad, right. |
+| `PS4_RIGHTPAD_TOUCH` | `54` | PS4 controller: right trackpad, touch. |
+| `PS4_RIGHTPAD_SWIPE` | `55` | PS4 controller: right trackpad, swipe. |
+| `PS4_RIGHTPAD_CLICK` | `56` | PS4 controller: right trackpad, click. |
+| `PS4_RIGHTPAD_DPADNORTH` | `57` | PS4 controller: right trackpad, up. |
+| `PS4_RIGHTPAD_DPADSOUTH` | `58` | PS4 controller: right trackpad, down. |
+| `PS4_RIGHTPAD_DPADWEST` | `59` | PS4 controller: right trackpad, left. |
+| `PS4_RIGHTPAD_DPADEAST` | `60` | PS4 controller: right trackpad, right. |
+| `PS4_CENTERPAD_TOUCH` | `61` | PS4 controller: center trackpad, touch. |
+| `PS4_CENTERPAD_SWIPE` | `62` | PS4 controller: center trackpad, swipe. |
+| `PS4_CENTERPAD_CLICK` | `63` | PS4 controller: center trackpad, click. |
+| `PS4_CENTERPAD_DPADNORTH` | `64` | PS4 controller: center trackpad, up. |
+| `PS4_CENTERPAD_DPADSOUTH` | `65` | PS4 controller: center trackpad, down. |
+| `PS4_CENTERPAD_DPADWEST` | `66` | PS4 controller: center trackpad, left. |
+| `PS4_CENTERPAD_DPADEAST` | `67` | PS4 controller: center trackpad, right. |
+| `PS4_LEFTTRIGGER_PULL` | `68` | PS4 controller: left trigger, pull. |
+| `PS4_LEFTTRIGGER_CLICK` | `69` | PS4 controller: left trigger, click. |
+| `PS4_RIGHTTRIGGER_PULL` | `70` | PS4 controller: right trigger, pull. |
+| `PS4_RIGHTTRIGGER_CLICK` | `71` | PS4 controller: right trigger, click. |
+| `PS4_LEFTSTICK_MOVE` | `72` | PS4 controller: left stick, move. |
+| `PS4_LEFTSTICK_CLICK` | `73` | PS4 controller: left stick, click. |
+| `PS4_LEFTSTICK_DPADNORTH` | `74` | PS4 controller: left stick, up. |
+| `PS4_LEFTSTICK_DPADSOUTH` | `75` | PS4 controller: left stick, down. |
+| `PS4_LEFTSTICK_DPADWEST` | `76` | PS4 controller: left stick, left. |
+| `PS4_LEFTSTICK_DPADEAST` | `77` | PS4 controller: left stick, right. |
+| `PS4_RIGHTSTICK_MOVE` | `78` | PS4 controller: right stick, move. |
+| `PS4_RIGHTSTICK_CLICK` | `79` | PS4 controller: right stick, click. |
+| `PS4_RIGHTSTICK_DPADNORTH` | `80` | PS4 controller: right stick, up. |
+| `PS4_RIGHTSTICK_DPADSOUTH` | `81` | PS4 controller: right stick, down. |
+| `PS4_RIGHTSTICK_DPADWEST` | `82` | PS4 controller: right stick, left. |
+| `PS4_RIGHTSTICK_DPADEAST` | `83` | PS4 controller: right stick, right. |
+| `PS4_DPAD_NORTH` | `84` | PS4 controller: D-pad, up. |
+| `PS4_DPAD_SOUTH` | `85` | PS4 controller: D-pad, down. |
+| `PS4_DPAD_WEST` | `86` | PS4 controller: D-pad, left. |
+| `PS4_DPAD_EAST` | `87` | PS4 controller: D-pad, right. |
+| `PS4_GYRO_MOVE` | `88` | PS4 controller: gyro, move. |
+| `PS4_GYRO_PITCH` | `89` | PS4 controller: gyro, pitch. |
+| `PS4_GYRO_YAW` | `90` | PS4 controller: gyro, yaw. |
+| `PS4_GYRO_ROLL` | `91` | PS4 controller: gyro, roll. |
+| `XBOXONE_A` | `92` | Xbox One controller: A button. |
+| `XBOXONE_B` | `93` | Xbox One controller: B button. |
+| `XBOXONE_X` | `94` | Xbox One controller: X button. |
+| `XBOXONE_Y` | `95` | Xbox One controller: Y button. |
+| `XBOXONE_LEFTBUMPER` | `96` | Xbox One controller: left bumper. |
+| `XBOXONE_RIGHTBUMPER` | `97` | Xbox One controller: right bumper. |
+| `XBOXONE_MENU` | `98` | Xbox One controller: Menu button. |
+| `XBOXONE_VIEW` | `99` | Xbox One controller: View button. |
+| `XBOXONE_LEFTTRIGGER_PULL` | `100` | Xbox One controller: left trigger, pull. |
+| `XBOXONE_LEFTTRIGGER_CLICK` | `101` | Xbox One controller: left trigger, click. |
+| `XBOXONE_RIGHTTRIGGER_PULL` | `102` | Xbox One controller: right trigger, pull. |
+| `XBOXONE_RIGHTTRIGGER_CLICK` | `103` | Xbox One controller: right trigger, click. |
+| `XBOXONE_LEFTSTICK_MOVE` | `104` | Xbox One controller: left stick, move. |
+| `XBOXONE_LEFTSTICK_CLICK` | `105` | Xbox One controller: left stick, click. |
+| `XBOXONE_LEFTSTICK_DPADNORTH` | `106` | Xbox One controller: left stick, up. |
+| `XBOXONE_LEFTSTICK_DPADSOUTH` | `107` | Xbox One controller: left stick, down. |
+| `XBOXONE_LEFTSTICK_DPADWEST` | `108` | Xbox One controller: left stick, left. |
+| `XBOXONE_LEFTSTICK_DPADEAST` | `109` | Xbox One controller: left stick, right. |
+| `XBOXONE_RIGHTSTICK_MOVE` | `110` | Xbox One controller: right stick, move. |
+| `XBOXONE_RIGHTSTICK_CLICK` | `111` | Xbox One controller: right stick, click. |
+| `XBOXONE_RIGHTSTICK_DPADNORTH` | `112` | Xbox One controller: right stick, up. |
+| `XBOXONE_RIGHTSTICK_DPADSOUTH` | `113` | Xbox One controller: right stick, down. |
+| `XBOXONE_RIGHTSTICK_DPADWEST` | `114` | Xbox One controller: right stick, left. |
+| `XBOXONE_RIGHTSTICK_DPADEAST` | `115` | Xbox One controller: right stick, right. |
+| `XBOXONE_DPAD_NORTH` | `116` | Xbox One controller: D-pad, up. |
+| `XBOXONE_DPAD_SOUTH` | `117` | Xbox One controller: D-pad, down. |
+| `XBOXONE_DPAD_WEST` | `118` | Xbox One controller: D-pad, left. |
+| `XBOXONE_DPAD_EAST` | `119` | Xbox One controller: D-pad, right. |
+| `XBOX360_A` | `120` | Xbox 360 controller: A button. |
+| `XBOX360_B` | `121` | Xbox 360 controller: B button. |
+| `XBOX360_X` | `122` | Xbox 360 controller: X button. |
+| `XBOX360_Y` | `123` | Xbox 360 controller: Y button. |
+| `XBOX360_LEFTBUMPER` | `124` | Xbox 360 controller: left bumper. |
+| `XBOX360_RIGHTBUMPER` | `125` | Xbox 360 controller: right bumper. |
+| `XBOX360_START` | `126` | Xbox 360 controller: start button. |
+| `XBOX360_BACK` | `127` | Xbox 360 controller: back button. |
+| `XBOX360_LEFTTRIGGER_PULL` | `128` | Xbox 360 controller: left trigger, pull. |
+| `XBOX360_LEFTTRIGGER_CLICK` | `129` | Xbox 360 controller: left trigger, click. |
+| `XBOX360_RIGHTTRIGGER_PULL` | `130` | Xbox 360 controller: right trigger, pull. |
+| `XBOX360_RIGHTTRIGGER_CLICK` | `131` | Xbox 360 controller: right trigger, click. |
+| `XBOX360_LEFTSTICK_MOVE` | `132` | Xbox 360 controller: left stick, move. |
+| `XBOX360_LEFTSTICK_CLICK` | `133` | Xbox 360 controller: left stick, click. |
+| `XBOX360_LEFTSTICK_DPADNORTH` | `134` | Xbox 360 controller: left stick, up. |
+| `XBOX360_LEFTSTICK_DPADSOUTH` | `135` | Xbox 360 controller: left stick, down. |
+| `XBOX360_LEFTSTICK_DPADWEST` | `136` | Xbox 360 controller: left stick, left. |
+| `XBOX360_LEFTSTICK_DPADEAST` | `137` | Xbox 360 controller: left stick, right. |
+| `XBOX360_RIGHTSTICK_MOVE` | `138` | Xbox 360 controller: right stick, move. |
+| `XBOX360_RIGHTSTICK_CLICK` | `139` | Xbox 360 controller: right stick, click. |
+| `XBOX360_RIGHTSTICK_DPADNORTH` | `140` | Xbox 360 controller: right stick, up. |
+| `XBOX360_RIGHTSTICK_DPADSOUTH` | `141` | Xbox 360 controller: right stick, down. |
+| `XBOX360_RIGHTSTICK_DPADWEST` | `142` | Xbox 360 controller: right stick, left. |
+| `XBOX360_RIGHTSTICK_DPADEAST` | `143` | Xbox 360 controller: right stick, right. |
+| `XBOX360_DPAD_NORTH` | `144` | Xbox 360 controller: D-pad, up. |
+| `XBOX360_DPAD_SOUTH` | `145` | Xbox 360 controller: D-pad, down. |
+| `XBOX360_DPAD_WEST` | `146` | Xbox 360 controller: D-pad, left. |
+| `XBOX360_DPAD_EAST` | `147` | Xbox 360 controller: D-pad, right. |
+| `COUNT` | `148` | The number of origins. |
+| `UNKNOWN` | `-1` | An unknown origin. |
+
+## Static variables
+
+### fromStringMap
+
+```haxe
+static var fromStringMap(default, null):Map<String, EControllerActionOrigin>
+```
+
+The origins by name.
+
+### toStringMap
+
+```haxe
+static var toStringMap(default, null):Map<EControllerActionOrigin, String>
+```
+
+The names by origin.
+
+## Static methods
+
+### getGlyph
+
+```haxe
+static function getGlyph(value:EControllerActionOrigin):String
+```
+
+* Returns the string name for this glyph so you can load a corresponding image from your assets.
+* @param   value the integer value of a controller action origin from the steam API
+* @return  a unique string identifier for this glyph, OR "unknown" if the glyph is not known (see Controller.getGlyphForActionOrigin())
+
+## Methods
+
+### toString
+
+```haxe
+inline function toString():String
+```
+
+Returns the name of the origin, or `unknown`.
+
+---
+
+# steam.EControllerSource
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Controller`](Controller.md) · source [`steam/Controller.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Controller.hx)
+
+A source of input of a controller (Steamworks `EControllerSource`).
+
+Underlying type: `Int`
+
+Implicit casts to: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `NONE` | `0` | No source. |
+| `LEFTTRACKPAD` | `1` | The left trackpad. |
+| `RIGHTTRACKPAD` | `2` | The right trackpad. |
+| `JOYSTICK` | `3` | The joystick. |
+| `ABXY` | `4` | The face buttons. |
+| `SWITCH` | `5` | The bumpers, grips and menu buttons. |
+| `LEFTTRIGGER` | `6` | The left trigger. |
+| `RIGHTTRIGGER` | `7` | The right trigger. |
+| `GYRO` | `8` | The gyroscope. |
+| `COUNT` | `9` | The number of sources. |
+
+---
+
+# steam.EControllerSourceMode
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Controller`](Controller.md) · source [`steam/Controller.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Controller.hx)
+
+How a source of input is used (Steamworks `EControllerSourceMode`).
+
+Underlying type: `Int`
+
+Implicit casts to: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `NONE` | `0` | Not used. |
+| `DPAD` | `1` | As a D-pad. |
+| `BUTTONS` | `2` | As buttons. |
+| `FOURBUTTONS` | `3` | As four buttons. |
+| `ABSOLUTEMOUSE` | `4` | As an absolute mouse. |
+| `RELATIVEMOUSE` | `5` | As a relative mouse. |
+| `JOYSTICKMOVE` | `6` | As a joystick for movement. |
+| `JOYSTICKCAMERA` | `7` | As a joystick for the camera. |
+| `SCROLLWHEEL` | `8` | As a scroll wheel. |
+| `TRIGGER` | `9` | As a trigger. |
+| `TOUCHMENU` | `10` | As a touch menu. |
+| `MOUSEJOYSTICK` | `11` | As a mouse joystick. |
+| `MOUSEREGION` | `12` | As a mouse region. |
+
+---
+
+# steam.EGamepadTextInputLineMode
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Controller`](Controller.md) · source [`steam/Controller.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Controller.hx)
+
+The number of lines of the gamepad text input.
+
+Underlying type: `Int`
+
+Implicit casts to: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `SINGLE_LINE` | `0` | A single line. |
+| `MULTIPLE_LINES` | `1` | Multiple lines. |
+
+---
+
+# steam.EGamepadTextInputMode
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Controller`](Controller.md) · source [`steam/Controller.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Controller.hx)
+
+The kind of text of the gamepad text input.
+
+Underlying type: `Int`
+
+Implicit casts to: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `NORMAL` | `0` | Normal text. |
+| `PASSWORD` | `1` | A password (hidden). |
+
+---
+
+# steam.ESteamControllerLEDFlags
+
+**class** · package [`steam`](README.md) · module [`steam.Controller`](Controller.md) · source [`steam/Controller.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Controller.hx)
+
+The flags of `Controller.setLEDColor`.
+
+## Static variables
+
+### SET_COLOR
+
+```haxe
+static inline var SET_COLOR:Int = 0x01
+```
+
+Sets the color.
+
+### RESTORE_USER_DEFAULT
+
+```haxe
+static inline var RESTORE_USER_DEFAULT:Int = 0x10
+```
+
+Restores the color set by the user.
+
+---
+
+# steam.ESteamControllerPad
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Controller`](Controller.md) · source [`steam/Controller.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Controller.hx)
+
+A trackpad of the Steam Controller, for the haptic pulses.
+
+Underlying type: `Int`
+
+Implicit casts to: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `LEFT` | `0` | The left trackpad. |
+| `RIGHT` | `1` | The right trackpad. |
+| `BOTH` | `2` | Both trackpads. |
+
+---
+
+# steam.ETimelineEventClipPriority
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Timeline`](Timeline.md) · source [`steam/Timeline.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Timeline.hx)
+
+Whether a timeline event is a good candidate for a clip (Steamworks `ETimelineEventClipPriority`).
+
+Underlying type: `Int`
+
+Implicit casts from: `Int`
+
+Implicit casts to: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `Invalid` | `0` | Invalid. |
+| `None` | `1` | Not a clip. |
+| `Standard` | `2` | A possible clip. |
+| `Featured` | `3` | A highlight, suggested as a clip. |
+
+---
+
+# steam.ETimelineGameMode
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Timeline`](Timeline.md) · source [`steam/Timeline.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Timeline.hx)
+
+The mode of the game shown in the Steam timeline (Steamworks `ETimelineGameMode`).
+
+Underlying type: `Int`
+
+Implicit casts from: `Int`
+
+Implicit casts to: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `Invalid` | `0` | Invalid. |
+| `Playing` | `1` | The player is playing. |
+| `Staging` | `2` | The player is preparing (lobby, character creation...). |
+| `Menus` | `3` | The player is in the menus. |
+| `LoadingScreen` | `4` | The game is loading. |
+
+---
+
+# steam.EventType
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Api`](Api.md) · source [`steam/Api.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Api.hx)
+
+The events sent by the native library to `Api` (handled internally).
+
+Underlying type: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `None` | `0` | No event. |
+| `GamepadTextInputDismissed` | `1` | The gamepad text input was closed (see `Api.whenGamepadTextInputDismissed`). |
+| `UserStatsReceived` | `2` | The stats and achievements of the user were received. |
+| `UserStatsStored` | `3` | The stats were stored (retried if it failed). |
+| `UserAchievementStored` | `4` | An achievement was stored (see `Api.whenAchievementStored`). |
+| `LeaderboardFound` | `5` | A leaderboard was found. |
+| `ScoreUploaded` | `6` | A leaderboard score was uploaded (see `Api.whenLeaderboardScoreUploaded`). |
+| `ScoreDownloaded` | `7` | Leaderboard scores were downloaded (see `Api.whenLeaderboardScoreDownloaded`). |
+| `GlobalStatsReceived` | `8` | The global stats were received. |
+
+---
+
+# steam.FriendFlags
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Friends`](Friends.md) · source [`steam/Friends.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Friends.hx)
+
+The relationships to list with `Friends.getFriends` (Steamworks `EFriendFlags`), combined with `|`.
+
+Underlying type: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `None` | `0` | None. |
+| `Blocked` | `1` | Users blocked by the user. |
+| `FriendshipRequested` | `2` | Users who sent a friend request. |
+| `Immediate` | `4` | Regular friends. |
+| `ClanMember` | `8` | Users in the same Steam groups. |
+| `OnGameServer` | `0x10` | Users on the same game server. |
+| `RequestingFrienship` | `0x80` | Users to whom the user sent a friend request. |
+| `RequestingInfo` | `0x100` | Users whose information was requested. |
+| `Ignored` | `0x200` | Ignored users. |
+| `IgnoredFriend` | `0x400` | Ignored friends. |
+| `ChatMember` | `0x1000` | Users in the same chats. |
+| `All` | `0xFFFF` | All the relationships. |
+
+---
+
+# steam.Friends
+
+**class** · package [`steam`](README.md) · source [`steam/Friends.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Friends.hx)
+
+The friends of the user, the overlay dialogs and the rich presence (Steamworks `ISteamFriends`).
+
+## Static methods
+
+### getFriends
+
+```haxe
+static function getFriends(?flags:FriendFlags):Array<Null<User>>
+```
+
+Returns the users with the given relationships (`Immediate` friends by default).
+
+### hasFriend
+
+```haxe
+static function hasFriend(user:User, ?flags:FriendFlags):Bool
+```
+
+Tells if the user has one of the relationships (`Immediate` friend by default).
+
+### activateOverlay
+
+```haxe
+static function activateOverlay(overlay:OverlayKind, ?uid:UID):Void
+```
+
+Opens a dialog of the Steam overlay, for the user or group `uid` with the dialogs that need one (`SteamID`, `Chat`...).
+
+### activateOverlayStore
+
+```haxe
+static function activateOverlayStore(appId:Int, flags:OverlayToStoreFlag):Void
+```
+
+Opens the store page of the app in the Steam overlay.
+
+### setRichPresence
+
+```haxe
+static function setRichPresence(key:String, value:Null<String>):Bool
+```
+
+Key `steam_display` requires localized token as value, see https://partner.steamgames.com/doc/api/ISteamFriends#richpresencelocalization
+Set `value` to empty or null to remove the key.
+
+### clearRichPresence
+
+```haxe
+static function clearRichPresence():Void
+```
+
+Removes all the rich presence keys of the user.
+
+---
+
+# steam.GameServer
+
+**class** · package [`steam`](README.md) · source [`steam/GameServer.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/GameServer.hx)
+
+A dedicated game server registered on Steam (Steamworks `SteamGameServer`), and the list of the servers.
+
+## Static methods
+
+### registerGlobalEvent
+
+```haxe
+static function registerGlobalEvent(event:Int, callb:() -> Void):Void
+```
+
+Sets the function called for a game server callback, by its callback id.
+
+### init
+
+```haxe
+static function init(ip:sys.net.Host, port:Int, gameport:Int, queryPort:Int, serverMode:ServerMode, version:String):Bool
+```
+
+Initializes the game server on the local IP, with the game and query ports, the authentication mode and the version of the game (`port` is not used). Its callbacks are then run by the main loop. Returns `false` on failure.
+
+### setConfig
+
+```haxe
+static function setConfig(modDir:String, product:String, desc:String):Void
+```
+
+Sets the mod folder, the product name and the game description, and marks the server as dedicated.
+
+### setInfo
+
+```haxe
+static function setInfo(maxPlayers:Int, password:Bool, serverName:String, botCount:Int, mapName:String):Void
+```
+
+Sets the information shown in the server browser: maximum players, password protection, name, number of bots and map name.
+
+### customTrace
+
+```haxe
+static dynamic function customTrace(str:String):Void
+```
+
+Prints a log message of the game server. Prints it with `Sys.println` by default.
+
+### enableHeartbeats
+
+```haxe
+static function enableHeartbeats(b:Bool):Void
+```
+
+Enables the heartbeats sent to the master server, so that the server is listed.
+
+### getPublicIP
+
+```haxe
+static function getPublicIP():Int
+```
+
+Returns the public IP of the server.
+
+### getSteamID
+
+```haxe
+static function getSteamID():UID
+```
+
+Returns the Steam id of the server.
+
+### logonAnonymous
+
+```haxe
+static function logonAnonymous(onLogin:() -> Void, ?retries:Int = 3):Void
+```
+
+Logs the server on Steam anonymously, retrying `retries` times: `onLogin` is called with `true` when connected, or `false` on failure. The server logs on again when disconnected.
+
+### shutdown
+
+```haxe
+static function shutdown():Void
+```
+
+Shuts down the game server.
+
+### requestInternetServerList
+
+```haxe
+static function requestInternetServerList(appId:Int, ?filters:{  }, ?onResults:() -> Void):Void
+```
+
+Requests the list of the internet servers of the app, with Steam server filters (field names and values): `onResults` is called with all the servers.
+
+---
+
+# steam.LeaderboardScore
+
+**class** · package [`steam`](README.md) · module [`steam.Api`](Api.md) · source [`steam/Api.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Api.hx)
+
+A leaderboard score.
+
+## Constructor
+
+### new
+
+```haxe
+function new(leaderboardId_:String, score_:Int, detail_:Int, ?rank_:Int = -1):Void
+```
+
+Creates a score.
+
+## Static methods
+
+### fromString
+
+```haxe
+static function fromString(str:String):LeaderboardScore
+```
+
+Parses a score written by `toString`, or returns `null`.
+
+## Variables
+
+### leaderboardId
+
+```haxe
+var leaderboardId:String
+```
+
+The name of the leaderboard.
+
+### score
+
+```haxe
+var score:Int
+```
+
+The score.
+
+### detail
+
+```haxe
+var detail:Int
+```
+
+Additional data stored with the score.
+
+### rank
+
+```haxe
+var rank:Int
+```
+
+The global rank, or `-1` if unknown.
+
+## Methods
+
+### toString
+
+```haxe
+function toString():String
+```
+
+Returns the score as `leaderboardId,score,detail,rank`.
+
+---
+
+# steam.Lobby
+
+**class** · package [`steam`](README.md) · source [`steam/Lobby.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Lobby.hx)
+
+A Steam lobby: a group of users sharing key/value data and chat messages, used to gather players before a game.
+
+## Constructor
+
+### new
+
+```haxe
+function new(uid:UID):Void
+```
+
+Creates the lobby of the Steam id.
+
+## Variables
+
+### uid
+
+```haxe
+var uid(default, null):UID
+```
+
+The Steam id of the lobby.
+
+### owner
+
+```haxe
+var owner(get, null):User
+```
+
+The owner of the lobby.
+
+### maxMembers
+
+```haxe
+var maxMembers(get, set):Int
+```
+
+The maximum number of members.
+
+## Methods
+
+### set
+
+```haxe
+function set(key:String, value:Dynamic):Void
+```
+
+Sets a lobby data, serialized with `haxe.Serializer` (owner only).
+
+### setRawData
+
+```haxe
+function setRawData(key:String, value:String):Void
+```
+
+Sets a lobby data (owner only). Throws on failure.
+
+### remove
+
+```haxe
+function remove(key:String):Bool
+```
+
+Removes a lobby data (owner only).
+
+### get
+
+```haxe
+function get(key:String):Dynamic
+```
+
+Returns a lobby data set with `set`, or `null`.
+
+### getRawData
+
+```haxe
+function getRawData(key:String):Null<Null<String>>
+```
+
+Returns a lobby data, or `null`.
+
+### getAllRaw
+
+```haxe
+function getAllRaw(?maxSize:Int = 65536):Map<String, String>
+```
+
+Returns all the lobby data. Throws if a value is larger than `maxSize` bytes.
+
+### getAll
+
+```haxe
+function getAll(?maxSize:Int = 65536):Map<String, Dynamic>
+```
+
+Returns all the lobby data. Note: the values are currently returned as raw strings, like `getAllRaw`.
+
+### leave
+
+```haxe
+function leave():Void
+```
+
+Leaves the lobby, and `dispose`s it.
+
+### join
+
+```haxe
+function join(onJoin:() -> Void):AsyncCall
+```
+
+Joins the lobby: `onJoin` is called with `inviteOnly` set if only invited users can join (Steamworks `m_bLocked`), or `null` on error.
+
+### getMembers
+
+```haxe
+function getMembers():Array<Null<User>>
+```
+
+Returns the members of the lobby (when joined).
+
+### getMemberData
+
+```haxe
+function getMemberData(user:User, key:String):String
+```
+
+Returns a data of a member, or `null`.
+
+### setMemberData
+
+```haxe
+function setMemberData(key:String, value:String):Void
+```
+
+Sets a data of the current user in the lobby.
+
+### requestData
+
+```haxe
+function requestData():Bool
+```
+
+Requests the data of a lobby that was not joined: `onDataUpdated` is called when received.
+
+### onDataUpdated
+
+```haxe
+dynamic function onDataUpdated():Void
+```
+
+Called when the lobby data changed.
+
+### onUserDataUpdated
+
+```haxe
+dynamic function onUserDataUpdated(user:User):Void
+```
+
+Called when the data of a member changed.
+
+### onUserJoined
+
+```haxe
+dynamic function onUserJoined(user:User):Void
+```
+
+Called when a user joined the lobby.
+
+### onUserLeft
+
+```haxe
+dynamic function onUserLeft(user:User):Void
+```
+
+Called when a user left the lobby (or disconnected, was kicked or banned).
+
+### onChatMessage
+
+```haxe
+dynamic function onChatMessage(type:ChatMessageType, cid:Int):Void
+```
+
+Called when a chat message was received: read it with `getChatEntry(cid)`.
+
+### getChatEntry
+
+```haxe
+function getChatEntry(cid:Int, ?maxData:Int = 1024):{ user:User, type:ChatMessageType, data:Bytes }
+```
+
+Returns a chat message: its sender, data (at most `maxData` bytes) and type.
+
+### sendChatMessage
+
+```haxe
+function sendChatMessage(bytes:Bytes):Void
+```
+
+Sends a chat message to the members. Throws on failure.
+
+### inviteFriends
+
+```haxe
+function inviteFriends():Void
+```
+
+Opens the Steam overlay to invite friends to the lobby.
+
+### inviteUser
+
+```haxe
+function inviteUser(user:User):Bool
+```
+
+Invites a user to the lobby.
+
+### toString
+
+```haxe
+function toString():String
+```
+
+Returns a description of the lobby.
+
+### dispose
+
+```haxe
+function dispose():Void
+```
+
+Stops the callbacks of the lobby.
+
+---
+
+# steam.LobbyKind
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Matchmaking`](Matchmaking.md) · source [`steam/Matchmaking.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Matchmaking.hx)
+
+The visibility of a lobby (Steamworks `ELobbyType`).
+
+Underlying type: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `Private` | `0` | Only way to join the lobby is to invite to someone else |
+| `FriendsOnly` | `1` | Shows for friends or invitees, but not in lobby list |
+| `Public` | `2` | Visible for friends and in lobby list |
+| `Invisible` | `3` | Returned by search, but not visible to other friends |
+
+---
+
+# steam.LobbyListFilters
+
+**typedef** · package [`steam`](README.md) · module [`steam.Matchmaking`](Matchmaking.md) · source [`steam/Matchmaking.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Matchmaking.hx)
+
+The filters of `Matchmaking.requestLobbyList`.
+
+## Fields
+
+### stringFilters
+
+```haxe
+var ?stringFilters:Null<Array<{ value:String, key:String, comparison:ComparisonFilter }>>
+```
+
+Filters on string lobby data.
+
+### nearFilters
+
+```haxe
+var ?nearFilters:Null<Array<{ value:Int, key:String }>>
+```
+
+Sorts the lobbies by the distance of the numerical data to the value.
+
+### intFilters
+
+```haxe
+var ?intFilters:Null<Array<{ value:Int, key:String, comparison:ComparisonFilter }>>
+```
+
+Filters on numerical lobby data.
+
+### distance
+
+```haxe
+var ?distance:Null<DistanceFilter>
+```
+
+The geographic distance.
+
+### availableSlots
+
+```haxe
+var ?availableSlots:Null<Int>
+```
+
+The minimum number of free slots.
+
+---
+
+# steam.Matchmaking
+
+**class** · package [`steam`](README.md) · source [`steam/Matchmaking.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Matchmaking.hx)
+
+The lobbies: creation, search and invitations (Steamworks `ISteamMatchmaking`).
+
+## Static methods
+
+### requestLobbyList
+
+```haxe
+static function requestLobbyList(onLobbyList:() -> Void, ?filters:Null<LobbyListFilters>, ?resultsCount:Int):Void
+```
+
+Searches lobbies: `onLobbyList` is called with the lobbies found, or `null` on error.
+
+### createLobby
+
+```haxe
+static function createLobby(kind:LobbyKind, maxPlayers:Int, onResult:() -> Void):AsyncCall
+```
+
+Creates a lobby, and joins it: `onResult` is called with the lobby, or `null` on error.
+
+### checkInvite
+
+```haxe
+static function checkInvite(onInvite:() -> Void):Void
+```
+
+Sets the function called when the user accepts an invitation to a lobby, and calls it if the game was launched by an invitation (`+connect_lobby` command line argument).
+
+---
+
+# steam.NetworkApi
+
+**typedef** · package [`steam`](README.md) · module [`steam.Networking`](Networking.md) · source [`steam/Networking.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Networking.hx)
+
+The callbacks of the peer-to-peer networking, given to `Networking.startP2P`.
+
+## Fields
+
+### onData
+
+```haxe
+var onData:(u:User, data:Bytes) -> Void
+```
+
+Called when a packet was received from a user. With `Networking.USE_MULTITHREAD`, the bytes are only valid during the call.
+
+### onConnectionRequest
+
+```haxe
+var onConnectionRequest:(u:User) -> Bool
+```
+
+Called when a user wants to connect: returns `true` to accept the connection.
+
+### onConnectionError
+
+```haxe
+var onConnectionError:(u:User, error:NetworkStatus) -> Void
+```
+
+Called when the connection to a user failed.
+
+---
+
+# steam.NetworkSessionData
+
+**typedef** · package [`steam`](README.md) · module [`steam.Networking`](Networking.md) · source [`steam/Networking.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Networking.hx)
+
+The state of a peer-to-peer session with a user (Steamworks `P2PSessionState_t`).
+
+## Fields
+
+### remotePort
+
+```haxe
+var remotePort:Int
+```
+
+The port of the remote user (if not relayed).
+
+### remoteIP
+
+```haxe
+var remoteIP:Int
+```
+
+The IP of the remote user (if not relayed).
+
+### relay
+
+```haxe
+var relay:Bool
+```
+
+Tells if the connection goes through a Steam relay server.
+
+### packetSendQueue
+
+```haxe
+var packetSendQueue:Int
+```
+
+The number of packets waiting to be sent.
+
+### error
+
+```haxe
+var error:NetworkStatus
+```
+
+The last error.
+
+### connecting
+
+```haxe
+var connecting:Bool
+```
+
+Tells if the connection is being established.
+
+### bytesSendQueue
+
+```haxe
+var bytesSendQueue:Int
+```
+
+The number of bytes waiting to be sent.
+
+### alive
+
+```haxe
+var alive:Bool
+```
+
+Tells if the connection is established.
+
+---
+
+# steam.NetworkStatus
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Networking`](Networking.md) · source [`steam/Networking.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Networking.hx)
+
+The error of a peer-to-peer connection (Steamworks `EP2PSessionError`).
+
+Underlying type: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `None` | `0` | No error. |
+| `NotRunningApp` | `1` | The remote user is not running the same game. |
+| `NoRigtsToApp` | `2` | The local user doesn't own the game. |
+| `DestinationNotLoggedIn` | `3` | The remote user is not logged in to Steam. |
+| `Timeout` | `4` | The connection timed out. |
+
+---
+
+# steam.Networking
+
+**class** · package [`steam`](README.md) · source [`steam/Networking.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Networking.hx)
+
+The peer-to-peer networking between users (Steamworks `ISteamNetworking`): packets are sent to a user with `sendP2P`, and received by the `NetworkApi` given to `startP2P`.
+
+## Static variables
+
+### USE_MULTITHREAD
+
+```haxe
+static var USE_MULTITHREAD(default, set):Bool
+```
+
+Reads the packets in a separate thread (they are still given to `onData` in the main thread). Must be set before `startP2P`.
+
+## Static methods
+
+### startP2P
+
+```haxe
+static function startP2P(napi:NetworkApi):Void
+```
+
+Starts receiving connections and packets with the callbacks of `napi`.
+
+### sendP2P
+
+```haxe
+static function sendP2P(user:User, data:Bytes, type:PacketType, ?pos:Int = 0, ?len:Int = -1):Bool
+```
+
+Sends `len` bytes of `data` from `pos` (all by default) to the user, opening the connection if needed. Returns `false` on failure.
+
+### closeSession
+
+```haxe
+static function closeSession(user:User):Void
+```
+
+Closes the connection with the user (after a short delay, so that the pending packets are sent).
+
+### closeP2P
+
+```haxe
+static function closeP2P():Void
+```
+
+Stops receiving packets and closes all the connections.
+
+### getSessionData
+
+```haxe
+static function getSessionData(user:User):NetworkSessionData
+```
+
+Returns the state of the connection with the user.
+
+---
+
+# steam.OverlayKind
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Friends`](Friends.md) · source [`steam/Friends.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Friends.hx)
+
+A dialog of the Steam overlay, opened with `Friends.activateOverlay`.
+
+Underlying type: `String`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `None` | `"none"` | The overlay without dialog. |
+| `Friends` | `"Friends"` | The friends list. |
+| `Community` | `"Community"` | The Steam Community. |
+| `Players` | `"Players"` | The recent players. |
+| `Settings` | `"Settings"` | The Steam settings. |
+| `OfficialGameGroup` | `"OfficialGameGroup"` | The Steam group of the game. |
+| `Stats` | `"Stats"` | The stats of the game. |
+| `Achievements` | `"Achievements"` | The achievements of the game. |
+| `SteamID` | `"steamid"` | opens the overlay web browser to the specified user or groups profile |
+| `Chat` | `"chat"` | opens a chat window to the specified user, or joins the group chat |
+| `JoinTrade` | `"jointrade"` | opens a window to a Steam Trading session that was started with the ISteamEconomy/StartTrade Web API |
+| `UserStats` | `"stats"` | opens the overlay web browser to the specified user's stats |
+| `UserAchievements` | `"achievements"` | opens the overlay web browser to the specified user's achievements |
+| `FriendAdd` | `"friendadd"` | opens the overlay in minimal mode prompting the user to add the target user as a friend |
+| `FriendRemove` | `"friendremove"` | opens the overlay in minimal mode prompting the user to remove the target friend |
+| `FriendRequestAccept` | `"friendrequestaccept"` | opens the overlay in minimal mode prompting the user to accept an incoming friend invite |
+| `FriendRequestIgnore` | `"friendrequestignore"` | opens the overlay in minimal mode prompting the user to ignore an incoming friend invite |
+
+## Methods
+
+### toString
+
+```haxe
+function toString():String
+```
+
+Returns the Steamworks dialog name.
+
+---
+
+# steam.OverlayToStoreFlag
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Friends`](Friends.md) · source [`steam/Friends.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Friends.hx)
+
+What to do when opening the store page in the overlay (Steamworks `EOverlayToStoreFlag`).
+
+Underlying type: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `None` | `0` | Only show the store page. |
+| `AddToCart` | `1` | Add the app to the cart. |
+| `AddToCartAndShow` | `2` | Add the app to the cart and show the cart. |
+
+---
+
+# steam.PacketType
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Networking`](Networking.md) · source [`steam/Networking.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Networking.hx)
+
+How a packet is sent (Steamworks `EP2PSend`).
+
+Underlying type: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `Unreliable` | `0` | Unreliable, can be dropped or arrive out of order (up to 1200 bytes). |
+| `UnreliableNoDelay` | `1` | Unreliable, and dropped if the connection is not established yet. |
+| `Reliable` | `2` | Reliable and in order (up to 1MB). |
+| `ReliableWithBuffering` | `3` | Reliable, with small packets grouped together (Nagle algorithm). |
+
+---
+
+# steam.ServerMode
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.GameServer`](GameServer.md) · source [`steam/GameServer.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/GameServer.hx)
+
+The authentication mode of a game server (Steamworks `EServerMode`).
+
+Underlying type: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `NoAuthentification` | `1` | No authentication of the users. |
+| `Authentification` | `2` | The users are authenticated by Steam. |
+| `AuthentificationAndSecure` | `3` | The users are authenticated, and the server is VAC secured. |
+
+---
+
+# steam.SteamNotificationPosition
+
+**enum abstract** · package [`steam`](README.md) · module [`steam.Api`](Api.md) · source [`steam/Api.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Api.hx)
+
+A corner of the screen where the Steam notifications appear.
+
+Underlying type: `Int`
+
+Implicit casts to: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `TopLeft` | `0` | The top left corner. |
+| `TopRight` | `1` | The top right corner. |
+| `BottomLeft` | `2` | The bottom left corner. |
+| `BottomRight` | `3` | The bottom right corner. |
+
+---
+
+# steam.Timeline
+
+**class** · package [`steam`](README.md) · source [`steam/Timeline.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Timeline.hx)
+
+The Steam timeline of the game recordings (Steamworks `ISteamTimeline`): game modes, tooltips and events marking the important moments. Times are in seconds, relative to now.
+
+## Static methods
+
+### setTimelineTooltip
+
+```haxe
+static function setTimelineTooltip(description:String, timeDelta:Float):Void
+```
+
+Sets the description shown for the current state of the game in the timeline, from `timeDelta` seconds relative to now.
+
+### clearTimelineTooltip
+
+```haxe
+static function clearTimelineTooltip(timeDelta:Float):Void
+```
+
+Clears the description set with `setTimelineTooltip`.
+
+### setTimelineGameMode
+
+```haxe
+static function setTimelineGameMode(mode:ETimelineGameMode):Void
+```
+
+Sets the mode of the game, shown with colors in the timeline.
+
+### addInstantaneousTimelineEvent
+
+```haxe
+static function addInstantaneousTimelineEvent(title:String, description:String, icon:String, priority:Int, startOffsetSeconds:Float, ?possibleClip:ETimelineEventClipPriority = None):TimelineEventHandle
+```
+
+Adds an event at a moment: `icon` is a Steam icon name (`steam_` icons or icons uploaded for the game), `priority` sorts the overlapping events (`0` to `1000`), and `startOffsetSeconds` is relative to now.
+
+### addRangeTimelineEvent
+
+```haxe
+static function addRangeTimelineEvent(title:String, description:String, icon:String, priority:Int, startOffsetSeconds:Float, durationSeconds:Float, ?possibleClip:ETimelineEventClipPriority = None):TimelineEventHandle
+```
+
+Adds an event lasting `durationSeconds` (see `addInstantaneousTimelineEvent`).
+
+### startRangeTimelineEvent
+
+```haxe
+static function startRangeTimelineEvent(title:String, description:String, icon:String, priority:Int, startOffsetSeconds:Float, ?possibleClip:ETimelineEventClipPriority = None):TimelineEventHandle
+```
+
+Starts an event whose end is not known yet: end it with `endRangeTimelineEvent`.
+
+### updateRangeTimelineEvent
+
+```haxe
+static function updateRangeTimelineEvent(event:TimelineEventHandle, title:String, description:String, icon:String, priority:Int, ?possibleClip:ETimelineEventClipPriority = None):Void
+```
+
+Changes the information of an event started with `startRangeTimelineEvent`.
+
+### endRangeTimelineEvent
+
+```haxe
+static function endRangeTimelineEvent(event:TimelineEventHandle, endOffsetSeconds:Float):Void
+```
+
+Ends an event started with `startRangeTimelineEvent`, `endOffsetSeconds` relative to now.
+
+### removeTimelineEvent
+
+```haxe
+static function removeTimelineEvent(event:TimelineEventHandle):Void
+```
+
+Removes an event.
+
+---
+
+# steam.TimelineEventHandle
+
+**typedef** · package [`steam`](README.md) · module [`steam.Timeline`](Timeline.md) · source [`steam/Timeline.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Timeline.hx)
+
+A handle of a timeline event.
+
+Alias for: `hl.I64`
+
+---
+
+# steam.TimelineNative
+
+**class** · package [`steam`](README.md) · module [`steam.Timeline`](Timeline.md) · source [`steam/Timeline.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/Timeline.hx)
+
+The native functions of `Timeline`.
+
+---
+
+# steam.UID
+
+**abstract** · package [`steam`](README.md) · source [`steam/UID.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/UID.hx)
+
+A 64 bits Steam identifier (`CSteamID`: user, lobby, game server...) or Workshop file identifier, stored as 8 bytes.
+
+Underlying type: `hl.Bytes`
+
+## Static methods
+
+### fromBytes
+
+```haxe
+static function fromBytes(bytes:Bytes):UID
+```
+
+Returns the identifier from its 8 bytes. Throws if the length is not 8.
+
+### fromInt64
+
+```haxe
+static function fromInt64(v:Int64):UID
+```
+
+Returns the identifier from a 64 bits integer.
+
+## Methods
+
+### toString
+
+```haxe
+function toString():String
+```
+
+Returns the identifier in hexadecimal.
+
+### getBytes
+
+```haxe
+function getBytes():Bytes
+```
+
+Returns the 8 bytes of the identifier.
+
+### getInt64
+
+```haxe
+function getInt64():Int64
+```
+
+Returns the identifier as a 64 bits integer.
+
+---
+
+# steam.User
+
+**class** · package [`steam`](README.md) · source [`steam/User.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/User.hx)
+
+A Steam user. Users are unique for a UID: get them with `fromUID`.
+
+## Static methods
+
+### fromUID
+
+```haxe
+static function fromUID(uid:UID):Null<User>
+```
+
+Returns the user of the Steam id.
+
+### fromUID32
+
+```haxe
+static function fromUID32(uid:Int):Null<User>
+```
+
+Returns the user of the account id returned by `getID32` (an individual account of the public universe).
+
+## Variables
+
+### uid
+
+```haxe
+var uid(default, null):UID
+```
+
+The Steam id of the user.
+
+### name
+
+```haxe
+var name(get, null):String
+```
+
+The name of the user (cached once read). Can be unknown until `requestInformation` completes.
+
+## Methods
+
+### getID32
+
+```haxe
+function getID32():Int
+```
+
+Returns the lower 32 bits of the Steam id (the account id), see `fromUID32`.
+
+### requestInformation
+
+```haxe
+function requestInformation(onChange:() -> Void, ?nameOnly:Bool = false):Void
+```
+
+Requests the name and avatar (or only the name) of the user: `onChange` is called with the changed information when received.
+
+### toString
+
+```haxe
+function toString():String
+```
+
+Returns the name and the UID of the user.
+
+### getAvatar
+
+```haxe
+function getAvatar(size:AvatarSize):{ width:Int, rgba:Bytes, height:Int }
+```
+
+Returns the avatar of the user as RGBA pixels, or `null` if not loaded yet (see `requestInformation`).
+
+---
+
+# steam.data.AnalogInputMode
+
+**enum** · package [`steam.data`](README.md) · module [`steam.data.ControllerConfig`](ControllerConfig.md) · source [`steam/data/ControllerConfig.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/data/ControllerConfig.hx)
+
+The input mode of a stick, pad or gyro action.
+
+## Constructors
+
+### AbsoluteMouse
+
+```haxe
+AbsoluteMouse
+```
+
+The `absolute_mouse` input mode: the action gives mouse-like movements.
+
+### JoystickMove
+
+```haxe
+JoystickMove
+```
+
+The `joystick_move` input mode (default): the action gives a joystick position.
+
+---
+
+# steam.data.AnalogTriggerAction
+
+**typedef** · package [`steam.data`](README.md) · module [`steam.data.ControllerConfig`](ControllerConfig.md) · source [`steam/data/ControllerConfig.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/data/ControllerConfig.hx)
+
+An analog trigger action.
+
+## Fields
+
+### name
+
+```haxe
+var name:String
+```
+
+The name of the action.
+
+### localizationKey
+
+```haxe
+var localizationKey:String
+```
+
+The localization key of its title.
+
+---
+
+# steam.data.ButtonAction
+
+**typedef** · package [`steam.data`](README.md) · module [`steam.data.ControllerConfig`](ControllerConfig.md) · source [`steam/data/ControllerConfig.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/data/ControllerConfig.hx)
+
+A digital (button) action.
+
+## Fields
+
+### name
+
+```haxe
+var name:String
+```
+
+The name of the action.
+
+### localizationKey
+
+```haxe
+var localizationKey:String
+```
+
+The localization key of its title.
+
+---
+
+# steam.data.ControllerActionSet
+
+**typedef** · package [`steam.data`](README.md) · module [`steam.data.ControllerConfig`](ControllerConfig.md) · source [`steam/data/ControllerConfig.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/data/ControllerConfig.hx)
+
+An action set: the actions available in a context of the game (menu, gameplay...).
+
+## Fields
+
+### stickPadGyro
+
+```haxe
+var stickPadGyro:Array<StickPadGyroAction>
+```
+
+The stick, pad or gyro actions.
+
+### name
+
+```haxe
+var name:String
+```
+
+The name of the action set.
+
+### localizationKey
+
+```haxe
+var localizationKey:String
+```
+
+The localization key of its title.
+
+### button
+
+```haxe
+var button:Array<ButtonAction>
+```
+
+The digital actions.
+
+### analogTrigger
+
+```haxe
+var analogTrigger:Array<AnalogTriggerAction>
+```
+
+The analog trigger actions.
+
+---
+
+# steam.data.ControllerActionType
+
+**enum** · package [`steam.data`](README.md) · module [`steam.data.ControllerConfig`](ControllerConfig.md) · source [`steam/data/ControllerConfig.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/data/ControllerConfig.hx)
+
+The type of a controller action.
+
+## Constructors
+
+### Button
+
+```haxe
+Button
+```
+
+A digital action.
+
+### AnalogTrigger
+
+```haxe
+AnalogTrigger
+```
+
+An analog trigger action.
+
+### StickPadGyro
+
+```haxe
+StickPadGyro
+```
+
+A stick, pad or gyro action.
+
+---
+
+# steam.data.ControllerConfig
+
+**class** · package [`steam.data`](README.md) · source [`steam/data/ControllerConfig.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/data/ControllerConfig.hx)
+
+* A strongly-typed data structure representation of the "game_actions_xyz.vdf"
+* file Steam uses to define controller inputs for your game. You can initialize
+* this from a VDF string, JSON string, or generic data structure
+* 
+* @author
+
+## Constructor
+
+### new
+
+```haxe
+function new():Void
+```
+
+Creates an empty configuration.
+
+## Static methods
+
+### fromVDF
+
+```haxe
+static function fromVDF(str:String):ControllerConfig
+```
+
+Reads the configuration from the VDF file.
+
+### fromJSON
+
+```haxe
+static function fromJSON(str:String):ControllerConfig
+```
+
+Reads the configuration from the VDF file converted to JSON.
+
+### fromObject
+
+```haxe
+static function fromObject(obj:Dynamic):ControllerConfig
+```
+
+Reads the configuration from the parsed VDF file. Throws if the `In Game Actions` or `actions` sections are missing.
+
+## Variables
+
+### actionSets
+
+```haxe
+var actionSets:Array<ControllerActionSet>
+```
+
+The action sets.
+
+### localizations
+
+```haxe
+var localizations:Array<ControllerLocalization>
+```
+
+The localized texts, by language.
+
+## Methods
+
+### toString
+
+```haxe
+function toString():String
+```
+
+Returns a description of the configuration.
+
+---
+
+# steam.data.ControllerLocalization
+
+**typedef** · package [`steam.data`](README.md) · module [`steam.data.ControllerConfig`](ControllerConfig.md) · source [`steam/data/ControllerConfig.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/data/ControllerConfig.hx)
+
+The localized texts of a language.
+
+## Fields
+
+### values
+
+```haxe
+var values:Map<String, String>
+```
+
+The texts, by localization key.
+
+### locale
+
+```haxe
+var locale:Locale
+```
+
+The language.
+
+---
+
+# steam.data.Locale
+
+**enum abstract** · package [`steam.data`](README.md) · source [`steam/data/Locale.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/data/Locale.hx)
+
+A language name of the Steam API (as returned by `steam.Api.getCurrentGameLanguage`).
+
+Underlying type: `String`
+
+Implicit casts from: `String`
+
+Implicit casts to: `String`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `BRAZILIAN` | `"brazilian"` | Brazilian Portuguese. |
+| `BULGARIAN` | `"bulgarian"` | Bulgarian. |
+| `CZECH` | `"czech"` | Czech. |
+| `DANISH` | `"danish"` | Danish. |
+| `DUTCH` | `"dutch"` | Dutch. |
+| `ENGLISH` | `"english"` | English. |
+| `FINNISH` | `"finnish"` | Finnish. |
+| `FRENCH` | `"french"` | French. |
+| `GERMAN` | `"german"` | German. |
+| `GREEK` | `"greek"` | Greek. |
+| `HUNGARIAN` | `"hungarian"` | Hungarian. |
+| `ITALIAN` | `"italian"` | Italian. |
+| `JAPANESE` | `"japanese"` | Japanese. |
+| `KOREANA` | `"koreana"` | Korean (`koreana` is the code used by Steam for Korean). |
+| `KOREAN` | `"korean"` | Korean (legacy code). |
+| `NORWEGIAN` | `"norwegian"` | Norwegian. |
+| `POLISH` | `"polish"` | Polish. |
+| `PORTUGUESE` | `"portuguese"` | Portuguese. |
+| `ROMANIAN` | `"romanian"` | Romanian. |
+| `RUSSIAN` | `"russian"` | Russian. |
+| `SCHINESE` | `"schinese"` | Simplified Chinese. |
+| `SPANISH` | `"spanish"` | Spanish. |
+| `SWEDISH` | `"swedish"` | Swedish. |
+| `TCHINESE` | `"tchinese"` | Traditional Chinese. |
+| `THAI` | `"thai"` | Thai. |
+| `TURKISH` | `"turkish"` | Turkish. |
+| `UKRAINIAN` | `"ukrainian"` | Ukrainian. |
+| `UNKNOWN` | `"unknown"` | An unknown language. |
+
+---
+
+# steam.data.ObjNum
+
+**typedef** · package [`steam.data`](README.md) · module [`steam.data.VDF`](VDF.md) · source [`steam/data/VDF.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/data/VDF.hx)
+
+An object parsed by `VDF`, with the position after it.
+
+## Fields
+
+### obj
+
+```haxe
+var obj:Dynamic
+```
+
+The object.
+
+### num
+
+```haxe
+var num:Int
+```
+
+The position after it.
+
+---
+
+# steam.data.StickPadGyroAction
+
+**typedef** · package [`steam.data`](README.md) · module [`steam.data.ControllerConfig`](ControllerConfig.md) · source [`steam/data/ControllerConfig.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/data/ControllerConfig.hx)
+
+A stick, pad or gyro action.
+
+## Fields
+
+### osMouse
+
+```haxe
+var osMouse:Bool
+```
+
+Tells if the action moves the mouse of the operating system.
+
+### name
+
+```haxe
+var name:String
+```
+
+The name of the action.
+
+### localizationKey
+
+```haxe
+var localizationKey:String
+```
+
+The localization key of its title.
+
+### inputMode
+
+```haxe
+var inputMode:AnalogInputMode
+```
+
+The input mode.
+
+---
+
+# steam.data.StrNum
+
+**typedef** · package [`steam.data`](README.md) · module [`steam.data.VDF`](VDF.md) · source [`steam/data/VDF.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/data/VDF.hx)
+
+A string parsed by `VDF`, with the position after it.
+
+## Fields
+
+### str
+
+```haxe
+var str:String
+```
+
+The string.
+
+### num
+
+```haxe
+var num:Int
+```
+
+The position after it.
+
+---
+
+# steam.data.VDF
+
+**class** · package [`steam.data`](README.md) · source [`steam/data/VDF.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/data/VDF.hx)
+
+Parses the Valve Data Format (VDF, used by the Steam configuration files) into an object (port of the vdf library by Anthony Garcia).
+
+## Static methods
+
+### parse
+
+```haxe
+static function parse(string:String):Dynamic
+```
+
+Parses a VDF text into an object.
+
+---
+
+# steam.helpers.MacroHelper
+
+**class** · package [`steam.helpers`](README.md) · source [`steam/helpers/MacroHelper.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/helpers/MacroHelper.hx)
+
+Macros used by the `steam` package.
+
+## Static methods
+
+### buildMap
+
+```haxe
+static function buildMap(typePath:Dynamic, invert:Dynamic, ?exclude:Dynamic):Dynamic
+```
+
+* Builds a map from static uppercase inline variables in an abstract type.
+*
+* @param   invert  Use the field value as the key and the name as the value
+
+---
+
+# steam.helpers.Util
+
+**class** · package [`steam.helpers`](README.md) · source [`steam/helpers/Util.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/helpers/Util.hx)
+
+String conversion helpers.
+
+## Static methods
+
+### boolify
+
+```haxe
+static function boolify(str:String):Bool
+```
+
+Returns `true` for `1` or `true` (any case), `false` otherwise.
+
+### str2Float
+
+```haxe
+static function str2Float(str:String, ?defaultValue:Float = 0.0):Float
+```
+
+Parses a float, or returns `defaultValue`.
+
+### str2Int
+
+```haxe
+static function str2Int(str:String, ?defaultValue:Int = 0):Int
+```
+
+Parses an integer, or returns `defaultValue`.
+
+---
+
+# steam.ugc.EFileType
+
+**enum abstract** · package [`steam.ugc`](README.md) · module `steam.ugc.Data` · source [`steam/ugc/Data.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/ugc/Data.hx)
+
+The type of a Workshop item (Steamworks `EWorkshopFileType`).
+
+Underlying type: `Int`
+
+Implicit casts from: `Int`
+
+Implicit casts to: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `Community` | `0` | Normal Workshop item that can be subscribed to. |
+| `Microtransaction` | `1` | Workshop item that is meant to be voted on for the purpose of selling in-game. |
+| `Collection` | `2` | A collection of Workshop or Greenlight items. |
+| `Art` | `3` | Artwork. |
+| `Video` | `4` | External video. |
+| `Screenshot` | `5` | Screenshot. |
+| `Game` | `6` | Greenlight game entry. |
+| `Software` | `7` | Greenlight software entry. |
+| `Concept` | `8` | Greenlight concept. |
+| `WebGuide` | `9` | Steam web guide. |
+| `IntegratedGuide` | `10` | Application integrated guide. |
+| `Merch` | `11` | Workshop merchandise meant to be voted on for the purpose of being sold. |
+| `ControllerBinding` | `12` | Steam Controller bindings. |
+| `SteamWorksAccessInvite` | `13` | Internal. |
+| `SteamVideo` | `14` | Steam video. |
+| `GameManagedItem` | `15` | Managed completely by the game, not the user, and not shown on the web. |
+
+---
+
+# steam.ugc.EItemVisibility
+
+**enum abstract** · package [`steam.ugc`](README.md) · module `steam.ugc.Data` · source [`steam/ugc/Data.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/ugc/Data.hx)
+
+The visibility of a Workshop item (Steamworks `ERemoteStoragePublishedFileVisibility`).
+
+Underlying type: `Int`
+
+Implicit casts from: `Int`
+
+Implicit casts to: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `Public` | `0` | Visible to everyone. |
+| `FriendsOnly` | `1` | Visible to the friends of the owner. |
+| `Private` | `2` | Visible to the owner only. |
+
+---
+
+# steam.ugc.EMatchingType
+
+**enum abstract** · package [`steam.ugc`](README.md) · module `steam.ugc.Data` · source [`steam/ugc/Data.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/ugc/Data.hx)
+
+The kind of Workshop items returned by a query (Steamworks `EUGCMatchingUGCType`).
+
+Underlying type: `Int`
+
+Implicit casts from: `Int`
+
+Implicit casts to: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `Items` | `0` | both mtx items and ready-to-use items |
+| `Items_Mtx` | `1` | Microtransaction items. |
+| `Items_ReadyToUse` | `2` | Ready-to-use items. |
+| `Collections` | `3` | Collections. |
+| `Artwork` | `4` | Artwork. |
+| `Videos` | `5` | Videos. |
+| `Screenshots` | `6` | Screenshots. |
+| `AllGuides` | `7` | both web quides and integrated guides |
+| `WebGuides` | `8` | Web guides. |
+| `IntegratedGuides` | `9` | Guides integrated in the game. |
+| `UsableInGame` | `10` | ready-to-use items and integrated guides |
+| `ControllerBindings` | `11` | Steam Input controller bindings. |
+| `GameManagedItems` | `12` | game managed items (not managed by users) |
+| `All` | `~0` | return everything |
+
+---
+
+# steam.ugc.EQueryType
+
+**enum abstract** · package [`steam.ugc`](README.md) · module `steam.ugc.Data` · source [`steam/ugc/Data.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/ugc/Data.hx)
+
+How the items of a Workshop query of all the items are ranked (Steamworks `EUGCQuery`).
+
+Underlying type: `Int`
+
+Implicit casts from: `Int`
+
+Implicit casts to: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `RankedByVote` | `0` | By votes. |
+| `RankedByPublicationDate` | `1` | By publication date. |
+| `AcceptedForGameRankedByAcceptanceDate` | `2` | The items accepted for the game, by acceptance date. |
+| `RankedByTrend` | `3` | By trend. |
+| `FavoritedByFriendsRankedByPublicationDate` | `4` | The favorites of the user's friends, by publication date. |
+| `CreatedByFriendsRankedByPublicationDate` | `5` | The items created by the user's friends, by publication date. |
+| `RankedByNumTimesReported` | `6` | By number of reports. |
+| `CreatedByFollowedUsersRankedByPublicationDate` | `7` | The items created by the users followed by the user, by publication date. |
+| `NotYetRated` | `8` | The items not rated yet. |
+| `RankedByTotalVotesAsc` | `9` | By increasing total number of votes. |
+| `RankedByVotesUp` | `10` | By number of up votes. |
+| `RankedByTextSearch` | `11` | By relevance to the search text (see `Query.setSearchText`). |
+| `RankedByTotalUniqueSubscriptions` | `12` | By number of unique subscriptions. |
+| `RankedByPlaytimeTrend` | `13` | By play time trend. |
+| `RankedByTotalPlaytime` | `14` | By total play time. |
+| `RankedByAveragePlaytimeTrend` | `15` | By average play time trend. |
+| `RankedByLifetimeAveragePlaytime` | `16` | By lifetime average play time. |
+| `RankedByPlaytimeSessionsTrend` | `17` | By play sessions trend. |
+| `RankedByLifetimePlaytimeSessions` | `18` | By lifetime number of play sessions. |
+
+---
+
+# steam.ugc.EResult
+
+**enum abstract** · package [`steam.ugc`](README.md) · module `steam.ugc.Data` · source [`steam/ugc/Data.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/ugc/Data.hx)
+
+The result of a Steam operation (Steamworks `EResult`).
+
+Underlying type: `Int`
+
+Implicit casts from: `Int`
+
+Implicit casts to: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `OK` | `1` | Success. |
+| `Fail` | `2` | Generic failure. |
+| `NoConnection` | `3` | No/failed network connection. |
+| `InvalidPassword` | `5` | Password/ticket is invalid. |
+| `LoggedInElsewhere` | `6` | Same user logged in elsewhere. |
+| `InvalidProtocolVer` | `7` | Protocol version is incorrect. |
+| `InvalidParam` | `8` | A parameter is incorrect. |
+| `FileNotFound` | `9` | File was not found. |
+| `Busy` | `10` | Called method busy - action not taken. |
+| `InvalidState` | `11` | Called object was in an invalid state. |
+| `InvalidName` | `12` | Name is invalid. |
+| `InvalidEmail` | `13` | Email is invalid. |
+| `DuplicateName` | `14` | Name is not unique. |
+| `AccessDenied` | `15` | Access is denied. |
+| `Timeout` | `16` | Operation timed out. |
+| `Banned` | `17` | VAC2 banned. |
+| `AccountNotFound` | `18` | Account not found. |
+| `InvalidSteamID` | `19` | SteamID is invalid. |
+| `ServiceUnavailable` | `20` | The requested service is currently unavailable. |
+| `NotLoggedOn` | `21` | The user is not logged on. |
+| `Pending` | `22` | Request is pending (may be in process; or waiting on third party) |
+| `EncryptionFailure` | `23` | Encryption or Decryption failed. |
+| `InsufficientPrivilege` | `24` | Insufficient privilege. |
+| `LimitExceeded` | `25` | Too much of a good thing. |
+| `Revoked` | `26` | Access has been revoked (used for revoked guest passes) |
+| `Expired` | `27` | License/Guest pass the user is trying to access is expired. |
+| `AlreadyRedeemed` | `28` | Guest pass has already been redeemed by account; cannot be acked again. |
+| `DuplicateRequest` | `29` | The request is a duplicate and the action has already occurred in the past; ignored this time. |
+| `AlreadyOwned` | `30` | All the games in this guest pass redemption request are already owned by the user. |
+| `IPNotFound` | `31` | IP address not found. |
+| `PersistFailed` | `32` | Failed to write change to the data store. |
+| `LockingFailed` | `33` | Failed to acquire access lock for this operation. |
+| `LogonSessionReplaced` | `34` | The logon session was replaced. |
+| `ConnectFailed` | `35` | The connection failed. |
+| `HandshakeFailed` | `36` | The connection handshake failed. |
+| `IOFailure` | `37` | A generic IO failure. |
+| `RemoteDisconnect` | `38` | The remote server disconnected. |
+| `ShoppingCartNotFound` | `39` | Failed to find the shopping cart requested. |
+| `Blocked` | `40` | A user didn't allow it. |
+| `Ignored` | `41` | Target is ignoring sender. |
+| `NoMatch` | `42` | Nothing matching the request found. |
+| `AccountDisabled` | `43` | The account is disabled. |
+| `ServiceReadOnly` | `44` | This service is not accepting content changes right now. |
+| `AccountNotFeatured` | `45` | Account doesn't have value; so this feature isn't available. |
+| `AdministratorOK` | `46` | Allowed to take this action; but only because requester is admin. |
+| `ContentVersion` | `47` | A Version mismatch in content transmitted within the Steam protocol. |
+| `TryAnotherCM` | `48` | The current CM can't service the user making a request; user should try another. |
+| `PasswordRequiredToKickSession` | `49` | You are already logged in elsewhere; this cached credential login has failed. |
+| `AlreadyLoggedInElsewhere` | `50` | You are already logged in elsewhere; you must wait. |
+| `Suspended` | `51` | Long running operation (content download) suspended/paused. |
+| `Cancelled` | `52` | Operation canceled (typically by user: content download) |
+| `DataCorruption` | `53` | Operation canceled because data is ill formed or unrecoverable. |
+| `DiskFull` | `54` | Operation canceled - not enough disk space. |
+| `RemoteCallFailed` | `55` | An remote call or IPC call failed. |
+| `PasswordUnset` | `56` | Password could not be verified as it's unset server side. |
+| `ExternalAccountUnlinked` | `57` | External account (PSN; Facebook...) is not linked to a Steam account. |
+| `PSNTicketInvalid` | `58` | PSN ticket was invalid. |
+| `ExternalAccountAlreadyLinked` | `59` | External account (PSN; Facebook...) is already linked to some other account; must explicitly request to replace/delete the link first. |
+| `RemoteFileConflict` | `60` | The sync cannot resume due to a conflict between the local and remote files. |
+| `IllegalPassword` | `61` | The requested new password is not legal. |
+| `SameAsPreviousValue` | `62` | New value is the same as the old one ( secret question and answer ) |
+| `AccountLogonDenied` | `63` | Account login denied due to 2nd factor authentication failure. |
+| `CannotUseOldPassword` | `64` | The requested new password is not legal. |
+| `InvalidLoginAuthCode` | `65` | Account login denied due to auth code invalid. |
+| `AccountLogonDeniedNoMail` | `66` | Account login denied due to 2nd factor auth failure - and no mail has been sent. |
+| `HardwareNotCapableOfIPT` | `67` | The hardware is not capable of Intel Identity Protection Technology. |
+| `IPTInitError` | `68` | Intel Identity Protection Technology failed to initialize. |
+| `ParentalControlRestricted` | `69` | Operation failed due to parental control restrictions for current user. |
+| `FacebookQueryError` | `70` | Facebook query returned an error. |
+| `ExpiredLoginAuthCode` | `71` | Account login denied due to auth code expired. |
+| `IPLoginRestrictionFailed` | `72` | The login was denied by the IP restrictions. |
+| `AccountLockedDown` | `73` | The account is locked down. |
+| `AccountLogonDeniedVerifiedEmailRequired` | `74` | A verified email is required to log on. |
+| `NoMatchingURL` | `75` | There is no URL matching the provided values. |
+| `BadResponse` | `76` | Parse failure; missing field; etc. |
+| `RequirePasswordReEntry` | `77` | The user cannot complete the action until they re-enter their password. |
+| `ValueOutOfRange` | `78` | The value entered is outside the acceptable range. |
+| `UnexpectedError` | `79` | Something happened that we didn't expect to ever happen. |
+| `Disabled` | `80` | The requested service has been configured to be unavailable. |
+| `InvalidCEGSubmission` | `81` | The set of files submitted to the CEG server are not valid ! |
+| `RestrictedDevice` | `82` | The device being used is not allowed to perform this action. |
+| `RegionLocked` | `83` | The action could not be complete because it is region restricted. |
+| `RateLimitExceeded` | `84` | Temporary rate limit exceeded; try again later; different from `LimitExceeded`, which may be permanent. |
+| `AccountLoginDeniedNeedTwoFactor` | `85` | Need two-factor code to login. |
+| `ItemDeleted` | `86` | The thing we're trying to access has been deleted. |
+| `AccountLoginDeniedThrottle` | `87` | Login attempt failed; try to throttle response to possible attacker. |
+| `TwoFactorCodeMismatch` | `88` | Two factor code mismatch. |
+| `TwoFactorActivationCodeMismatch` | `89` | Activation code for two-factor didn't match. |
+| `AccountAssociatedToMultiplePartners` | `90` | Account has been associated with multiple partners. |
+| `NotModified` | `91` | Data not modified. |
+| `NoMobileDevice` | `92` | The account does not have a mobile device associated with it. |
+| `TimeNotSynced` | `93` | The time presented is out of range or tolerance. |
+| `SmsCodeFailed` | `94` | SMS code failure (no match; none pending; etc.) |
+| `AccountLimitExceeded` | `95` | Too many accounts access this resource. |
+| `AccountActivityLimitExceeded` | `96` | Too many changes to this account. |
+| `PhoneActivityLimitExceeded` | `97` | Too many changes to this phone. |
+| `RefundToWallet` | `98` | Cannot refund to payment method; must use wallet. |
+| `EmailSendFailure` | `99` | Cannot send an email. |
+| `NotSettled` | `100` | Can't perform operation till payment has settled. |
+| `NeedCaptcha` | `101` | Needs to provide a valid captcha. |
+| `GSLTDenied` | `102` | A game server login token owned by this token's owner has been banned. |
+| `GSOwnerDenied` | `103` | Game server owner is denied for other reason (account lock; community ban; vac ban; missing phone) |
+| `InvalidItemType` | `104` | The type of thing we were requested to act on is invalid. |
+| `IPBanned` | `105` | The ip address has been banned from taking this action. |
+| `GSLTExpired` | `106` | This token has expired from disuse; can be reset for use. |
+
+---
+
+# steam.ugc.EUserList
+
+**enum abstract** · package [`steam.ugc`](README.md) · module `steam.ugc.Data` · source [`steam/ugc/Data.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/ugc/Data.hx)
+
+The list of items of a user, for a Workshop query (Steamworks `EUserUGCList`).
+
+Underlying type: `Int`
+
+Implicit casts from: `Int`
+
+Implicit casts to: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `Published` | `0` | The items published by the user. |
+| `VotedOn` | `1` | The items the user voted on. |
+| `VotedUp` | `2` | The items the user voted up. |
+| `VotedDown` | `3` | The items the user voted down. |
+| `WillVoteLater` | `4` | Deprecated. |
+| `Favorited` | `5` | The favorites of the user. |
+| `Subscribed` | `6` | The items the user subscribed to. |
+| `UsedOrPlayed` | `7` | The items the user used or played. |
+| `Followed` | `8` | The items the user follows. |
+
+---
+
+# steam.ugc.EUserListSortOrder
+
+**enum abstract** · package [`steam.ugc`](README.md) · module `steam.ugc.Data` · source [`steam/ugc/Data.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/ugc/Data.hx)
+
+The order of the items of a user list query (Steamworks `EUserUGCListSortOrder`).
+
+Underlying type: `Int`
+
+Implicit casts from: `Int`
+
+Implicit casts to: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `CreationOrderDesc` | `0` | By decreasing creation date. |
+| `CreationOrderAsc` | `1` | By increasing creation date. |
+| `TitleAsc` | `2` | By title. |
+| `LastUpdatedDesc` | `3` | By decreasing update date. |
+| `SubscriptionDateDesc` | `4` | By decreasing subscription date. |
+| `VoteScoreDesc` | `5` | By decreasing vote score. |
+| `ForModeration` | `6` | For moderation. |
+
+---
+
+# steam.ugc.Item
+
+**class** · package [`steam.ugc`](README.md) · source [`steam/ugc/Item.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/ugc/Item.hx)
+
+A Workshop item (Steamworks `PublishedFileId_t`).
+
+## Static variables
+
+### downloadedCallbacks
+
+```haxe
+static var downloadedCallbacks:Array<() -> Void>
+```
+
+The functions called when an item was downloaded (see `init`).
+
+### installedCallbacks
+
+```haxe
+static var installedCallbacks:Array<() -> Void>
+```
+
+The functions called when an item was installed (see `init`).
+
+## Static methods
+
+### fromInt
+
+```haxe
+static function fromInt(i:Int):Item
+```
+
+Returns the item of an id below 2^32.
+
+### init
+
+```haxe
+static function init(onDownloaded:() -> Void, onInstalled:() -> Void):Void
+```
+
+Adds functions called when an item was downloaded and when an item was installed.
+
+### create
+
+```haxe
+static function create(appId:Int, cb:(Null<Item>, Bool) -> Void):Void
+```
+
+Creates a new item for the app: `cb` is called with the item (`null` on error) and whether the user must accept the Workshop legal agreement. Set its content with `ItemUpdate`.
+
+### listSubscribed
+
+```haxe
+static function listSubscribed():Array<Item>
+```
+
+Returns the items the user is subscribed to, or `null`.
+
+## Variables
+
+### id
+
+```haxe
+var id:steam.UID
+```
+
+The id of the item.
+
+## Methods
+
+### getState
+
+```haxe
+function getState():EnumFlags<ItemState>
+```
+
+Returns the state of the item.
+
+### getDownloadInfo
+
+```haxe
+function getDownloadInfo():{ total:Float, downloaded:Float }
+```
+
+Returns the progress of the download, in bytes, or `null` if not downloading.
+
+### getInstallInfo
+
+```haxe
+function getInstallInfo():Null<{ timestamp:Dynamic, size:Dynamic, path:String }>
+```
+
+Returns the size, update time and folder of the installed item, or `null` if not installed.
+
+### download
+
+```haxe
+function download(highPriority:Bool):Bool
+```
+
+Downloads or updates the item (see `init` to be notified). `highPriority` pauses the other downloads. Returns `false` on failure.
+
+### subscribe
+
+```haxe
+function subscribe(cb:steam.Callback<steam.UID>):Void
+```
+
+Subscribes the user to the item (it is then downloaded): `cb` is called when done.
+
+### unsubscribe
+
+```haxe
+function unsubscribe(cb:steam.Callback<steam.UID>):Void
+```
+
+Unsubscribes the user from the item: `cb` is called when done.
+
+### toString
+
+```haxe
+function toString():String
+```
+
+Returns a description of the item.
+
+### delete
+
+```haxe
+function delete(cb:(Int, Bool) -> Void):steam.AsyncCall
+```
+
+Deletes the item: `cb` is called with the `EResult` and whether the call failed.
+
+### addAppDependency
+
+```haxe
+function addAppDependency(appId:Int, cb:(Int, Bool) -> Void):steam.AsyncCall
+```
+
+Makes the item require the app (DLC): `cb` is called with the `EResult` and whether the call failed.
+
+### removeAppDependency
+
+```haxe
+function removeAppDependency(appId:Int, cb:(Int, Bool) -> Void):steam.AsyncCall
+```
+
+Removes an app dependency of the item: `cb` is called with the `EResult` and whether the call failed.
+
+### getAppDependencies
+
+```haxe
+function getAppDependencies(cb:({ result:Int, deps:hl.NativeArray<Int> }, Bool) -> Void):steam.AsyncCall
+```
+
+Requests the apps the item requires: `cb` is called with the `EResult` and the app ids, and whether the call failed.
+
+---
+
+# steam.ugc.ItemState
+
+**enum** · package [`steam.ugc`](README.md) · module [`steam.ugc.Item`](Item.md) · source [`steam/ugc/Item.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/ugc/Item.hx)
+
+The state of a Workshop item on the computer (Steamworks `EItemState`).
+
+## Constructors
+
+### Subscribed
+
+```haxe
+Subscribed
+```
+
+The user is subscribed to the item.
+
+### LegacyItem
+
+```haxe
+LegacyItem
+```
+
+The item was created with the old Workshop API (`ISteamRemoteStorage`).
+
+### Installed
+
+```haxe
+Installed
+```
+
+The item is installed.
+
+### NeedsUpdate
+
+```haxe
+NeedsUpdate
+```
+
+The item needs an update.
+
+### Downloading
+
+```haxe
+Downloading
+```
+
+The item is being downloaded.
+
+### DownloadPending
+
+```haxe
+DownloadPending
+```
+
+The download is scheduled.
+
+---
+
+# steam.ugc.ItemUpdate
+
+**class** · package [`steam.ugc`](README.md) · source [`steam/ugc/ItemUpdate.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/ugc/ItemUpdate.hx)
+
+An update of a Workshop item: set the changes, then `submit` it (Steamworks `UGCUpdateHandle_t`).
+
+## Static methods
+
+### start
+
+```haxe
+static function start(appId:Int, item:steam.UID):ItemUpdate
+```
+
+Starts an update of the item of the app, or returns `null`.
+
+## Methods
+
+### submit
+
+```haxe
+function submit(notes:String, cb:(Bool, Dynamic) -> Void):steam.AsyncCall
+```
+
+Submits the update, with change notes (or `null`): `cb` is called with `true` on success, and whether the user must accept the Workshop legal agreement.
+
+### setUpdateLanguage
+
+```haxe
+function setUpdateLanguage(lang:String):Bool
+```
+
+Sets the language of the title and description (Steam API language name).
+
+### setTitle
+
+```haxe
+function setTitle(title:String):Bool
+```
+
+Sets the title.
+
+### setDescription
+
+```haxe
+function setDescription(desc:String):Bool
+```
+
+Sets the description.
+
+### setMetadata
+
+```haxe
+function setMetadata(metadata:String):Bool
+```
+
+Sets the metadata, data for the game (up to 5000 bytes).
+
+### setTags
+
+```haxe
+function setTags(tags:Array<String>):Bool
+```
+
+Sets the tags.
+
+### addKeyValueTag
+
+```haxe
+function addKeyValueTag(key:String, value:String):Bool
+```
+
+Adds a key/value tag.
+
+### removeKeyValueTag
+
+```haxe
+function removeKeyValueTag(key:String):Bool
+```
+
+Removes the key/value tags of the key.
+
+### setVisibility
+
+```haxe
+function setVisibility(visibility:EItemVisibility):Bool
+```
+
+Sets the visibility.
+
+### setContent
+
+```haxe
+function setContent(path:String):Bool
+```
+
+Sets the folder whose content is uploaded as the item.
+
+### setPreviewImage
+
+```haxe
+function setPreviewImage(path:String):Bool
+```
+
+Sets the preview image file.
+
+---
+
+# steam.ugc.Query
+
+**class** · package [`steam.ugc`](README.md) · source [`steam/ugc/Query.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/ugc/Query.hx)
+
+A query of Workshop items (Steamworks `UGCQueryHandle_t`): create it with `list`, `userList` or `details`, set its options, `send` it, read the results with `getResult`, then `close` it.
+
+## Static methods
+
+### list
+
+```haxe
+static function list(type:EQueryType, ugcType:EMatchingType, creatorApp:Int, consumerApp:Int, page:Int):Query
+```
+
+Creates a query of all the items, ranked by `type`. `page` starts at `1` (50 results per page). Returns `null` on failure.
+
+### userList
+
+```haxe
+static function userList(user:steam.User, listType:EUserList, ugcType:EMatchingType, order:EUserListSortOrder, creatorApp:Int, consumerApp:Int, page:Int):Null<Query>
+```
+
+Creates a query of a list of items of a user. `page` starts at `1`. Returns `null` on failure.
+
+### details
+
+```haxe
+static function details(ids:Array<Item>):Query
+```
+
+Creates a query of the details of the items. Returns `null` on failure.
+
+## Variables
+
+### returnKeyValueTags
+
+```haxe
+var returnKeyValueTags(default, set):Bool
+```
+
+Returns the key/value tags of the items.
+
+### returnMetadata
+
+```haxe
+var returnMetadata(default, set):Bool
+```
+
+Returns the metadata of the items.
+
+### returnChildren
+
+```haxe
+var returnChildren(default, set):Bool
+```
+
+Returns the children of the items (collections).
+
+### sent
+
+```haxe
+var sent(default, null):Bool
+```
+
+Tells if `send` was called.
+
+### resultsReturned
+
+```haxe
+var resultsReturned(default, null):Int
+```
+
+The number of results of this page.
+
+### totalResults
+
+```haxe
+var totalResults(default, null):Int
+```
+
+The total number of results.
+
+### cached
+
+```haxe
+var cached(default, null):Bool
+```
+
+Tells if the results come from the local cache.
+
+## Methods
+
+### setLanguage
+
+```haxe
+function setLanguage(lang:String):Void
+```
+
+Sets the language of the titles and descriptions returned (Steam API language name).
+
+### setSearchText
+
+```haxe
+function setSearchText(search:String):Void
+```
+
+Sets the text searched in the items.
+
+### addRequiredTag
+
+```haxe
+function addRequiredTag(tag:String):Void
+```
+
+Only returns the items having the tag.
+
+### addRequiredKeyValueTag
+
+```haxe
+function addRequiredKeyValueTag(key:String, value:String):Void
+```
+
+Only returns the items having the key/value tag.
+
+### addExcludedTag
+
+```haxe
+function addExcludedTag(tag:String):Void
+```
+
+Excludes the items having the tag.
+
+### set_returnMetadata
+
+```haxe
+function set_returnMetadata(b:Bool):Bool
+```
+
+### set_returnKeyValueTags
+
+```haxe
+function set_returnKeyValueTags(b:Bool):Bool
+```
+
+### set_returnChildren
+
+```haxe
+function set_returnChildren(b:Bool):Bool
+```
+
+### send
+
+```haxe
+function send(cb:() -> Void):Void
+```
+
+Sends the query: `cb` is called with `true` if it succeeded.
+
+### close
+
+```haxe
+function close():Void
+```
+
+Releases the query.
+
+### getResult
+
+```haxe
+function getResult(index:Int):Null<Result>
+```
+
+Returns a result, from `0` to `resultsReturned - 1`, or `null`.
+
+---
+
+# steam.ugc.Result
+
+**class** · package [`steam.ugc`](README.md) · module [`steam.ugc.Query`](Query.md) · source [`steam/ugc/Query.hx`](https://github.com/Jonathan-HETEAU/hlsteam/blob/ccr-01f70725-tatboj/steam/ugc/Query.hx)
+
+A Workshop item returned by a `Query` (Steamworks `SteamUGCDetails_t`).
+
+## Variables
+
+### id
+
+```haxe
+var id:steam.UID
+```
+
+The id of the item.
+
+### item
+
+```haxe
+var item(get, null):Item
+```
+
+The item.
+
+### result
+
+```haxe
+var result:EResult
+```
+
+The result of the query for this item.
+
+### fileType
+
+```haxe
+var fileType:EFileType
+```
+
+The type of the item.
+
+### creatorApp
+
+```haxe
+var creatorApp:Int
+```
+
+The app that created the item.
+
+### consumerApp
+
+```haxe
+var consumerApp:Int
+```
+
+The app that uses the item.
+
+### title
+
+```haxe
+var title:String
+```
+
+The title.
+
+### description
+
+```haxe
+var description:String
+```
+
+The description.
+
+### owner
+
+```haxe
+var owner:steam.User
+```
+
+The user who created the item.
+
+### created
+
+```haxe
+var created:Int
+```
+
+The creation time, in seconds since 1970.
+
+### updated
+
+```haxe
+var updated:Int
+```
+
+The last update time, in seconds since 1970.
+
+### timeAddedToUserList
+
+```haxe
+var timeAddedToUserList:Int
+```
+
+The time the item was added to the user list, for `Query.userList` queries, in seconds since 1970.
+
+### visibility
+
+```haxe
+var visibility:EItemVisibility
+```
+
+The visibility.
+
+### banned
+
+```haxe
+var banned:Bool
+```
+
+Tells if the item was banned.
+
+### acceptedForUse
+
+```haxe
+var acceptedForUse:Bool
+```
+
+Tells if the item was accepted for the game.
+
+### tags
+
+```haxe
+var tags:Array<String>
+```
+
+The tags.
+
+### previewFile
+
+```haxe
+var previewFile:steam.UID
+```
+
+The preview image file.
+
+### previewFileSize
+
+```haxe
+var previewFileSize:Int
+```
+
+The size of the preview image, in bytes.
+
+### file
+
+```haxe
+var file:steam.UID
+```
+
+The file of the item.
+
+### fileName
+
+```haxe
+var fileName:String
+```
+
+The name of the file.
+
+### fileSize
+
+```haxe
+var fileSize:Int
+```
+
+The size of the file, in bytes.
+
+### url
+
+```haxe
+var url:String
+```
+
+The URL of the item, for links (web guides, videos).
+
+### votesUp
+
+```haxe
+var votesUp:Int
+```
+
+The number of up votes.
+
+### votesDown
+
+```haxe
+var votesDown:Int
+```
+
+The number of down votes.
+
+### score
+
+```haxe
+var score:Float
+```
+
+The score, from `0` to `1`.
+
+### numChildren
+
+```haxe
+var numChildren:Int
+```
+
+The number of children (items of a collection).
+
+### keyValueTags
+
+```haxe
+var keyValueTags:Array<{ value:String, key:String }>
+```
+
+The key/value tags, if `Query.returnKeyValueTags` is set.
+
+### metadata
+
+```haxe
+var metadata:String
+```
+
+The metadata, if `Query.returnMetadata` is set.
+
+### children
+
+```haxe
+var children:Array<Item>
+```
+
+The children, if `Query.returnChildren` is set.
+
+## Methods
+
+### get_item
+
+```haxe
+inline function get_item():Item
+```
+
+### getKeyValueTag
+
+```haxe
+function getKeyValueTag(key:String):String
+```
+
+Returns the value of a key/value tag, or `null`.
+
+---

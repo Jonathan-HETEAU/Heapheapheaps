@@ -1,0 +1,3186 @@
+# DomKit API (full text)
+
+> DomKit is a strictly typed UI framework for Haxe based on components and CSS: components are declared with an XML-like markup (`static var SRC = <comp>...</comp>`) compiled by macros, and styled with CSS properties checked at compile time. It is used by Heaps (`h2d.domkit`): see https://heaps.io/documentation/domkit.html.
+
+# domkit.Argument
+
+**typedef** · package [`domkit`](README.md) · module [`domkit.MarkupParser`](MarkupParser.md) · source [`domkit/MarkupParser.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/MarkupParser.hx)
+
+A node argument (`<node(arg1, arg2)>`), passed to the component constructor.
+
+## Fields
+
+### value
+
+```haxe
+var value:AttributeValue
+```
+
+The value.
+
+### pmin
+
+```haxe
+var pmin:Int
+```
+
+The start position.
+
+### pmax
+
+```haxe
+var pmax:Int
+```
+
+The end position.
+
+---
+
+# domkit.AttributeValue
+
+**enum** · package [`domkit`](README.md) · module [`domkit.MarkupParser`](MarkupParser.md) · source [`domkit/MarkupParser.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/MarkupParser.hx)
+
+The value of an attribute or argument.
+
+## Constructors
+
+### RawValue
+
+```haxe
+RawValue(v:String)
+```
+
+A string, parsed as CSS (`attr="value"`).
+
+### Code
+
+```haxe
+Code(v:CodeExpr)
+```
+
+Haxe code (`attr={code}`, or `"$code"`).
+
+---
+
+# domkit.BezierCurve
+
+**class** · package [`domkit`](README.md) · module [`domkit.CssParser`](CssParser.md) · source [`domkit/CssParser.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssParser.hx)
+
+Extends: [`domkit.Curve`](Curve.md)
+
+A cubic bezier easing curve, like CSS `cubic-bezier(c1x, c1y, c2x, c2y)`.
+
+## Constructor
+
+### new
+
+```haxe
+function new(a:Float, b:Float, c:Float, d:Float):Void
+```
+
+Creates the curve from its control points.
+
+## Variables
+
+### c1x
+
+```haxe
+var c1x:Float
+```
+
+The X of the first control point.
+
+### c1y
+
+```haxe
+var c1y:Float
+```
+
+The Y of the first control point.
+
+### c2x
+
+```haxe
+var c2x:Float
+```
+
+The X of the second control point.
+
+### c2y
+
+```haxe
+var c2y:Float
+```
+
+The Y of the second control point.
+
+## Methods
+
+### interpolate
+
+```haxe
+override function interpolate(p:Float):Float
+```
+
+## Inherited members
+
+- from [`domkit.Curve`](Curve.md): `interpolate`
+
+---
+
+# domkit.BytesCell
+
+**class** · package [`domkit`](README.md) · module [`domkit.CssStyle`](CssStyle.md) · source [`domkit/CssStyle.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssStyle.hx) · available on hl
+
+Type parameters: `<T>`
+
+An entry of a `BytesMap`.
+
+## Constructor
+
+### new
+
+```haxe
+function new(bytes:hl.Bytes, value:domkit.BytesCell.T, next:BytesCell<domkit.BytesCell.T>):Void
+```
+
+Creates the entry.
+
+## Variables
+
+### bytes
+
+```haxe
+var bytes:hl.Bytes
+```
+
+The key.
+
+### value
+
+```haxe
+var value:domkit.BytesCell.T
+```
+
+The value.
+
+### next
+
+```haxe
+var next:BytesCell<domkit.BytesCell.T>
+```
+
+The next entry with the same hash.
+
+---
+
+# domkit.BytesMap
+
+**abstract** · package [`domkit`](README.md) · module [`domkit.CssStyle`](CssStyle.md) · source [`domkit/CssStyle.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssStyle.hx) · available on hl
+
+Type parameters: `<T>`
+
+A map with bytes keys, used by the style cache on HashLink.
+
+Underlying type: `Map<Int, BytesCell<domkit.BytesMap.T>>`
+
+## Methods
+
+### get
+
+```haxe
+inline function get(bytes:hl.Bytes, len:Int):Null<domkit.BytesMap.T>
+```
+
+Returns the value of the first `len` bytes, or `null`.
+
+### set
+
+```haxe
+inline function set(bytes:hl.Bytes, len:Int, value:domkit.BytesMap.T):Void
+```
+
+Sets the value of the first `len` bytes.
+
+---
+
+# domkit.Checker
+
+**class** · package [`domkit`](README.md) · source [`domkit/Checker.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Checker.hx)
+
+Extends: `hscript.Checker`
+
+Type checks the markup and the CSS of components at runtime (for the interpreted components of `Interp`, or in editors such as Hide), from the types of the Heaps components (`h2d.domkit.InitComponents.build()` classes).
+
+## Constructor
+
+### new
+
+```haxe
+function new(types:Null<hscript.CheckerTypes>):Void
+```
+
+Creates the checker from the types of the program (`hscript.LiveClass.getTypes()`).
+
+## Variables
+
+### t_string
+
+```haxe
+var t_string:hscript._Checker.Type
+```
+
+The `String` type.
+
+### components
+
+```haxe
+var components:Map<String, TypedComponent>
+```
+
+The components, by name.
+
+### properties
+
+```haxe
+var properties:Map<String, Array<TypedProperty>>
+```
+
+The components properties, by CSS name.
+
+## Methods
+
+### begin
+
+```haxe
+function begin(onMarkup:(String, hscript._Expr.Expr) -> Void):Void
+```
+
+Starts checking code, `onMarkup` being called for the markup expressions.
+
+### done
+
+```haxe
+function done():Void
+```
+
+Ends the checking.
+
+### haxeToCss
+
+```haxe
+function haxeToCss(name:String):String
+```
+
+Converts a Haxe name to CSS casing (see `CssParser.haxeToCss`).
+
+### getComponent
+
+```haxe
+function getComponent(name:String):Null<TypedComponent>
+```
+
+Returns the component of the given name (after the remaps), or `null`.
+
+### makeParams
+
+```haxe
+function makeParams(c:TypedComponent):Null<Array<hscript._Checker.Type>>
+```
+
+Returns new monomorphs for the type parameters of the component class, or `null`.
+
+### resolveProperty
+
+```haxe
+function resolveProperty(comp:TypedComponent, name:String):Null<TypedProperty>
+```
+
+Returns the property of the component or of its parents, or `null`.
+
+---
+
+# domkit.CodeExpr
+
+**typedef** · package [`domkit`](README.md) · module [`domkit.MarkupParser`](MarkupParser.md) · source [`domkit/MarkupParser.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/MarkupParser.hx)
+
+Haxe code in the markup: an expression in macros, the source code otherwise.
+
+Alias for: `String`
+
+---
+
+# domkit.Component
+
+**class** · package [`domkit`](README.md) · source [`domkit/Component.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Component.hx)
+
+Type parameters: `<BaseT, T>`
+
+Subclasses: [`domkit.MetaComponent`](MetaComponent.md)
+
+A component: the name used in the markup and in CSS (`button`, `flow`...), how to create its objects of type `T`, and how it handles the CSS properties. Components are created by the macros ([`domkit.Object`](Object.md) classes) and registered by name.
+
+## Constructor
+
+### new
+
+```haxe
+function new(name:String, make:(Array<Dynamic>, domkit.Component.BaseT) -> domkit.Component.T, parent:Component<domkit.Component.BaseT, Dynamic>):Void
+```
+
+Creates and registers the component.
+
+## Static methods
+
+### get
+
+```haxe
+static function get(name:String, ?opt:Bool = false):Null<Component<Dynamic, Dynamic>>
+```
+
+Returns the component of the given name (after the remaps). Throws if unknown, or returns `null` if `opt` is set.
+
+### resolveRemaps
+
+```haxe
+static function resolveRemaps(name:String):String
+```
+
+Returns the name of the component used for `name` (see `domkit.Macros.registerComponentRemap`), or `name` itself.
+
+### build
+
+```haxe
+static function build(expr:Dynamic, ?parent:Dynamic):Dynamic
+```
+
+Creates the objects declared by an inline markup, and returns the root: `Component.build(<flow><text text="hi"/></flow>, parent)`.
+
+## Variables
+
+### id
+
+```haxe
+var id:Int
+```
+
+The index of the component, used by the style cache (`-1` until it is used by a CSS rule).
+
+### name
+
+```haxe
+var name:String
+```
+
+The name of the component.
+
+### make
+
+```haxe
+var make:(Array<Dynamic>, domkit.Component.BaseT) -> domkit.Component.T
+```
+
+Creates an object of the component, from the constructor arguments and the parent object.
+
+### parent
+
+```haxe
+var parent:Component<domkit.Component.BaseT, Dynamic>
+```
+
+The parent component: its properties are inherited, and its CSS rules apply.
+
+## Methods
+
+### getHandler
+
+```haxe
+inline function getHandler(p:Property):PropertyHandler<domkit.Component.T, getHandler.P>
+```
+
+Returns the handler of the property, or `null` if the component doesn't support it.
+
+### isOfType
+
+```haxe
+function isOfType(c:Component<domkit.Component.BaseT, domkit.Component.T>):Bool
+```
+
+Tells if the component is `c` or inherits from it.
+
+---
+
+# domkit.ComponentDecl
+
+**interface** · package [`domkit`](README.md) · module [`domkit.Component`](Component.md) · source [`domkit/Component.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Component.hx)
+
+Type parameters: `<T>`
+
+Declares the component of another class `T`: a class implementing `ComponentDecl<T>` (with [`domkit.Object`](Object.md)) defines the properties of `T`, for classes that can't be modified.
+
+---
+
+# domkit.CssClass
+
+**class** · package [`domkit`](README.md) · module [`domkit.CssParser`](CssParser.md) · source [`domkit/CssParser.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssParser.hx)
+
+A CSS selector part: component, class names, id and pseudo classes, with its parent selector.
+
+## Constructor
+
+### new
+
+```haxe
+function new():Void
+```
+
+Creates an empty selector.
+
+## Variables
+
+### parent
+
+```haxe
+var parent:Null<CssClass>
+```
+
+The parent selector, or `null`.
+
+### component
+
+```haxe
+var component:Null<Component<Dynamic, Dynamic>>
+```
+
+The component, or `null` for any.
+
+### id
+
+```haxe
+var id:Identifier
+```
+
+The id (`#id`), or undefined.
+
+### className
+
+```haxe
+var className:Null<Identifier>
+```
+
+The class (`.name`), or `null`.
+
+### extraClasses
+
+```haxe
+var extraClasses:Null<Array<Identifier>>
+```
+
+The other classes, or `null`.
+
+### pseudoClasses
+
+```haxe
+var pseudoClasses:PseudoClass
+```
+
+The pseudo classes.
+
+### relation
+
+```haxe
+var relation:CssRelation
+```
+
+The relation with the parent selector.
+
+## Methods
+
+### withParent
+
+```haxe
+function withParent(cl:CssClass):Null<CssClass>
+```
+
+Returns the selector of a nested rule, combined with its parent selector `cl`.
+
+### toString
+
+```haxe
+function toString():String
+```
+
+Returns the selector in CSS syntax.
+
+---
+
+# domkit.CssData
+
+**class** · package [`domkit`](README.md) · module [`domkit.CssStyle`](CssStyle.md) · source [`domkit/CssStyle.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssStyle.hx)
+
+The rules of a `CssStyle`, sorted by priority, and the cache of the rules matching a set of components.
+
+## Constructor
+
+### new
+
+```haxe
+function new():Void
+```
+
+Creates empty data.
+
+## Static variables
+
+### CID
+
+```haxe
+static var CID:Int
+```
+
+The number of components with an id.
+
+### COMPONENTS
+
+```haxe
+static var COMPONENTS:Array<Component<Dynamic, Dynamic>>
+```
+
+The components used by the rules, by id.
+
+## Static methods
+
+### registerComponent
+
+```haxe
+static function registerComponent(c:Component<Dynamic, Dynamic>):Void
+```
+
+Gives an id to the component, if not done yet.
+
+## Variables
+
+### rules
+
+```haxe
+var rules:Array<Rule>
+```
+
+The rules, sorted by decreasing priority after `init`.
+
+### bytesSize
+
+```haxe
+var bytesSize:Int
+```
+
+The size of the component bit sets.
+
+### needsInit
+
+```haxe
+var needsInit:Bool
+```
+
+Tells if rules were added since the last `init`.
+
+## Methods
+
+### init
+
+```haxe
+function init():Void
+```
+
+Sorts the rules and registers their components, if rules were added.
+
+### getCache
+
+```haxe
+inline function getCache(bits:FastBytes):Array<Rule>
+```
+
+Returns the rules cached for the set of components, or `null`.
+
+### setCache
+
+```haxe
+inline function setCache(bits:FastBytes, value:Array<Rule>):Void
+```
+
+Caches the rules of the set of components.
+
+### add
+
+```haxe
+function add(sheet:CssSheet):Void
+```
+
+Adds the rules of a style sheet.
+
+### clear
+
+```haxe
+function clear():Void
+```
+
+Removes all the rules.
+
+---
+
+# domkit.CssOp
+
+**enum** · package [`domkit`](README.md) · module [`domkit.CssValue`](CssValue.md) · source [`domkit/CssValue.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssValue.hx)
+
+An arithmetic operator in a CSS value.
+
+## Constructors
+
+### OAdd
+
+```haxe
+OAdd
+```
+
+`+`
+
+### OSub
+
+```haxe
+OSub
+```
+
+`-`
+
+### OMult
+
+```haxe
+OMult
+```
+
+`*`
+
+### ODiv
+
+```haxe
+ODiv
+```
+
+`/`
+
+---
+
+# domkit.CssParser
+
+**class** · package [`domkit`](README.md) · source [`domkit/CssParser.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssParser.hx)
+
+Parses CSS style sheets and values, with the DomKit extensions: nested rules (`&`, `>`), variables (`@name : value;`), mixins (`.name(args) { }` used as `.name(values);`), arithmetic, and `//` comments.
+
+## Constructor
+
+### new
+
+```haxe
+function new():Void
+```
+
+Creates a parser.
+
+## Static methods
+
+### opStr
+
+```haxe
+static function opStr(op:CssOp):String
+```
+
+Returns the CSS operator.
+
+### valueMap
+
+```haxe
+static function valueMap(v:CssValue, f:() -> CssValue):CssValue
+```
+
+Returns the value with `f` applied to its sub values.
+
+### valueStr
+
+```haxe
+static function valueStr(v:CssValue):String
+```
+
+Returns the value in CSS syntax.
+
+### haxeToCss
+
+```haxe
+static function haxeToCss(name:String):String
+```
+
+Converts a Haxe name to CSS casing: `myButton` and `MyButton` are `my-button`. Fully uppercase names are lower cased, and `_` becomes `-`.
+
+### cssToHaxe
+
+```haxe
+static function cssToHaxe(name:String, ?isField:Bool = false):String
+```
+
+Converts a CSS name to a Haxe class name (`my-button` is `MyButton`), or a field name if `isField` is set (`myButton`).
+
+## Variables
+
+### warnings
+
+```haxe
+var warnings:Array<{ pmin:Int, pmax:Int, msg:String }>
+```
+
+The warnings of the last parsing or `check`.
+
+### allowSubRules
+
+```haxe
+var allowSubRules:Bool
+```
+
+Allows nested rules.
+
+### allowVariablesDecl
+
+```haxe
+var allowVariablesDecl:Bool
+```
+
+Allows variables declarations (`@name : value;`).
+
+### allowMixins
+
+```haxe
+var allowMixins:Bool
+```
+
+Allows mixins.
+
+### expandSubRules
+
+```haxe
+var expandSubRules:Bool
+```
+
+Converts the nested rules to rules with full selectors.
+
+### allowSingleLineComment
+
+```haxe
+var allowSingleLineComment:Bool
+```
+
+Allows `//` comments.
+
+### variables
+
+```haxe
+var variables:Map<String, CssValue>
+```
+
+The variables, by name.
+
+### mixins
+
+```haxe
+var mixins:Map<String, { rules:CssSheetElement, args:Array<String> }>
+```
+
+The mixins, by name.
+
+## Methods
+
+### addMacro
+
+```haxe
+function addMacro(name:String, callb:(args:Array<CssValue>, parent:CssSheetElement) -> String):Void
+```
+
+Adds a macro, used like a mixin (`.name(args);`): `callb` returns CSS code inserted in the rule.
+
+### error
+
+```haxe
+function error(msg:String):Dynamic
+```
+
+Throws an `Error` at the current position.
+
+### parse
+
+```haxe
+function parse(css:String, ?file:String):CssSheetElement
+```
+
+Parses the properties of an inline style (without selector).
+
+### parseValue
+
+```haxe
+function parseValue(valueStr:String):CssValue
+```
+
+Parses a CSS value.
+
+### parseSheet
+
+```haxe
+function parseSheet(css:String, ?file:String):CssSheet
+```
+
+Parses a style sheet.
+
+### parseClasses
+
+```haxe
+function parseClasses(css:String, ?hasParent:Bool, ?file:String):Array<CssClass>
+```
+
+Parses selectors.
+
+### check
+
+```haxe
+function check(rules:CssSheet, components:Array<Component<Dynamic, Dynamic>>):Void
+```
+
+Checks that the properties of the rules are supported by their components and have valid values: the problems are added to `warnings`.
+
+---
+
+# domkit.CssRelation
+
+**enum abstract** · package [`domkit`](README.md) · module [`domkit.CssParser`](CssParser.md) · source [`domkit/CssParser.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssParser.hx)
+
+The relation between a selector and its parent selector.
+
+Underlying type: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `None` | `0` | A descendant (`a b`). |
+| `ImmediateChildren` | `1` | A direct child (`a > b`). |
+| `SubRule` | `2` | The same object, in a nested rule (`&.b`). |
+
+---
+
+# domkit.CssRule
+
+**typedef** · package [`domkit`](README.md) · module [`domkit.CssParser`](CssParser.md) · source [`domkit/CssParser.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssParser.hx)
+
+A property set by a CSS rule, with its position in the source.
+
+## Fields
+
+### vmin
+
+```haxe
+var vmin:Int
+```
+
+The start position of the value.
+
+### value
+
+```haxe
+var value:CssValue
+```
+
+The value.
+
+### pmin
+
+```haxe
+var pmin:Int
+```
+
+The start position of the property name.
+
+### pmax
+
+```haxe
+var pmax:Int
+```
+
+The end position of the value.
+
+### p
+
+```haxe
+var p:Property
+```
+
+The property.
+
+### file
+
+```haxe
+var file:String
+```
+
+The CSS file, or `null`.
+
+---
+
+# domkit.CssSheet
+
+**typedef** · package [`domkit`](README.md) · module [`domkit.CssParser`](CssParser.md) · source [`domkit/CssParser.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssParser.hx)
+
+A parsed style sheet.
+
+Alias for: `Array<CssSheetElement>`
+
+---
+
+# domkit.CssSheetElement
+
+**typedef** · package [`domkit`](README.md) · module [`domkit.CssParser`](CssParser.md) · source [`domkit/CssParser.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssParser.hx)
+
+A CSS rule: its selectors, properties, transitions and nested rules.
+
+## Fields
+
+### transitions
+
+```haxe
+var ?transitions:Null<Array<Transition>>
+```
+
+The transitions.
+
+### subRules
+
+```haxe
+var ?subRules:Null<CssSheet>
+```
+
+The nested rules, when not expanded (see `CssParser.expandSubRules`).
+
+### style
+
+```haxe
+var style:Array<CssRule>
+```
+
+The properties.
+
+### classes
+
+```haxe
+var classes:Array<CssClass>
+```
+
+The selectors (separated by commas).
+
+---
+
+# domkit.CssStyle
+
+**class** · package [`domkit`](README.md) · source [`domkit/CssStyle.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssStyle.hx)
+
+A style: CSS rules applied to objects with `Properties.applyStyle`, and the running transitions, updated with `updateTime`.
+
+## Constructor
+
+### new
+
+```haxe
+function new():Void
+```
+
+Creates an empty style.
+
+## Static methods
+
+### ruleMatch
+
+```haxe
+static function ruleMatch(c:CssClass, e:Properties<Dynamic>):Bool
+```
+
+Tells if the selector matches the object.
+
+## Variables
+
+### data
+
+```haxe
+var data:CssData
+```
+
+The rules.
+
+### useSmartCache
+
+```haxe
+var useSmartCache:Bool
+```
+
+Caches the rules matching each set of components of an object and its parents, to test fewer rules.
+
+## Methods
+
+### updateTime
+
+```haxe
+function updateTime(dt:Float):Void
+```
+
+Updates the running transitions, `dt` being the elapsed time in seconds.
+
+### add
+
+```haxe
+function add(sheet:CssSheet):Void
+```
+
+Adds the rules of a style sheet.
+
+### clear
+
+```haxe
+function clear():Void
+```
+
+Removes all the rules.
+
+---
+
+# domkit.CssTransition
+
+**class** · package [`domkit`](README.md) · module [`domkit.CssStyle`](CssStyle.md) · source [`domkit/CssStyle.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssStyle.hx)
+
+A running transition of a property of an object.
+
+## Constructor
+
+### new
+
+```haxe
+function new():Void
+```
+
+Creates the transition.
+
+## Variables
+
+### properties
+
+```haxe
+var properties:Properties<Dynamic>
+```
+
+The object.
+
+### trans
+
+```haxe
+var trans:RuleTransition
+```
+
+The transition.
+
+### handler
+
+```haxe
+var handler:PropertyHandler<Dynamic, Dynamic>
+```
+
+The handler applying the values.
+
+### vstart
+
+```haxe
+var vstart:Dynamic
+```
+
+The start value.
+
+### vtarget
+
+```haxe
+var vtarget:Dynamic
+```
+
+The target value.
+
+### progress
+
+```haxe
+var progress:Float
+```
+
+The progress, from `0` to `1`.
+
+### discrete
+
+```haxe
+var discrete:Bool
+```
+
+Tells if the value is not a number: it changes at the end of the transition (unless the handler interpolates it).
+
+---
+
+# domkit.CssValue
+
+**enum** · package [`domkit`](README.md) · source [`domkit/CssValue.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssValue.hx)
+
+A parsed CSS value.
+
+## Constructors
+
+### VIdent
+
+```haxe
+VIdent(i:String)
+```
+
+An identifier.
+
+### VString
+
+```haxe
+VString(s:String)
+```
+
+A quoted string.
+
+### VUnit
+
+```haxe
+VUnit(v:Float, unit:String)
+```
+
+A number with a unit (`10px`, `50%`).
+
+### VFloat
+
+```haxe
+VFloat(v:Float)
+```
+
+A float.
+
+### VInt
+
+```haxe
+VInt(v:Int)
+```
+
+An integer.
+
+### VHex
+
+```haxe
+VHex(h:String, v:Int)
+```
+
+A hexadecimal color (`#F80`), with its digits and value.
+
+### VList
+
+```haxe
+VList(l:Array<CssValue>)
+```
+
+Values separated by commas.
+
+### VGroup
+
+```haxe
+VGroup(l:Array<CssValue>)
+```
+
+Values separated by spaces.
+
+### VCall
+
+```haxe
+VCall(f:String, vl:Array<CssValue>)
+```
+
+A function call (`rgba(...)`, `url(...)`).
+
+### VLabel
+
+```haxe
+VLabel(v:String, val:CssValue)
+```
+
+A value with a label (`!important`).
+
+### VSlash
+
+```haxe
+VSlash
+```
+
+A `/` separator.
+
+### VArray
+
+```haxe
+VArray(v:CssValue, ?content:CssValue)
+```
+
+An array access (`a[b]`).
+
+### VOp
+
+```haxe
+VOp(op:CssOp, v1:CssValue, v2:CssValue)
+```
+
+An arithmetic operation.
+
+### VParent
+
+```haxe
+VParent(v:CssValue)
+```
+
+A value in parentheses.
+
+### VVar
+
+```haxe
+VVar(name:String)
+```
+
+A variable (`@name`).
+
+---
+
+# domkit.Curve
+
+**class** · package [`domkit`](README.md) · module [`domkit.CssParser`](CssParser.md) · source [`domkit/CssParser.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssParser.hx)
+
+Subclasses: [`domkit.BezierCurve`](BezierCurve.md)
+
+An easing curve: linear.
+
+## Constructor
+
+### new
+
+```haxe
+function new():Void
+```
+
+Creates the curve.
+
+## Methods
+
+### interpolate
+
+```haxe
+function interpolate(v:Float):Float
+```
+
+Returns the progress of the value at the time `v` (from `0` to `1`).
+
+---
+
+# domkit.DMLChecker
+
+**class** · package [`domkit`](README.md) · module [`domkit.Checker`](Checker.md) · source [`domkit/Checker.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Checker.hx)
+
+Parses and type checks the markup of a component (DML), and checks CSS rules against the components.
+
+## Constructor
+
+### new
+
+```haxe
+function new(checker:Checker):Void
+```
+
+Creates the checker.
+
+## Variables
+
+### parsers
+
+```haxe
+var parsers:Array<ValueParser>
+```
+
+The value parsers used to check the CSS values.
+
+### definedIdents
+
+```haxe
+var definedIdents:Map<String, Array<TypedComponent>>
+```
+
+The components using each id (`#id`) or class, to check the CSS rules using them.
+
+## Methods
+
+### loadFile
+
+```haxe
+dynamic function loadFile(path:String):Null<String>
+```
+
+Returns the content of a file (for the `import.hx` files), or `null`.
+
+### parse
+
+```haxe
+function parse(data:String, filePath:String, filePos:Int, locals:{  }):Markup
+```
+
+Parses and checks the markup of a component, with the types of the `locals` (see `domkit.Macros.generateLocalsObj`). Throws an error if invalid.
+
+### defineIdent
+
+```haxe
+function defineIdent(c:TypedComponent, cl:String):Void
+```
+
+Registers a component using the id or class `cl`.
+
+### checkCSS
+
+```haxe
+function checkCSS(rules:CssSheet):Void
+```
+
+Checks the properties of the rules against the components they apply to.
+
+---
+
+# domkit.Error
+
+**class** · package [`domkit`](README.md) · source [`domkit/Error.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Error.hx)
+
+An error while parsing markup or CSS, with its position in the source.
+
+## Constructor
+
+### new
+
+```haxe
+function new(messsage:String, ?pmin:Int = -1, ?pmax:Int = -1):Void
+```
+
+Creates the error. `pmax` defaults to `pmin + 1`.
+
+## Variables
+
+### message
+
+```haxe
+var message:String
+```
+
+The error message.
+
+### pmin
+
+```haxe
+var pmin:Int
+```
+
+The start position in the source, or `-1`.
+
+### pmax
+
+```haxe
+var pmax:Int
+```
+
+The end position in the source.
+
+## Methods
+
+### toString
+
+```haxe
+function toString():String
+```
+
+Returns a description of the error.
+
+---
+
+# domkit.FastBytes
+
+**typedef** · package [`domkit`](README.md) · module [`domkit.CssStyle`](CssStyle.md) · source [`domkit/CssStyle.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssStyle.hx)
+
+Bytes used for the component bit sets of the style cache: `hl.Bytes` on HashLink, `haxe.io.Bytes` elsewhere.
+
+## On js
+
+Alias for: `Bytes`
+
+## On hl
+
+Alias for: `Dynamic`
+
+---
+
+# domkit.HSL
+
+**class** · package [`domkit`](README.md) · module [`domkit.CssValue`](CssValue.md) · source [`domkit/CssValue.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssValue.hx)
+
+A color in the HSL color space, used by the `darken`, `lighten`, `saturate` and `desaturate` color functions.
+
+## Constructor
+
+### new
+
+```haxe
+function new(color:Int):Void
+```
+
+Converts an ARGB color.
+
+## Variables
+
+### alpha
+
+```haxe
+var alpha:Float
+```
+
+The alpha, from `0` to `1`.
+
+### hue
+
+```haxe
+var hue:Float
+```
+
+The hue, in radians.
+
+### saturation
+
+```haxe
+var saturation:Float
+```
+
+The saturation, from `0` to `1`.
+
+### lightness
+
+```haxe
+var lightness:Float
+```
+
+The lightness, from `0` to `1`.
+
+## Methods
+
+### toColor
+
+```haxe
+function toColor():Int
+```
+
+Returns the ARGB color.
+
+---
+
+# domkit.Identifier
+
+**abstract** · package [`domkit`](README.md) · source [`domkit/Identifier.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Identifier.hx)
+
+A string (class name or id) converted to a unique integer, for fast comparisons.
+
+Underlying type: `Int`
+
+## Methods
+
+### toString
+
+```haxe
+function toString():Null<String>
+```
+
+Returns the string of the identifier.
+
+### isDefined
+
+```haxe
+inline function isDefined():Bool
+```
+
+Tells if the identifier is set (not `null`).
+
+---
+
+# domkit.Interp
+
+**class** · package [`domkit`](README.md) · source [`domkit/Interp.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Interp.hx)
+
+Runs the markup of components with hscript instead of compiled code, to reload it while the program runs (hot reload). Enable it with `domkit.Macros.allowInterp()` (after `hscript.LiveClass.enable()`), and compile with `-lib hscript -D hscriptPos`.
+
+## Static variables
+
+### onError
+
+```haxe
+static var onError:(msg:String) -> Void
+```
+
+Called on errors, if set (errors are thrown otherwise).
+
+## Static methods
+
+### getChecker
+
+```haxe
+static function getChecker():Checker
+```
+
+Returns the shared `Checker`.
+
+### run
+
+```haxe
+static function run(obj:Model<Dynamic>, compName:String, locals:{  }):Void
+```
+
+Builds the children of the object by interpreting the markup of its component. Called by the generated `initComponent()`.
+
+### clearCache
+
+```haxe
+static function clearCache(name:String):Void
+```
+
+Forgets the parsed markup of the component, to load it again.
+
+### init
+
+```haxe
+static function init(callb:() -> Dynamic):Bool
+```
+
+Watches the source files of the interpreted components: `callb` is called with the class of a component whose markup changed. Returns `true` if a source was found.
+
+---
+
+# domkit.InvalidProperty
+
+**class** · package [`domkit`](README.md) · module [`domkit.Property`](Property.md) · source [`domkit/Property.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Property.hx)
+
+Thrown by a property parser when the CSS value is invalid.
+
+## Constructor
+
+### new
+
+```haxe
+function new(?msg:String):Void
+```
+
+Creates the exception.
+
+## Variables
+
+### message
+
+```haxe
+var message:String
+```
+
+The reason, or `null`.
+
+## Methods
+
+### toString
+
+```haxe
+function toString():String
+```
+
+Returns a description of the exception.
+
+---
+
+# domkit.MToken
+
+**enum abstract** · package [`domkit`](README.md) · module [`domkit.MarkupParser`](MarkupParser.md) · source [`domkit/MarkupParser.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/MarkupParser.hx)
+
+The states of the markup parser.
+
+Underlying type: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `IGNORE_SPACES` | `0` | Skipping spaces. |
+| `BEGIN` | `1` | Before a node or text. |
+| `BEGIN_NODE` | `2` | After `<`. |
+| `BEGIN_CODE` | `3` | After `$` in a text. |
+| `CODE_IDENT` | `4` | In a `$ident` code. |
+| `CODE_BLOCK` | `5` | In a `${ code }` block. |
+| `TAG_NAME` | `6` | In a node name. |
+| `BODY` | `7` | In a node, between its attributes. |
+| `ATTRIB_NAME` | `8` | In an attribute name. |
+| `EQUALS` | `9` | Expecting `=` after an attribute name. |
+| `ATTVAL_BEGIN` | `10` | Before an attribute value. |
+| `ATTRIB_VAL` | `11` | In a quoted attribute value. |
+| `ATTRIB_VAL_CODE` | `12` | In an attribute value code (`attr={code}`). |
+| `CHILDS` | `13` | In the children of a node. |
+| `CLOSE` | `14` | In a closing node. |
+| `WAIT_END` | `15` | Expecting `>` after `/`. |
+| `WAIT_END_RET` | `16` | Expecting `>` at the end of a closing node. |
+| `PCDATA` | `17` | In a text. |
+| `HEADER` | `18` | In a `<?` header. |
+| `COMMENT` | `19` | In a `<!-- -->` comment. |
+| `DOCTYPE` | `20` | In a `<!DOCTYPE>`. |
+| `CDATA` | `21` | In a CDATA section. |
+| `ESCAPE` | `22` | In an `&entity;`. |
+| `ARGS` | `23` | In the arguments of a node (`<node(args)>`). |
+| `MACRO_ID` | `24` | In a macro name (`@name`). |
+| `IF_COND` | `25` | In a node condition (`<node if(cond)>`). |
+| `PARENT_NAME` | `26` | In the parent component name of a definition (`<name:parent>`). |
+| `PARENT_ARGS` | `27` | In the arguments of the parent component. |
+
+---
+
+# domkit.Macros
+
+**class** · package [`domkit`](README.md) · source [`domkit/Macros.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Macros.hx)
+
+The macros of DomKit: build the [`domkit.Object`](Object.md) classes (`buildObject`), and the configuration functions to call from an initialization macro (`--macro`).
+
+## Static methods
+
+### generateRemapMap
+
+```haxe
+static function generateRemapMap():Dynamic
+```
+
+Returns the component remaps (see `registerComponentRemap`), for the runtime.
+
+### generateLocalsObj
+
+```haxe
+static function generateLocalsObj():Dynamic
+```
+
+Returns the local variables, with their values and types, for the interpreted components (with hscript).
+
+### generateLocalsTypes
+
+```haxe
+static function generateLocalsTypes():Dynamic
+```
+
+Returns the local variables as an object (with hscript).
+
+### generateLocalsRestore
+
+```haxe
+static function generateLocalsRestore():Dynamic
+```
+
+Sets back the local variables from `__locals`, after the interpreted markup (with hscript).
+
+---
+
+# domkit.Markup
+
+**typedef** · package [`domkit`](README.md) · module [`domkit.MarkupParser`](MarkupParser.md) · source [`domkit/MarkupParser.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/MarkupParser.hx)
+
+A node of the markup tree.
+
+## Fields
+
+### pmin
+
+```haxe
+var pmin:Int
+```
+
+The start position in the source.
+
+### pmax
+
+```haxe
+var pmax:Int
+```
+
+The end position in the source.
+
+### parent
+
+```haxe
+var ?parent:Null<{ pmin:Int, pmax:Int, name:String, arguments:Array<Argument> }>
+```
+
+The parent component of a component definition (`<name:parent(args)>`).
+
+### kind
+
+```haxe
+var kind:MarkupKind
+```
+
+The kind of node.
+
+### condition
+
+```haxe
+var ?condition:Null<{ pmin:Int, pmax:Int, cond:CodeExpr }>
+```
+
+The condition (`<node if(cond)>`): the node is created only if it is true.
+
+### children
+
+```haxe
+var ?children:Null<Array<Markup>>
+```
+
+The children.
+
+### attributes
+
+```haxe
+var ?attributes:Null<Array<{ vmin:Int, value:AttributeValue, pmin:Int, pmax:Int, name:String }>>
+```
+
+The attributes.
+
+### arguments
+
+```haxe
+var ?arguments:Null<Array<Argument>>
+```
+
+The arguments (`<node(args)>`).
+
+---
+
+# domkit.MarkupKind
+
+**enum** · package [`domkit`](README.md) · module [`domkit.MarkupParser`](MarkupParser.md) · source [`domkit/MarkupParser.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/MarkupParser.hx)
+
+The kind of a markup node.
+
+## Constructors
+
+### Node
+
+```haxe
+Node(name:String)
+```
+
+A component node (`<name>`), or the root of the document (`null` name).
+
+### Text
+
+```haxe
+Text(text:String)
+```
+
+A text.
+
+### CodeBlock
+
+```haxe
+CodeBlock(v:String)
+```
+
+Haxe code (`$ident` or `${ code }`), creating children.
+
+### Macro
+
+```haxe
+Macro(id:String)
+```
+
+A macro call (`@name(args)`), expanded by `domkit.Macros.processMacro`.
+
+### For
+
+```haxe
+For(cond:CodeExpr)
+```
+
+A loop (`for( x in a ) <node/>`, or with `{ }` for several children).
+
+---
+
+# domkit.MarkupParser
+
+**class** · package [`domkit`](README.md) · source [`domkit/MarkupParser.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/MarkupParser.hx)
+
+Parses the XML-like markup of the components (`static var SRC = <comp>...</comp>`).
+
+## Constructor
+
+### new
+
+```haxe
+function new():Void
+```
+
+Creates a parser.
+
+## Static methods
+
+### markupToString
+
+```haxe
+static function markupToString(m:Markup):String
+```
+
+Returns the markup source of a node.
+
+## Variables
+
+### allowRawText
+
+```haxe
+var allowRawText:Bool
+```
+
+Accepts the code blocks that are not loops as raw text, instead of failing.
+
+## Methods
+
+### parse
+
+```haxe
+function parse(str:String, fileName:String, filePos:Int):Markup
+```
+
+Parses the markup and returns its root, whose children are the top nodes. `filePos` is added to the positions of the nodes and errors.
+
+---
+
+# domkit.MetaComponent
+
+**class** · package [`domkit`](README.md) · source [`domkit/MetaComponent.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/MetaComponent.hx)
+
+Extends: [`domkit.Component`](Component.md)
+
+The component of a [`domkit.Object`](Object.md) class at compile time: reads its `@:p` properties and constructor, and generates its runtime `Component`.
+
+## Constructor
+
+### new
+
+```haxe
+function new(name:String, make:(Array<Dynamic>, Dynamic) -> Dynamic, parent:Component<Dynamic, Dynamic>):Void
+```
+
+## Inherited members
+
+- from [`domkit.Component`](Component.md): `id`, `name`, `make`, `parent`, `getHandler`, `isOfType`
+
+---
+
+# domkit.MetaError
+
+**class** · package [`domkit`](README.md) · module [`domkit.MetaComponent`](MetaComponent.md) · source [`domkit/MetaComponent.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/MetaComponent.hx)
+
+An error of the component macros.
+
+## Constructor
+
+### new
+
+```haxe
+function new(msg:String, pos:Position):Void
+```
+
+Creates the error.
+
+## Variables
+
+### message
+
+```haxe
+var message:String
+```
+
+The message.
+
+### position
+
+```haxe
+var position:Position
+```
+
+The position.
+
+---
+
+# domkit.Model
+
+**interface** · package [`domkit`](README.md) · source [`domkit/Model.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Model.hx)
+
+Type parameters: `<T>`
+
+The base type of the objects of the UI, `T` being the base class of the components: implement it on your base class (with Heaps, [`h2d.Object`](../../heaps/h2d/Object.md) is used).
+
+## Variables
+
+### dom
+
+```haxe
+var dom:Properties<domkit.Model.T>
+```
+
+The DomKit properties of the object: component, classes, id, state and style.
+
+### parent
+
+```haxe
+var parent(default, null):domkit.Model.T
+```
+
+The parent object, or `null`.
+
+## Methods
+
+### getChildren
+
+```haxe
+function getChildren():Array<domkit.Model.T>
+```
+
+Returns the children objects.
+
+### getChildRefPosition
+
+```haxe
+function getChildRefPosition(first:Bool):Int
+```
+
+Returns the index of the first (or last if `first` is not set) child counting for the `:first-child`, `:last-child`, `:odd` and `:even` CSS pseudo classes.
+
+---
+
+# domkit.Object
+
+**interface** · package [`domkit`](README.md) · source [`domkit/Object.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Object.hx)
+
+A class whose instances are built by DomKit: its `@:p` fields become CSS properties of its component, and its `static var SRC = <comp>...</comp>` markup is compiled into an `initComponent()` method creating the children.
+
+The component name is the class name in CSS casing (`MyButton` is `my-button`), or set with `@:uiComp("name")`; `@:uiNoComponent` builds the markup without declaring a component. The parser of the properties is set with `@:parser(path)` (see `domkit.Macros.setDefaultParser`).
+
+---
+
+# domkit.ParserMode
+
+**enum** · package [`domkit`](README.md) · module [`domkit.MetaComponent`](MetaComponent.md) · source [`domkit/MetaComponent.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/MetaComponent.hx)
+
+How the value of a `@:p` property is parsed.
+
+## Constructors
+
+### PNone
+
+```haxe
+PNone
+```
+
+`@:p(none)` or default: `none` is `null` for a nullable type.
+
+### PAuto
+
+```haxe
+PAuto
+```
+
+`@:p(auto)`: `auto` is `null` for a nullable type.
+
+### PCustom
+
+```haxe
+PCustom
+```
+
+`@:p(name)`: the `parse<Name>` method of the parser.
+
+---
+
+# domkit.PropParser
+
+**enum** · package [`domkit`](README.md) · module [`domkit.Checker`](Checker.md) · source [`domkit/Checker.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Checker.hx)
+
+How a property value is parsed, for the type checking of CSS values.
+
+## Constructors
+
+### PUnknown
+
+```haxe
+PUnknown
+```
+
+Unknown parser: the value is not checked.
+
+### PNamed
+
+```haxe
+PNamed(name:String)
+```
+
+The `parse<Name>` method of the `ValueParser`.
+
+### POpt
+
+```haxe
+POpt(t:PropParser, def:String)
+```
+
+A nullable value, where `def` (`auto` or `none`) means `null`.
+
+### PEnum
+
+```haxe
+PEnum(e:hscript.CEnum)
+```
+
+The constructors of an enum.
+
+---
+
+# domkit.Properties
+
+**class** · package [`domkit`](README.md) · source [`domkit/Properties.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Properties.hx)
+
+Type parameters: `<T>`
+
+The DomKit state of an object (its `dom` field): component, id, classes, pseudo class states (`hover`, `active`...) and the CSS values set on it. Changing them marks the object to be styled again by the next `applyStyle`.
+
+## Constructor
+
+### new
+
+```haxe
+function new(obj:Model<domkit.Properties.T>, component:Component<domkit.Properties.T, Dynamic>):Void
+```
+
+Creates the properties of the object.
+
+## Static methods
+
+### create
+
+```haxe
+static function create(comp:String, value:create.T, ?attributes:DynamicAccess<String>):Properties<create.BaseT>
+```
+
+Creates the properties of an existing object for the component of the given name, with optional attributes.
+
+## Variables
+
+### id
+
+```haxe
+var id(default, null):Identifier
+```
+
+The id of the object (`#id` in CSS), set with `setId`.
+
+### obj
+
+```haxe
+var obj(default, null):Model<domkit.Properties.T>
+```
+
+The object.
+
+### component
+
+```haxe
+var component(default, null):Component<domkit.Properties.T, Dynamic>
+```
+
+The component of the object.
+
+### hover
+
+```haxe
+var hover(default, set):Bool
+```
+
+Matches the `:hover` pseudo class.
+
+### active
+
+```haxe
+var active(default, set):Bool
+```
+
+Matches the `:active` pseudo class.
+
+### disabled
+
+```haxe
+var disabled(default, set):Bool
+```
+
+Matches the `:disabled` pseudo class.
+
+### focus
+
+```haxe
+var focus(default, set):Bool
+```
+
+Matches the `:focus` pseudo class.
+
+### parent
+
+```haxe
+var parent(get, null):Properties<domkit.Properties.T>
+```
+
+The properties of the parent object, or `null`.
+
+### contentRoot
+
+```haxe
+var contentRoot(default, null):Model<domkit.Properties.T>
+```
+
+The object to which the children declared in the markup are added (the object itself by default).
+
+## Methods
+
+### getClasses
+
+```haxe
+function getClasses():Iterable<Identifier>
+```
+
+Returns the classes of the object.
+
+### hasClass
+
+```haxe
+function hasClass(name:String):Bool
+```
+
+Tells if the object has the class.
+
+### onParentChanged
+
+```haxe
+function onParentChanged(?prev:Properties<domkit.Properties.T>):Void
+```
+
+Must be called when the object is added to or removed from a parent, to style it again.
+
+### addClass
+
+```haxe
+function addClass(c:String):Void
+```
+
+Adds a class.
+
+### applyStyle
+
+```haxe
+function applyStyle(style:CssStyle):Void
+```
+
+Applies the style to the objects that need it, from this object's tree.
+
+### removeClass
+
+```haxe
+function removeClass(c:String):Void
+```
+
+Removes a class.
+
+### toggleClass
+
+```haxe
+function toggleClass(c:String, ?b:Bool):Void
+```
+
+Adds the class if `b` is set, removes it if `b` is `false`, or toggles it if `b` is `null`.
+
+### initAttributes
+
+```haxe
+function initAttributes(attr:DynamicAccess<String>):Void
+```
+
+Sets the attributes from their CSS strings (see `setAttribute`). Invalid ones are printed on `sys` targets.
+
+### setClasses
+
+```haxe
+function setClasses(?classStr:String, ?classObj:Dynamic<Bool>):Void
+```
+
+Replaces the classes, from a string (`"a b"`) or from an object whose fields set to `true` are the classes (`_` becoming `-`).
+
+### appendClasses
+
+```haxe
+function appendClasses(?classStr:String, ?classObj:Dynamic<Bool>):Void
+```
+
+Adds classes, from a string (`"a b"`) or from an object whose fields set to `true` are the classes (`_` becoming `-`).
+
+### setClassKind
+
+```haxe
+function setClassKind(kind:String, value:String):Void
+```
+
+Removes the class starting with `kind-` and adds the class `kind-value` instead (none if `value` is `null`).
+
+### setId
+
+```haxe
+function setId(id:String):Void
+```
+
+Sets the id of the object, or `null`.
+
+### setAttribute
+
+```haxe
+function setAttribute(p:String, value:CssValue):SetAttributeResult
+```
+
+Sets a property of the object, as an inline style (it has priority over the CSS rules), and applies it. `id` and `class` set the id and add classes.
+
+---
+
+# domkit.Property
+
+**class** · package [`domkit`](README.md) · source [`domkit/Property.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Property.hx)
+
+A CSS property name, registered once with a unique id (see `get`).
+
+## Static methods
+
+### get
+
+```haxe
+static function get(name:String, ?create:Bool = true):Null<Property>
+```
+
+Returns the property of the given name, creating it if `create` is set (`null` otherwise).
+
+## Variables
+
+### name
+
+```haxe
+var name(default, null):String
+```
+
+The name of the property, in CSS casing (`padding-left`).
+
+### id
+
+```haxe
+var id(default, null):Int
+```
+
+The unique id of the property.
+
+### hasTransition
+
+```haxe
+var hasTransition(default, null):Bool
+```
+
+Tells if a CSS rule defines a transition for the property.
+
+---
+
+# domkit.PropertyHandler
+
+**class** · package [`domkit`](README.md) · module [`domkit.Component`](Component.md) · source [`domkit/Component.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Component.hx)
+
+Type parameters: `<O, P>`
+
+How a component handles a CSS property: parses its value, applies it to the objects of type `O`, and interpolates it for the transitions.
+
+## Constructor
+
+### new
+
+```haxe
+function new(parser:() -> domkit.PropertyHandler.P, def:domkit.PropertyHandler.P, applyType:(domkit.PropertyHandler.O, domkit.PropertyHandler.P) -> Void):Void
+```
+
+Creates the handler.
+
+## Variables
+
+### parser
+
+```haxe
+var parser(default, null):() -> domkit.PropertyHandler.P
+```
+
+Converts the CSS value to the property value. Throws `Property.InvalidProperty` if invalid.
+
+### defaultValue
+
+```haxe
+var defaultValue(default, null):domkit.PropertyHandler.P
+```
+
+The value applied when no CSS rule sets the property.
+
+### apply
+
+```haxe
+var apply(default, null):(domkit.PropertyHandler.O, domkit.PropertyHandler.P) -> Void
+```
+
+Applies the value to an object.
+
+### transition
+
+```haxe
+var transition(default, null):(domkit.PropertyHandler.P, domkit.PropertyHandler.P, Float) -> domkit.PropertyHandler.P
+```
+
+Interpolates between two values, or `null` (floats are interpolated, other values change at the end of the transition).
+
+---
+
+# domkit.PseudoClass
+
+**enum abstract** · package [`domkit`](README.md) · module [`domkit.CssParser`](CssParser.md) · source [`domkit/CssParser.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssParser.hx)
+
+The pseudo classes of a CSS selector, as bit flags.
+
+Underlying type: `Int`
+
+## Values
+
+| Name | Value | Description |
+|---|---|---|
+| `None` | `0` | No pseudo class. |
+| `Hover` | `1` | `:hover`: the object is hovered (`Properties.hover`). |
+| `FirstChild` | `2` | `:first-child`. |
+| `LastChild` | `4` | `:last-child`. |
+| `Odd` | `8` | `:odd`: the children at an odd index, counting from 0. |
+| `Even` | `16` | `:even`: the children at an even index, counting from 0. |
+| `Active` | `32` | `:active` (`Properties.active`). |
+| `Disabled` | `64` | `:disabled` (`Properties.disabled`). |
+| `Focus` | `128` | `:focus` (`Properties.focus`). |
+| `NotImportant` | `256` | `:not-important`: lowers the priority of the rule below the rules without it. |
+| `NeedChildren` | `512` | Set with the pseudo classes depending on the position among the parent's children. |
+
+## Methods
+
+### toInt
+
+```haxe
+inline function toInt():Int
+```
+
+Returns the flags as an integer.
+
+### has
+
+```haxe
+inline function has(c:PseudoClass):Bool
+```
+
+Tells if the flag is set.
+
+---
+
+# domkit.Rule
+
+**class** · package [`domkit`](README.md) · module [`domkit.CssStyle`](CssStyle.md) · source [`domkit/CssStyle.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssStyle.hx)
+
+A CSS rule for one selector, with its priority.
+
+## Constructor
+
+### new
+
+```haxe
+function new():Void
+```
+
+Creates an empty rule.
+
+## Variables
+
+### id
+
+```haxe
+var id:Int
+```
+
+The index of the rule, to keep the declaration order among rules of equal priority.
+
+### priority
+
+```haxe
+var priority:Int
+```
+
+The priority, from the specificity of the selector (ids, then classes and pseudo classes, then components) and `!important`.
+
+### cl
+
+```haxe
+var cl:CssClass
+```
+
+The selector.
+
+### style
+
+```haxe
+var style:Array<RuleStyle>
+```
+
+The properties.
+
+### transitions
+
+```haxe
+var transitions:Array<RuleTransition>
+```
+
+The transitions, or `null`.
+
+---
+
+# domkit.RuleStyle
+
+**class** · package [`domkit`](README.md) · module [`domkit.CssStyle`](CssStyle.md) · source [`domkit/CssStyle.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssStyle.hx)
+
+A property set by a `Rule`.
+
+## Constructor
+
+### new
+
+```haxe
+function new(p:Property, value:CssValue, ?pos:{ vmin:Int, pmin:Int, pmax:Int, file:String }):Void
+```
+
+Creates the property.
+
+## Variables
+
+### p
+
+```haxe
+var p:Property
+```
+
+The property.
+
+### value
+
+```haxe
+var value:CssValue
+```
+
+The CSS value.
+
+### lastHandler
+
+```haxe
+var lastHandler:PropertyHandler<Dynamic, Dynamic>
+```
+
+The handler that last parsed the value, to reuse `lastValue`.
+
+### lastValue
+
+```haxe
+var lastValue:Dynamic
+```
+
+The value parsed by `lastHandler`.
+
+### next
+
+```haxe
+var next:RuleStyle
+```
+
+The next property applied to the object (temporary list).
+
+### pos
+
+```haxe
+var pos:{ vmin:Int, pmin:Int, pmax:Int, file:String }
+```
+
+The position in the CSS source, or `null`.
+
+---
+
+# domkit.RuleTransition
+
+**class** · package [`domkit`](README.md) · module [`domkit.CssStyle`](CssStyle.md) · source [`domkit/CssStyle.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssStyle.hx)
+
+A transition set by a `Rule`.
+
+## Constructor
+
+### new
+
+```haxe
+function new(p:Property, time:Float, curve:Curve):Void
+```
+
+Creates the transition.
+
+## Variables
+
+### p
+
+```haxe
+var p:Property
+```
+
+The property.
+
+### time
+
+```haxe
+var time:Float
+```
+
+The duration, in seconds.
+
+### curve
+
+```haxe
+var curve:Curve
+```
+
+The easing curve.
+
+### next
+
+```haxe
+var next:RuleTransition
+```
+
+The next transition applied to the object (temporary list).
+
+---
+
+# domkit.ScriptInterp
+
+**class** · package [`domkit`](README.md) · module [`domkit.Interp`](Interp.md) · source [`domkit/Interp.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Interp.hx)
+
+Extends: `hscript.Interp`
+
+The hscript interpreter running the code of an interpreted component.
+
+## Constructor
+
+### new
+
+```haxe
+function new(ctx:Interp, obj:Model<Dynamic>, locals:{  }):Void
+```
+
+Creates the interpreter of the object, with the local variables of its constructor.
+
+## Methods
+
+### executeLoop
+
+```haxe
+function executeLoop(n:String, it:hscript.Expr, callb:() -> Void):Void
+```
+
+Runs `callb` for each value of the iterator, as the variable `n`.
+
+### executeKeyValueLoop
+
+```haxe
+function executeKeyValueLoop(vk:String, vv:String, it:hscript.Expr, callb:() -> Void):Void
+```
+
+Runs `callb` for each key and value of the iterator, as the variables `vk` and `vv`.
+
+---
+
+# domkit.SetAttributeResult
+
+**enum** · package [`domkit`](README.md) · module [`domkit.Properties`](Properties.md) · source [`domkit/Properties.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Properties.hx)
+
+The result of `Properties.setAttribute`.
+
+## Constructors
+
+### Ok
+
+```haxe
+Ok
+```
+
+The value was applied.
+
+### Unknown
+
+```haxe
+Unknown
+```
+
+The property is unknown.
+
+### Unsupported
+
+```haxe
+Unsupported
+```
+
+The component doesn't support the property.
+
+### InvalidValue
+
+```haxe
+InvalidValue(?msg:String)
+```
+
+The value is invalid for the property.
+
+---
+
+# domkit.Token
+
+**enum** · package [`domkit`](README.md) · module [`domkit.CssParser`](CssParser.md) · source [`domkit/CssParser.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssParser.hx)
+
+A token of the CSS lexer.
+
+## Constructors
+
+### TIdent
+
+```haxe
+TIdent(i:String)
+```
+
+An identifier.
+
+### TString
+
+```haxe
+TString(s:String)
+```
+
+A quoted string.
+
+### TInt
+
+```haxe
+TInt(i:Int)
+```
+
+An integer.
+
+### TFloat
+
+```haxe
+TFloat(f:Float)
+```
+
+A float.
+
+### TDblDot
+
+```haxe
+TDblDot
+```
+
+`:`
+
+### TSharp
+
+```haxe
+TSharp
+```
+
+`#`
+
+### TPOpen
+
+```haxe
+TPOpen
+```
+
+`(`
+
+### TPClose
+
+```haxe
+TPClose
+```
+
+`)`
+
+### TExclam
+
+```haxe
+TExclam
+```
+
+`!`
+
+### TComma
+
+```haxe
+TComma
+```
+
+`,`
+
+### TEof
+
+```haxe
+TEof
+```
+
+The end of the input.
+
+### TPercent
+
+```haxe
+TPercent
+```
+
+`%`
+
+### TSemicolon
+
+```haxe
+TSemicolon
+```
+
+`;`
+
+### TBrOpen
+
+```haxe
+TBrOpen
+```
+
+`{`
+
+### TBrClose
+
+```haxe
+TBrClose
+```
+
+`}`
+
+### TDot
+
+```haxe
+TDot
+```
+
+`.`
+
+### TSpaces
+
+```haxe
+TSpaces
+```
+
+Spaces (in selectors).
+
+### TSlash
+
+```haxe
+TSlash
+```
+
+`/`
+
+### TStar
+
+```haxe
+TStar
+```
+
+`*`
+
+### TPlus
+
+```haxe
+TPlus
+```
+
+`+`
+
+### TMinus
+
+```haxe
+TMinus
+```
+
+`-`
+
+### TBkOpen
+
+```haxe
+TBkOpen
+```
+
+`[`
+
+### TBkClose
+
+```haxe
+TBkClose
+```
+
+`]`
+
+### TSuperior
+
+```haxe
+TSuperior
+```
+
+`>`
+
+### TAnd
+
+```haxe
+TAnd
+```
+
+`&`
+
+### TAt
+
+```haxe
+TAt
+```
+
+`@`
+
+---
+
+# domkit.Transition
+
+**typedef** · package [`domkit`](README.md) · module [`domkit.CssParser`](CssParser.md) · source [`domkit/CssParser.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssParser.hx)
+
+A transition of a property, declared with the `transition` CSS property.
+
+## Fields
+
+### time
+
+```haxe
+var time:Float
+```
+
+The duration, in seconds.
+
+### p
+
+```haxe
+var p:Property
+```
+
+The property.
+
+### curve
+
+```haxe
+var curve:Curve
+```
+
+The easing curve.
+
+---
+
+# domkit.TypedComponent
+
+**typedef** · package [`domkit`](README.md) · module [`domkit.Checker`](Checker.md) · source [`domkit/Checker.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Checker.hx)
+
+A component, with the types of its class, properties and constructor arguments.
+
+## Fields
+
+### properties
+
+```haxe
+var properties:Map<String, TypedProperty>
+```
+
+The properties declared by the component, by CSS name.
+
+### parent
+
+```haxe
+var ?parent:Null<{ params:Array<hscript._Checker.Type>, comp:TypedComponent }>
+```
+
+The parent component.
+
+### name
+
+```haxe
+var name:String
+```
+
+The name of the component.
+
+### domkitComp
+
+```haxe
+var domkitComp:Component<Dynamic, Dynamic>
+```
+
+The runtime component.
+
+### classDef
+
+```haxe
+var ?classDef:Null<hscript.CClass>
+```
+
+The class of the component.
+
+### arguments
+
+```haxe
+var arguments:Array<{ t:hscript._Checker.Type, ?opt:Null<Bool>, name:String }>
+```
+
+The constructor arguments (without the parent).
+
+---
+
+# domkit.TypedProperty
+
+**typedef** · package [`domkit`](README.md) · module [`domkit.Checker`](Checker.md) · source [`domkit/Checker.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/Checker.hx)
+
+A property of a component, with its type.
+
+## Fields
+
+### type
+
+```haxe
+var type:hscript._Checker.Type
+```
+
+The type of the property.
+
+### parser
+
+```haxe
+var parser:PropParser
+```
+
+How the CSS values are parsed.
+
+### field
+
+```haxe
+var field:String
+```
+
+The field of the component class.
+
+### comp
+
+```haxe
+var comp:TypedComponent
+```
+
+The component declaring the property.
+
+---
+
+# domkit.ValueParser
+
+**class** · package [`domkit`](README.md) · module [`domkit.CssValue`](CssValue.md) · source [`domkit/CssValue.hx`](https://github.com/Jonathan-HETEAU/domkit/blob/ccr-01f70725-tatboj/domkit/CssValue.hx)
+
+Converts CSS values to property values: the `parseXxx` methods are used by the `@:p(xxx)` fields (`@:p(color)` uses `parseColor`). Extend it to add parsers, and set it with `@:parser` or `domkit.Macros.setDefaultParser`. The methods throw `Property.InvalidProperty` for invalid values.
+
+## Constructor
+
+### new
+
+```haxe
+function new():Void
+```
+
+Creates the parser.
+
+## Methods
+
+### invalidProp
+
+```haxe
+function invalidProp(?msg:String):Dynamic
+```
+
+Throws an `Property.InvalidProperty` error.
+
+### parseIdent
+
+```haxe
+function parseIdent(v:CssValue):String
+```
+
+Parses an identifier.
+
+### parseString
+
+```haxe
+function parseString(v:CssValue):String
+```
+
+Parses a string or an identifier.
+
+### parseId
+
+```haxe
+function parseId(v:CssValue):String
+```
+
+Parses an object id.
+
+### parseColor
+
+```haxe
+function parseColor(v:CssValue):Int
+```
+
+Parses a color, as an ARGB integer: `#RGB`, `#RRGGBB`, `rgb(r,g,b)`, `rgba(r,g,b,a)`, CSS color names, `darken(c,10%)`, `lighten(c,10%)`, `saturate(c,10%)`, `desaturate(c,10%)`, and `color alpha`.
+
+### transitionColor
+
+```haxe
+function transitionColor(a:Null<Int>, b:Null<Int>, p:Float):Int
+```
+
+Interpolates between two ARGB colors.
+
+### parseArray
+
+```haxe
+function parseArray(elt:() -> parseArray.T, v:CssValue):Array<parseArray.T>
+```
+
+Parses values separated by spaces, with `elt`.
+
+### parsePath
+
+```haxe
+function parsePath(v:CssValue):String
+```
+
+Parses a path: a string, an identifier or `url(path)`.
+
+### parseBool
+
+```haxe
+function parseBool(v:CssValue):Null<Bool>
+```
+
+Parses a boolean: `true`, `false`, `1` or `0`.
+
+### parseAuto
+
+```haxe
+function parseAuto(either:() -> parseAuto.T, v:CssValue):Null<parseAuto.T>
+```
+
+Returns `null` for `auto`, or parses the value with `either`.
+
+### parseNone
+
+```haxe
+function parseNone(either:() -> parseNone.T, v:CssValue):Null<parseNone.T>
+```
+
+Returns `null` for `none`, or parses the value with `either`.
+
+### parseInt
+
+```haxe
+function parseInt(v:CssValue):Null<Int>
+```
+
+Parses an integer.
+
+### parseFloat
+
+```haxe
+function parseFloat(v:CssValue):Float
+```
+
+Parses a number.
+
+### parseFloatPercent
+
+```haxe
+function parseFloatPercent(v:CssValue):Float
+```
+
+Parses a number, or a percentage as a ratio (`50%` is `0.5`).
+
+### parseXY
+
+```haxe
+function parseXY(v:CssValue):{ y:Float, x:Float }
+```
+
+Parses two numbers, as `{ x, y }`.
+
+### parseBox
+
+```haxe
+function parseBox(v:CssValue):{ top:Int, right:Int, left:Int, bottom:Int }
+```
+
+Parses 1 to 4 integers as `{ top, right, bottom, left }`, like the CSS `padding`.
+
+### parseGenBox
+
+```haxe
+function parseGenBox(v:CssValue, f:() -> parseGenBox.T):{ top:parseGenBox.T, right:parseGenBox.T, left:parseGenBox.T, bottom:parseGenBox.T }
+```
+
+Parses 1 to 4 values with `f`, as `{ top, right, bottom, left }`, like the CSS `padding`.
+
+### makeEnumParser
+
+```haxe
+function makeEnumParser(e:Enum<makeEnumParser.T>):() -> makeEnumParser.T
+```
+
+Returns a parser of the constructors of the enum, in CSS casing (`TopLeft` is `top-left`) or lower case.
+
+---

@@ -1,0 +1,10 @@
+{
+	"baseUrl": "https://jonathan-heteau.github.io/heaps-docs/",
+	"repos": [
+		{ "id": "heaps",   "name": "Heaps",   "github": "Jonathan-HETEAU/heaps",   "branch": "ccr-01f70725-tatboj" },
+		{ "id": "hxbit",   "name": "HxBit",   "github": "Jonathan-HETEAU/hxbit",   "branch": "ccr-01f70725-tatboj" },
+		{ "id": "domkit",  "name": "DomKit",  "github": "Jonathan-HETEAU/domkit",  "branch": "ccr-01f70725-tatboj" },
+		{ "id": "hlsteam", "name": "hlsteam", "github": "Jonathan-HETEAU/hlsteam", "branch": "ccr-01f70725-tatboj" },
+		{ "id": "hide",    "name": "Hide",    "github": "Jonathan-HETEAU/hide",    "branch": "ccr-01f70725-tatboj" }
+	]
+}

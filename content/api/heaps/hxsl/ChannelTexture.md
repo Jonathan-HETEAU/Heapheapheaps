@@ -1,0 +1,23 @@
+# hxsl.ChannelTexture
+
+**typedef** · package [`hxsl`](README.md) · source [`hxsl/ChannelTexture.hx`](https://github.com/Jonathan-HETEAU/heaps/blob/ccr-01f70725-tatboj/hxsl/ChannelTexture.hx)
+
+A texture with the channel to read, the value of a `Channel` global.
+
+## Fields
+
+### texture
+
+```haxe
+var texture:TextureChannel
+```
+
+The texture.
+
+### channel
+
+```haxe
+var channel:Channel
+```
+
+The channel to read.

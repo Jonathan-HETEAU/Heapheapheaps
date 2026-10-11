@@ -1,0 +1,26 @@
+# Heaps documentation
+
+> Unified documentation of the Heaps game engine (Haxe) and of its libraries: HxBit (serialization and networking), DomKit (UI components and CSS), hlsteam (Steamworks for HashLink) and Hide (the editor and its `hrt` runtime: prefabs, FX, shader graphs).
+
+The API reference is generated from the doc comments of the sources. Every page is plain Markdown: fetch the `.md` URLs.
+
+## API reference
+
+- [Heaps](https://jonathan-heteau.github.io/heaps-docs/llms/heaps.txt): 974 types. Heaps is a cross-platform 2D/3D game engine written in Haxe (targets: HashLink with SDL/OpenGL or DirectX, and JavaScript/WebGL). Packages: `h2d` (2D scene graph), `h3d` (3D engine, GPU abstraction), `hxd` (resources, input, system, sound), `hxsl` (Haxe shader language).
+- [HxBit](https://jonathan-heteau.github.io/heaps-docs/llms/hxbit.txt): 54 types. HxBit is a binary serialization and network synchronization library for Haxe: classes implementing `hxbit.Serializable` get macro-generated, strictly typed serialization code; `hxbit.NetworkSerializable` objects are replicated by a `hxbit.NetworkHost` (property sync and RPCs). The README explains the concepts: [README.md](https://github.com/Jonathan-HETEAU/hxbit/blob/ccr-01f70725-tatboj/README.md).
+- [DomKit](https://jonathan-heteau.github.io/heaps-docs/llms/domkit.txt): 53 types. DomKit is a strictly typed UI framework for Haxe based on components and CSS: components are declared with an XML-like markup (`static var SRC = <comp>...</comp>`) compiled by macros, and styled with CSS properties checked at compile time. It is used by Heaps (`h2d.domkit`): see https://heaps.io/documentation/domkit.html.
+- [hlsteam](https://jonathan-heteau.github.io/heaps-docs/llms/hlsteam.txt): 75 types. hlsteam is a Haxe wrapper of the Steamworks API for HashLink (native library `steam.hdll`): initialization and callbacks (`steam.Api`), achievements, stats and leaderboards, cloud files, Workshop (UGC), friends, lobbies and matchmaking, networking, game servers, timeline and Steam Input controllers. See the README for the setup.
+- [Hide](https://jonathan-heteau.github.io/heaps-docs/llms/hide.txt): 1069 types. Hide (Heaps IDE) is the editor of the Heaps engine. `hrt` is its runtime, used by the games: prefabs (3D levels, FX, materials, render props...), shader graphs, animation graphs and texture graphs. `hide` is the editor itself (JS/nw.js and HashLink versions): views, property editors, CastleDB editor and editing tools of the prefabs.
+
+## Optional
+
+- [Heaps full text](https://jonathan-heteau.github.io/heaps-docs/llms/heaps-full.txt): all the API pages of Heaps in one file
+- [Heaps file dependencies](https://jonathan-heteau.github.io/heaps-docs/deps/heaps/DEPENDENCIES.md): modules, packages and dependency cycles
+- [HxBit full text](https://jonathan-heteau.github.io/heaps-docs/llms/hxbit-full.txt): all the API pages of HxBit in one file
+- [HxBit file dependencies](https://jonathan-heteau.github.io/heaps-docs/deps/hxbit/DEPENDENCIES.md): modules, packages and dependency cycles
+- [DomKit full text](https://jonathan-heteau.github.io/heaps-docs/llms/domkit-full.txt): all the API pages of DomKit in one file
+- [DomKit file dependencies](https://jonathan-heteau.github.io/heaps-docs/deps/domkit/DEPENDENCIES.md): modules, packages and dependency cycles
+- [hlsteam full text](https://jonathan-heteau.github.io/heaps-docs/llms/hlsteam-full.txt): all the API pages of hlsteam in one file
+- [hlsteam file dependencies](https://jonathan-heteau.github.io/heaps-docs/deps/hlsteam/DEPENDENCIES.md): modules, packages and dependency cycles
+- [Hide full text](https://jonathan-heteau.github.io/heaps-docs/llms/hide-full.txt): all the API pages of Hide in one file
+- [Hide file dependencies](https://jonathan-heteau.github.io/heaps-docs/deps/hide/DEPENDENCIES.md): modules, packages and dependency cycles

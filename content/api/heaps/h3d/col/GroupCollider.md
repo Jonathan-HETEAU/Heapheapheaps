@@ -1,0 +1,90 @@
+# h3d.col.GroupCollider
+
+**class** · package [`h3d.col`](README.md) · module [`h3d.col.Collider`](Collider.md) · source [`h3d/col/Collider.hx`](https://github.com/Jonathan-HETEAU/heaps/blob/ccr-01f70725-tatboj/h3d/col/Collider.hx)
+
+Extends: [`h3d.col.Collider`](Collider.md)
+
+A collider made of several colliders: it is hit if any of them is hit.
+
+## Constructor
+
+### new
+
+```haxe
+function new(colliders:Array<Collider>):Void
+```
+
+Creates the collider.
+
+## Variables
+
+### colliders
+
+```haxe
+var colliders:Array<Collider>
+```
+
+The colliders of the group.
+
+## Methods
+
+### rayIntersection
+
+```haxe
+override function rayIntersection(r:Ray, bestMatch:Bool):Float
+```
+
+Returns the distance along the ray `r` to the first intersection with the shape, or a negative value if there is none.
+If `bestMatch` is `false`, any intersection can be returned (faster).
+
+### contains
+
+```haxe
+override function contains(p:Point):Bool
+```
+
+Tells if the point `p` is inside the shape.
+
+### inFrustum
+
+```haxe
+override function inFrustum(f:Frustum, ?m:h3d.Matrix):Bool
+```
+
+Tells if the shape intersects the frustum `f`, optionally transformed by `localMatrix`.
+
+### inSphere
+
+```haxe
+override function inSphere(s:Sphere):Bool
+```
+
+Tells if the shape intersects the sphere `s`.
+
+### dimension
+
+```haxe
+override function dimension():Float
+```
+
+Returns the largest size of the shape, used to compare collider sizes.
+
+### closestPoint
+
+```haxe
+override function closestPoint(p:Point):Null<Point>
+```
+
+Returns the point of the shape closest to `p`.
+
+### makeDebugObj
+
+```haxe
+override function makeDebugObj():h3d.scene.Object
+```
+
+Creates an object displaying the shape (debug), or `null` if not supported.
+
+## Inherited members
+
+- from [`h3d.col.Collider`](Collider.md): `rayIntersection`, `contains`, `inFrustum`, `inSphere`, `dimension`, `closestPoint`, `makeDebugObj`

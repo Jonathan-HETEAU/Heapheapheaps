@@ -1,0 +1,84 @@
+# hlsteam API
+
+> hlsteam is a Haxe wrapper of the Steamworks API for HashLink (native library `steam.hdll`): initialization and callbacks (`steam.Api`), achievements, stats and leaderboards, cloud files, Workshop (UGC), friends, lobbies and matchmaking, networking, game servers, timeline and Steam Input controllers. See the README for the setup.
+
+Each link points to the Markdown page of a type: signatures, documentation, inheritance and platform availability.
+Full text of all the pages: https://jonathan-heteau.github.io/heaps-docs/llms/hlsteam-full.txt
+
+## steam
+
+- [steam.Api](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/Api.md): The entry point of the Steam API: call `init` at startup, then use the functions of this class (achievements, stats, leaderboards, overlay, ownership) and of the other classes of the `steam` package.
+- [steam.AsyncCall](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/AsyncCall.md): A pending asynchronous Steam call: its callback is called when it completes, unless it is cancelled.
+- [steam.AvatarSize](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/AvatarSize.md): The size of an avatar image.
+- [steam.Callback](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/Callback.md): The callback of an asynchronous Steam call: the result, and `true` if the call failed.
+- [steam.Changed](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/Changed.md): The information of a user that changed (Steamworks `EPersonaChange`), given to the `User.requestInformation` callback.
+- [steam.ChatMessageType](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ChatMessageType.md): The type of a lobby chat message (Steamworks `EChatEntryType`).
+- [steam.Cloud](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/Cloud.md): Steam Cloud: the files of the user stored by Steam and synchronized between computers (Steamworks `ISteamRemoteStorage`).
+- [steam.ComparisonFilter](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ComparisonFilter.md): A comparison of a lobby list filter (Steamworks `ELobbyComparison`): how the lobby value compares to the filter value.
+- [steam.Controller](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/Controller.md): * The Steam Controller API.
+- [steam.ControllerActionSetHandle](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ControllerActionSetHandle.md): A handle of a controller action set.
+- [steam.ControllerAnalogActionData](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ControllerAnalogActionData.md): The state of an analog action.
+- [steam.ControllerAnalogActionHandle](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ControllerAnalogActionHandle.md): A handle of an analog controller action.
+- [steam.ControllerDigitalActionData](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ControllerDigitalActionData.md): The state of a digital action.
+- [steam.ControllerDigitalActionHandle](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ControllerDigitalActionHandle.md): A handle of a digital (button) controller action.
+- [steam.ControllerHandle](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ControllerHandle.md): A handle of a connected controller (Steam Input).
+- [steam.ControllerMotionData](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ControllerMotionData.md): The motion data of a controller.
+- [steam.DistanceFilter](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/DistanceFilter.md): The geographic distance of the lobbies to list (Steamworks `ELobbyDistanceFilter`).
+- [steam.EControllerActionOrigin](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/EControllerActionOrigin.md): A physical input of a controller bound to an action (Steamworks `EControllerActionOrigin`).
+- [steam.EControllerSource](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/EControllerSource.md): A source of input of a controller (Steamworks `EControllerSource`).
+- [steam.EControllerSourceMode](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/EControllerSourceMode.md): How a source of input is used (Steamworks `EControllerSourceMode`).
+- [steam.EGamepadTextInputLineMode](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/EGamepadTextInputLineMode.md): The number of lines of the gamepad text input.
+- [steam.EGamepadTextInputMode](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/EGamepadTextInputMode.md): The kind of text of the gamepad text input.
+- [steam.ESteamControllerLEDFlags](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ESteamControllerLEDFlags.md): The flags of `Controller.setLEDColor`.
+- [steam.ESteamControllerPad](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ESteamControllerPad.md): A trackpad of the Steam Controller, for the haptic pulses.
+- [steam.ETimelineEventClipPriority](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ETimelineEventClipPriority.md): Whether a timeline event is a good candidate for a clip (Steamworks `ETimelineEventClipPriority`).
+- [steam.ETimelineGameMode](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ETimelineGameMode.md): The mode of the game shown in the Steam timeline (Steamworks `ETimelineGameMode`).
+- [steam.EventType](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/EventType.md): The events sent by the native library to `Api` (handled internally).
+- [steam.FriendFlags](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/FriendFlags.md): The relationships to list with `Friends.getFriends` (Steamworks `EFriendFlags`), combined with `|`.
+- [steam.Friends](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/Friends.md): The friends of the user, the overlay dialogs and the rich presence (Steamworks `ISteamFriends`).
+- [steam.GameServer](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/GameServer.md): A dedicated game server registered on Steam (Steamworks `SteamGameServer`), and the list of the servers.
+- [steam.LeaderboardScore](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/LeaderboardScore.md): A leaderboard score.
+- [steam.Lobby](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/Lobby.md): A Steam lobby: a group of users sharing key/value data and chat messages, used to gather players before a game.
+- [steam.LobbyKind](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/LobbyKind.md): The visibility of a lobby (Steamworks `ELobbyType`).
+- [steam.LobbyListFilters](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/LobbyListFilters.md): The filters of `Matchmaking.requestLobbyList`.
+- [steam.Matchmaking](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/Matchmaking.md): The lobbies: creation, search and invitations (Steamworks `ISteamMatchmaking`).
+- [steam.NetworkApi](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/NetworkApi.md): The callbacks of the peer-to-peer networking, given to `Networking.startP2P`.
+- [steam.NetworkSessionData](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/NetworkSessionData.md): The state of a peer-to-peer session with a user (Steamworks `P2PSessionState_t`).
+- [steam.NetworkStatus](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/NetworkStatus.md): The error of a peer-to-peer connection (Steamworks `EP2PSessionError`).
+- [steam.Networking](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/Networking.md): The peer-to-peer networking between users (Steamworks `ISteamNetworking`): packets are sent to a user with `sendP2P`, and received by the `NetworkApi` given to `startP2P`.
+- [steam.OverlayKind](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/OverlayKind.md): A dialog of the Steam overlay, opened with `Friends.activateOverlay`.
+- [steam.OverlayToStoreFlag](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/OverlayToStoreFlag.md): What to do when opening the store page in the overlay (Steamworks `EOverlayToStoreFlag`).
+- [steam.PacketType](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/PacketType.md): How a packet is sent (Steamworks `EP2PSend`).
+- [steam.ServerMode](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ServerMode.md): The authentication mode of a game server (Steamworks `EServerMode`).
+- [steam.SteamNotificationPosition](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/SteamNotificationPosition.md): A corner of the screen where the Steam notifications appear.
+- [steam.Timeline](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/Timeline.md): The Steam timeline of the game recordings (Steamworks `ISteamTimeline`): game modes, tooltips and events marking the important moments.
+- [steam.TimelineEventHandle](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/TimelineEventHandle.md): A handle of a timeline event.
+- [steam.TimelineNative](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/TimelineNative.md): The native functions of `Timeline`.
+- [steam.UID](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/UID.md): A 64 bits Steam identifier (`CSteamID`: user, lobby, game server...) or Workshop file identifier, stored as 8 bytes.
+- [steam.User](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/User.md): A Steam user.
+- [steam.data.AnalogInputMode](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/data/AnalogInputMode.md): The input mode of a stick, pad or gyro action.
+- [steam.data.AnalogTriggerAction](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/data/AnalogTriggerAction.md): An analog trigger action.
+- [steam.data.ButtonAction](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/data/ButtonAction.md): A digital (button) action.
+- [steam.data.ControllerActionSet](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/data/ControllerActionSet.md): An action set: the actions available in a context of the game (menu, gameplay...).
+- [steam.data.ControllerActionType](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/data/ControllerActionType.md): The type of a controller action.
+- [steam.data.ControllerConfig](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/data/ControllerConfig.md): * A strongly-typed data structure representation of the "game_actions_xyz.vdf" * file Steam uses to define controller inputs for your game.
+- [steam.data.ControllerLocalization](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/data/ControllerLocalization.md): The localized texts of a language.
+- [steam.data.Locale](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/data/Locale.md): A language name of the Steam API (as returned by `steam.Api.getCurrentGameLanguage`).
+- [steam.data.ObjNum](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/data/ObjNum.md): An object parsed by `VDF`, with the position after it.
+- [steam.data.StickPadGyroAction](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/data/StickPadGyroAction.md): A stick, pad or gyro action.
+- [steam.data.StrNum](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/data/StrNum.md): A string parsed by `VDF`, with the position after it.
+- [steam.data.VDF](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/data/VDF.md): Parses the Valve Data Format (VDF, used by the Steam configuration files) into an object (port of the vdf library by Anthony Garcia).
+- [steam.helpers.MacroHelper](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/helpers/MacroHelper.md): Macros used by the `steam` package.
+- [steam.helpers.Util](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/helpers/Util.md): String conversion helpers.
+- [steam.ugc.EFileType](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ugc/EFileType.md): The type of a Workshop item (Steamworks `EWorkshopFileType`).
+- [steam.ugc.EItemVisibility](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ugc/EItemVisibility.md): The visibility of a Workshop item (Steamworks `ERemoteStoragePublishedFileVisibility`).
+- [steam.ugc.EMatchingType](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ugc/EMatchingType.md): The kind of Workshop items returned by a query (Steamworks `EUGCMatchingUGCType`).
+- [steam.ugc.EQueryType](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ugc/EQueryType.md): How the items of a Workshop query of all the items are ranked (Steamworks `EUGCQuery`).
+- [steam.ugc.EResult](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ugc/EResult.md): The result of a Steam operation (Steamworks `EResult`).
+- [steam.ugc.EUserList](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ugc/EUserList.md): The list of items of a user, for a Workshop query (Steamworks `EUserUGCList`).
+- [steam.ugc.EUserListSortOrder](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ugc/EUserListSortOrder.md): The order of the items of a user list query (Steamworks `EUserUGCListSortOrder`).
+- [steam.ugc.Item](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ugc/Item.md): A Workshop item (Steamworks `PublishedFileId_t`).
+- [steam.ugc.ItemState](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ugc/ItemState.md): The state of a Workshop item on the computer (Steamworks `EItemState`).
+- [steam.ugc.ItemUpdate](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ugc/ItemUpdate.md): An update of a Workshop item: set the changes, then `submit` it (Steamworks `UGCUpdateHandle_t`).
+- [steam.ugc.Query](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ugc/Query.md): A query of Workshop items (Steamworks `UGCQueryHandle_t`): create it with `list`, `userList` or `details`, set its options, `send` it, read the results with `getResult`, then `close` it.
+- [steam.ugc.Result](https://jonathan-heteau.github.io/heaps-docs/api/hlsteam/steam/ugc/Result.md): A Workshop item returned by a `Query` (Steamworks `SteamUGCDetails_t`).

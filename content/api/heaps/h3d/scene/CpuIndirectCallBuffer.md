@@ -1,0 +1,23 @@
+# h3d.scene.CpuIndirectCallBuffer
+
+**typedef** · package [`h3d.scene`](README.md) · module [`h3d.scene.MeshBatch`](MeshBatch.md) · source [`h3d/scene/MeshBatch.hx`](https://github.com/Jonathan-HETEAU/heaps/blob/ccr-01f70725-tatboj/h3d/scene/MeshBatch.hx)
+
+The indirect draw commands of one material, built on the CPU when using sub meshes.
+
+## Fields
+
+### count
+
+```haxe
+var count:Int
+```
+
+The number of commands.
+
+### bytes
+
+```haxe
+var bytes:Bytes
+```
+
+The indirect draw commands.

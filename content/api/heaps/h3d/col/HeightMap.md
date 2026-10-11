@@ -1,0 +1,94 @@
+# h3d.col.HeightMap
+
+**class** · package [`h3d.col`](README.md) · source [`h3d/col/HeightMap.hx`](https://github.com/Jonathan-HETEAU/heaps/blob/ccr-01f70725-tatboj/h3d/col/HeightMap.hx)
+
+Extends: [`h3d.col.Collider`](Collider.md)
+
+This is an helper class to define a heightmap-based collider.
+In order to use, you need to extends this class and override the getZ method
+in order to return appropriate Z value based on X and Y coordinates.
+
+## Constructor
+
+### new
+
+```haxe
+function new():Void
+```
+
+## Variables
+
+### step
+
+```haxe
+var step:Float
+```
+
+When performing raycast check, tells by how much step we advance.
+If this is too small, raycast check will be too expensive.
+If this is too big, we might step through a hip without noticing.
+Default : 1.0
+
+### precision
+
+```haxe
+var precision:Float
+```
+
+Tells which precision is required for the result.
+We will iterate until we have reach the given precision.
+
+## Methods
+
+### contains
+
+```haxe
+override inline function contains(pt:Point):Bool
+```
+
+Tells if the point `pt` is under the height map surface.
+
+### inFrustum
+
+```haxe
+override function inFrustum(f:Frustum, ?m:h3d.Matrix):Bool
+```
+
+Tells if the shape intersects the frustum `f`, optionally transformed by `localMatrix`.
+
+### inSphere
+
+```haxe
+override function inSphere(s:Sphere):Bool
+```
+
+Tells if the shape intersects the sphere `s`.
+
+### closestPoint
+
+```haxe
+override function closestPoint(sp:Point):Point
+```
+
+Returns the point of the shape closest to `p`.
+
+### rayIntersection
+
+```haxe
+override function rayIntersection(r:Ray, bestMatch:Bool):Float
+```
+
+Returns the distance along the ray `r` to the first intersection with the shape, or a negative value if there is none.
+If `bestMatch` is `false`, any intersection can be returned (faster).
+
+### makeDebugObj
+
+```haxe
+override function makeDebugObj():h3d.scene.Object
+```
+
+Creates an object displaying the shape (debug), or `null` if not supported.
+
+## Inherited members
+
+- from [`h3d.col.Collider`](Collider.md): `rayIntersection`, `contains`, `inFrustum`, `inSphere`, `dimension`, `closestPoint`, `makeDebugObj`
