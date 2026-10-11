@@ -4,7 +4,7 @@
 
 Extends: [`hxd.res.Resource`](../../../heaps/hxd/res/Resource.md)
 
-A prefab file resource (`.prefab`, `.fx`, `.l3d`...): `load()` returns its prefab, cached and reloaded when the file changes. Accessed with `hxd.Res` ([`hxd.res.Prefab`](../../../heaps/hxd/res/Prefab.md)).
+A prefab file resource (`.prefab`, `.fx`, `.l3d`...): `load()` returns its prefab, cached and reloaded when the file changes. Accessed with [`hxd.Res`](../../../heaps/hxd/Res.md) ([`hxd.res.Prefab`](../../../heaps/hxd/res/Prefab.md)).
 
 ## Constructor
 

@@ -26,3 +26,5 @@ pip install markdown==3.7
 python3 tools/build.py all --src src
 python3 -m http.server -d site
 ```
+
+The examples of the guides (`guides/examples/`) are compiled by `tools/check-examples.sh` (needs Haxe and the libraries).

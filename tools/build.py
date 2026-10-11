@@ -181,6 +181,10 @@ def copy_guides():
 	gdir = os.path.join(ROOT, "guides")
 	if not os.path.isdir(gdir):
 		return
+	L = ["# Guides", "", "Hand-written guides, with examples checked against the sources. The [API reference](../README.md) documents every type.", "", "| Guide | |", "|---|---|"]
+	for f, title, summary in guides():
+		L.append("| [%s](%s) | %s |" % (title, f, summary))
+	write(os.path.join(CONTENT, "guides", "README.md"), "\n".join(L) + "\n")
 	for d, _, files in os.walk(gdir):
 		for f in files:
 			p = os.path.relpath(os.path.join(d, f), gdir)
@@ -283,6 +287,7 @@ table{border-collapse:collapse;display:block;overflow:auto;max-width:100%}th,td{
 blockquote{margin:0;padding:0 1em;color:var(--muted);border-left:4px solid var(--border)}
 h1,h2,h3{line-height:1.25}h2{border-bottom:1px solid var(--border);padding-bottom:.3em}
 h3{font-size:1.05em}
+img{max-width:100%;height:auto}
 """
 
 JS = """
@@ -380,6 +385,34 @@ def render():
 	print("rendered %d pages, %d search entries" % (count, len(search)))
 
 
+def check_links():
+	"""Reports the relative links of content/ pointing to missing files. Returns the number of broken links."""
+	broken = []
+	for d, _, files in os.walk(CONTENT):
+		if os.path.relpath(d, CONTENT).split(os.sep)[0] == "html":
+			continue
+		for f in files:
+			if not f.endswith(".md"):
+				continue
+			p = os.path.join(d, f)
+			in_code = False
+			for line in open(p, encoding="utf-8"):
+				if line.lstrip().startswith("```"):
+					in_code = not in_code
+				if in_code:
+					continue
+				for m in LINK_RE.finditer(line):
+					t = m.group(2).split("#")[0]
+					if not t or re.match(r"^[a-z]+:", t):
+						continue
+					if not os.path.exists(os.path.normpath(os.path.join(d, t))):
+						broken.append("%s -> %s" % (os.path.relpath(p, CONTENT), m.group(2)))
+	for b in broken[:30]:
+		print("broken link:", b)
+	print("%d broken links" % len(broken))
+	return len(broken)
+
+
 def copy_dox(src):
 	for repo in REPOS:
 		s = os.path.join(src, repo["id"], "docs", "api", "html")
@@ -395,5 +428,7 @@ if __name__ == "__main__":
 	if cmd in ("assemble", "all"):
 		assemble(src)
 		copy_dox(src)
+		if check_links() and "--strict" in sys.argv:
+			sys.exit(1)
 	if cmd in ("render", "all"):
 		render()

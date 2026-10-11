@@ -98,6 +98,21 @@ Full text of all the pages: https://jonathan-heteau.github.io/heapheapheaps/llms
 - [h2d.col.Segments](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/col/Segments.md): An abstract over the list of `Segment`s.
 - [h2d.col.Triangle](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/col/Triangle.md): A simple triangle collider.
 - [h2d.col.Voronoi](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/col/Voronoi.md): A Steven Fortune's algorithm to compute Voronoi diagram from given set of Points and a bounding box.
+- [h2d.domkit.BitmapComp](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/domkit/BitmapComp.md): The `<bitmap>` domkit component (`h2d.Bitmap`): adds the tile (`src`, with its grid position and flipping) and the size.
+- [h2d.domkit.CustomParser](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/domkit/CustomParser.md): The parser of the CSS values of the h2d components (tiles, fonts, filters, alignments...).
+- [h2d.domkit.DrawableComp](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/domkit/DrawableComp.md): The `<drawable>` domkit component (`h2d.Drawable`): adds the tint color, smoothing, color adjustment and tile wrapping.
+- [h2d.domkit.FlowBg](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/domkit/FlowBg.md): The value of the `background` CSS property of a flow: a tile with its scale grid borders, and its color for transitions.
+- [h2d.domkit.FlowComp](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/domkit/FlowComp.md): The `<flow>` domkit component (`h2d.Flow`): adds the size constraints, background, layout, padding, spacing, alignment and overflow.
+- [h2d.domkit.HtmlTextComp](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/domkit/HtmlTextComp.md): The `<html-text>` domkit component (`h2d.HtmlText`): adds the white space condensing and the tag definitions.
+- [h2d.domkit.InputComp](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/domkit/InputComp.md): The `<input>` domkit component (`h2d.TextInput`): adds the width, the cursor and selection tiles, the edition, background color and multiline options.
+- [h2d.domkit.MaskComp](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/domkit/MaskComp.md): The `<mask>` domkit component (`h2d.Mask`): adds the mask width and height.
+- [h2d.domkit.Object](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/domkit/Object.md): Implement this interface to declare an `h2d.Object` subclass as a domkit component, with its markup and CSS properties.
+- [h2d.domkit.ObjectComp](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/domkit/ObjectComp.md): The `<object>` domkit component (`h2d.Object`): position, scale, rotation, alpha, filter, and the flow properties of the element in its parent flow (margin, align, position, offset, min size, auto size).
+- [h2d.domkit.ScaleGridComp](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/domkit/ScaleGridComp.md): The `<scale-grid>` domkit component (`h2d.ScaleGrid`): adds the borders, their scale and tiling, and the size.
+- [h2d.domkit.SourceFile](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/domkit/SourceFile.md): A loaded CSS source file.
+- [h2d.domkit.Style](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/domkit/Style.md): The CSS style sheets applied to domkit components.
+- [h2d.domkit.TextComp](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/domkit/TextComp.md): The `<text>` domkit component (`h2d.Text`): adds the font, color, spacing, line breaking, alignment and shadow.
+- [h2d.domkit.VideoComp](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/domkit/VideoComp.md): The `<video>` domkit component (`h2d.Video`): adds the video resource (`src`) and looping.
 - [h2d.filter.AbstractMask](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/filter/AbstractMask.md): A base class for filters that utilize separate Objects as a masking object.
 - [h2d.filter.Ambient](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/filter/Ambient.md): A ColorMatrix filer that applies color correction depending on the masked area.
 - [h2d.filter.Bloom](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/h2d/filter/Bloom.md): Applies a bloom effect to the filtered Object.
@@ -598,6 +613,7 @@ Full text of all the pages: https://jonathan-heteau.github.io/heapheapheaps/llms
 - [hxd.Platform](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/hxd/Platform.md): The kind of platform the application runs on (see `System.platform`).
 - [hxd.Precision](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/hxd/Precision.md): The storage precision of a buffer input.
 - [hxd.Rand](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/hxd/Rand.md): `hxd.Rand` is a seeded random number generator, that allows to get always the same results starting from a given seed.
+- [hxd.Res](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/hxd/Res.md): The access point to the resources (the files of the `res` directory).
 - [hxd.Save](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/hxd/Save.md): Save provides simple interface to save and load serialized user data.
 - [hxd.SceneEvents](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/hxd/SceneEvents.md): Dispatches the window input events to the interactives of one or more scenes.
 - [hxd.System](https://jonathan-heteau.github.io/heapheapheaps/api/heaps/hxd/System.md): Platform-specific services: main loop, cursor, clipboard, locale, and screen information.

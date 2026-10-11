@@ -8,7 +8,7 @@ The base class of the prefabs: the serializable nodes of the data edited in Hide
 A prefab is a tree of prefabs: `make()` instanciates it (creating its 2D/3D objects, see `Object3D` and `Object2D`).
 
 The `@:s` fields are serialized (see [`hrt.prefab.Macros`](Macros.md)). A prefab type is registered with
-`public static var _ = Prefab.register("name", MyPrefab);`. Load prefab files with `hxd.Res` (see `Resource`).
+`public static var _ = Prefab.register("name", MyPrefab);`. Load prefab files with [`hxd.Res`](../../../heaps/hxd/Res.md) (see `Resource`).
 
 ## Constructor
 

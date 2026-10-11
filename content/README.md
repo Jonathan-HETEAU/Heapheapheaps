@@ -2,11 +2,17 @@
 
 Unified documentation of the [Heaps](https://heaps.io) game engine and of its libraries, for humans and AI assistants.
 
+## Guides
+
+| Guide | |
+|---|---|
+| [Getting started](guides/01-getting-started.md) | Install Heaps, write a first application, compile it for the browser (WebGL) and for HashLink, and understand its life cycle. |
+
 ## API reference
 
 | Library | Types | Reference | HTML (dox) | Dependencies | Sources |
 |---|---:|---|---|---|---|
-| **Heaps** | 974 | [Markdown](api/heaps/README.md) | [dox](html/heaps/index.html) | [map](deps/heaps/DEPENDENCIES.md) | [GitHub](https://github.com/Jonathan-HETEAU/heaps/tree/ccr-01f70725-tatboj) |
+| **Heaps** | 990 | [Markdown](api/heaps/README.md) | [dox](html/heaps/index.html) | [map](deps/heaps/DEPENDENCIES.md) | [GitHub](https://github.com/Jonathan-HETEAU/heaps/tree/ccr-01f70725-tatboj) |
 | **HxBit** | 54 | [Markdown](api/hxbit/README.md) | [dox](html/hxbit/index.html) | [map](deps/hxbit/DEPENDENCIES.md) | [GitHub](https://github.com/Jonathan-HETEAU/hxbit/tree/ccr-01f70725-tatboj) |
 | **DomKit** | 53 | [Markdown](api/domkit/README.md) | [dox](html/domkit/index.html) | [map](deps/domkit/DEPENDENCIES.md) | [GitHub](https://github.com/Jonathan-HETEAU/domkit/tree/ccr-01f70725-tatboj) |
 | **hlsteam** | 75 | [Markdown](api/hlsteam/README.md) | [dox](html/hlsteam/index.html) | [map](deps/hlsteam/DEPENDENCIES.md) | [GitHub](https://github.com/Jonathan-HETEAU/hlsteam/tree/ccr-01f70725-tatboj) |

@@ -6070,7 +6070,7 @@ The base class of the prefabs: the serializable nodes of the data edited in Hide
 A prefab is a tree of prefabs: `make()` instanciates it (creating its 2D/3D objects, see `Object3D` and `Object2D`).
 
 The `@:s` fields are serialized (see [`hrt.prefab.Macros`](Macros.md)). A prefab type is registered with
-`public static var _ = Prefab.register("name", MyPrefab);`. Load prefab files with `hxd.Res` (see `Resource`).
+`public static var _ = Prefab.register("name", MyPrefab);`. Load prefab files with [`hxd.Res`](../../../heaps/hxd/Res.md) (see `Resource`).
 
 ## Constructor
 
@@ -7282,7 +7282,7 @@ The prefab.
 
 Extends: [`hxd.res.Resource`](../../../heaps/hxd/res/Resource.md)
 
-A prefab file resource (`.prefab`, `.fx`, `.l3d`...): `load()` returns its prefab, cached and reloaded when the file changes. Accessed with `hxd.Res` ([`hxd.res.Prefab`](../../../heaps/hxd/res/Prefab.md)).
+A prefab file resource (`.prefab`, `.fx`, `.l3d`...): `load()` returns its prefab, cached and reloaded when the file changes. Accessed with [`hxd.Res`](../../../heaps/hxd/Res.md) ([`hxd.res.Prefab`](../../../heaps/hxd/res/Prefab.md)).
 
 ## Constructor
 
@@ -47395,7 +47395,7 @@ Metadata copied from forwarded members (e.g. ":p").
 **interface** · package [`hrt.tools`](README.md) · module [`hrt.tools.Macros`](Macros.md) · source [`hrt/tools/Macros.hx`](https://github.com/Jonathan-HETEAU/hide/blob/ccr-01f70725-tatboj/hrt/tools/Macros.hx)
 
 Runs `Macros.forward` on implementing classes. Autobuild macros run before `@:build` ones, and interfaces
-listed last run first : list it after other autobuilding interfaces (e.g. `h2d.domkit.Object`) so they see forwarded members.
+listed last run first : list it after other autobuilding interfaces (e.g. [`h2d.domkit.Object`](../../../heaps/h2d/domkit/Object.md)) so they see forwarded members.
 
 ---
 

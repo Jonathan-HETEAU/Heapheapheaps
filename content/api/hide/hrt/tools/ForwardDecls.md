@@ -3,4 +3,4 @@
 **interface** · package [`hrt.tools`](README.md) · module [`hrt.tools.Macros`](Macros.md) · source [`hrt/tools/Macros.hx`](https://github.com/Jonathan-HETEAU/hide/blob/ccr-01f70725-tatboj/hrt/tools/Macros.hx)
 
 Runs `Macros.forward` on implementing classes. Autobuild macros run before `@:build` ones, and interfaces
-listed last run first : list it after other autobuilding interfaces (e.g. `h2d.domkit.Object`) so they see forwarded members.
+listed last run first : list it after other autobuilding interfaces (e.g. [`h2d.domkit.Object`](../../../heaps/h2d/domkit/Object.md)) so they see forwarded members.
