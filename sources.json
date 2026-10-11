@@ -1,5 +1,5 @@
 {
-	"baseUrl": "https://jonathan-heteau.github.io/heaps-docs/",
+	"baseUrl": "https://jonathan-heteau.github.io/heapheapheaps/",
 	"repos": [
 		{ "id": "heaps",   "name": "Heaps",   "github": "Jonathan-HETEAU/heaps",   "branch": "ccr-01f70725-tatboj" },
 		{ "id": "hxbit",   "name": "HxBit",   "github": "Jonathan-HETEAU/hxbit",   "branch": "ccr-01f70725-tatboj" },

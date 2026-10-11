@@ -3,60 +3,60 @@
 > DomKit is a strictly typed UI framework for Haxe based on components and CSS: components are declared with an XML-like markup (`static var SRC = <comp>...</comp>`) compiled by macros, and styled with CSS properties checked at compile time. It is used by Heaps (`h2d.domkit`): see https://heaps.io/documentation/domkit.html.
 
 Each link points to the Markdown page of a type: signatures, documentation, inheritance and platform availability.
-Full text of all the pages: https://jonathan-heteau.github.io/heaps-docs/llms/domkit-full.txt
+Full text of all the pages: https://jonathan-heteau.github.io/heapheapheaps/llms/domkit-full.txt
 
 ## domkit
 
-- [domkit.Argument](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/Argument.md): A node argument (`<node(arg1, arg2)>`), passed to the component constructor.
-- [domkit.AttributeValue](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/AttributeValue.md): The value of an attribute or argument.
-- [domkit.BezierCurve](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/BezierCurve.md): A cubic bezier easing curve, like CSS `cubic-bezier(c1x, c1y, c2x, c2y)`.
-- [domkit.BytesCell](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/BytesCell.md): An entry of a `BytesMap`.
-- [domkit.BytesMap](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/BytesMap.md): A map with bytes keys, used by the style cache on HashLink.
-- [domkit.Checker](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/Checker.md): Type checks the markup and the CSS of components at runtime (for the interpreted components of `Interp`, or in editors such as Hide), from the types of the Heaps components (`h2d.domkit.InitComponents.build()` classes).
-- [domkit.CodeExpr](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/CodeExpr.md): Haxe code in the markup: an expression in macros, the source code otherwise.
-- [domkit.Component](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/Component.md): A component: the name used in the markup and in CSS (`button`, `flow`...), how to create its objects of type `T`, and how it handles the CSS properties.
-- [domkit.ComponentDecl](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/ComponentDecl.md): Declares the component of another class `T`: a class implementing `ComponentDecl<T>` (with `domkit.Object`) defines the properties of `T`, for classes that can't be modified.
-- [domkit.CssClass](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/CssClass.md): A CSS selector part: component, class names, id and pseudo classes, with its parent selector.
-- [domkit.CssData](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/CssData.md): The rules of a `CssStyle`, sorted by priority, and the cache of the rules matching a set of components.
-- [domkit.CssOp](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/CssOp.md): An arithmetic operator in a CSS value.
-- [domkit.CssParser](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/CssParser.md): Parses CSS style sheets and values, with the DomKit extensions: nested rules (`&`, `>`), variables (`@name : value;`), mixins (`.name(args) { }` used as `.name(values);`), arithmetic, and `//` comments.
-- [domkit.CssRelation](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/CssRelation.md): The relation between a selector and its parent selector.
-- [domkit.CssRule](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/CssRule.md): A property set by a CSS rule, with its position in the source.
-- [domkit.CssSheet](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/CssSheet.md): A parsed style sheet.
-- [domkit.CssSheetElement](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/CssSheetElement.md): A CSS rule: its selectors, properties, transitions and nested rules.
-- [domkit.CssStyle](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/CssStyle.md): A style: CSS rules applied to objects with `Properties.applyStyle`, and the running transitions, updated with `updateTime`.
-- [domkit.CssTransition](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/CssTransition.md): A running transition of a property of an object.
-- [domkit.CssValue](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/CssValue.md): A parsed CSS value.
-- [domkit.Curve](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/Curve.md): An easing curve: linear.
-- [domkit.DMLChecker](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/DMLChecker.md): Parses and type checks the markup of a component (DML), and checks CSS rules against the components.
-- [domkit.Error](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/Error.md): An error while parsing markup or CSS, with its position in the source.
-- [domkit.FastBytes](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/FastBytes.md): Bytes used for the component bit sets of the style cache: `hl.Bytes` on HashLink, `haxe.io.Bytes` elsewhere.
-- [domkit.HSL](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/HSL.md): A color in the HSL color space, used by the `darken`, `lighten`, `saturate` and `desaturate` color functions.
-- [domkit.Identifier](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/Identifier.md): A string (class name or id) converted to a unique integer, for fast comparisons.
-- [domkit.Interp](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/Interp.md): Runs the markup of components with hscript instead of compiled code, to reload it while the program runs (hot reload).
-- [domkit.InvalidProperty](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/InvalidProperty.md): Thrown by a property parser when the CSS value is invalid.
-- [domkit.MToken](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/MToken.md): The states of the markup parser.
-- [domkit.Macros](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/Macros.md): The macros of DomKit: build the `domkit.Object` classes (`buildObject`), and the configuration functions to call from an initialization macro (`--macro`).
-- [domkit.Markup](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/Markup.md): A node of the markup tree.
-- [domkit.MarkupKind](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/MarkupKind.md): The kind of a markup node.
-- [domkit.MarkupParser](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/MarkupParser.md): Parses the XML-like markup of the components (`static var SRC = <comp>...</comp>`).
-- [domkit.MetaComponent](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/MetaComponent.md): The component of a `domkit.Object` class at compile time: reads its `@:p` properties and constructor, and generates its runtime `Component`.
-- [domkit.MetaError](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/MetaError.md): An error of the component macros.
-- [domkit.Model](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/Model.md): The base type of the objects of the UI, `T` being the base class of the components: implement it on your base class (with Heaps, `h2d.Object` is used).
-- [domkit.Object](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/Object.md): A class whose instances are built by DomKit: its `@:p` fields become CSS properties of its component, and its `static var SRC = <comp>...</comp>` markup is compiled into an `initComponent()` method creating the childr...
-- [domkit.ParserMode](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/ParserMode.md): How the value of a `@:p` property is parsed.
-- [domkit.PropParser](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/PropParser.md): How a property value is parsed, for the type checking of CSS values.
-- [domkit.Properties](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/Properties.md): The DomKit state of an object (its `dom` field): component, id, classes, pseudo class states (`hover`, `active`...) and the CSS values set on it.
-- [domkit.Property](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/Property.md): A CSS property name, registered once with a unique id (see `get`).
-- [domkit.PropertyHandler](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/PropertyHandler.md): How a component handles a CSS property: parses its value, applies it to the objects of type `O`, and interpolates it for the transitions.
-- [domkit.PseudoClass](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/PseudoClass.md): The pseudo classes of a CSS selector, as bit flags.
-- [domkit.Rule](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/Rule.md): A CSS rule for one selector, with its priority.
-- [domkit.RuleStyle](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/RuleStyle.md): A property set by a `Rule`.
-- [domkit.RuleTransition](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/RuleTransition.md): A transition set by a `Rule`.
-- [domkit.ScriptInterp](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/ScriptInterp.md): The hscript interpreter running the code of an interpreted component.
-- [domkit.SetAttributeResult](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/SetAttributeResult.md): The result of `Properties.setAttribute`.
-- [domkit.Token](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/Token.md): A token of the CSS lexer.
-- [domkit.Transition](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/Transition.md): A transition of a property, declared with the `transition` CSS property.
-- [domkit.TypedComponent](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/TypedComponent.md): A component, with the types of its class, properties and constructor arguments.
-- [domkit.TypedProperty](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/TypedProperty.md): A property of a component, with its type.
-- [domkit.ValueParser](https://jonathan-heteau.github.io/heaps-docs/api/domkit/domkit/ValueParser.md): Converts CSS values to property values: the `parseXxx` methods are used by the `@:p(xxx)` fields (`@:p(color)` uses `parseColor`).
+- [domkit.Argument](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/Argument.md): A node argument (`<node(arg1, arg2)>`), passed to the component constructor.
+- [domkit.AttributeValue](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/AttributeValue.md): The value of an attribute or argument.
+- [domkit.BezierCurve](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/BezierCurve.md): A cubic bezier easing curve, like CSS `cubic-bezier(c1x, c1y, c2x, c2y)`.
+- [domkit.BytesCell](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/BytesCell.md): An entry of a `BytesMap`.
+- [domkit.BytesMap](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/BytesMap.md): A map with bytes keys, used by the style cache on HashLink.
+- [domkit.Checker](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/Checker.md): Type checks the markup and the CSS of components at runtime (for the interpreted components of `Interp`, or in editors such as Hide), from the types of the Heaps components (`h2d.domkit.InitComponents.build()` classes).
+- [domkit.CodeExpr](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/CodeExpr.md): Haxe code in the markup: an expression in macros, the source code otherwise.
+- [domkit.Component](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/Component.md): A component: the name used in the markup and in CSS (`button`, `flow`...), how to create its objects of type `T`, and how it handles the CSS properties.
+- [domkit.ComponentDecl](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/ComponentDecl.md): Declares the component of another class `T`: a class implementing `ComponentDecl<T>` (with `domkit.Object`) defines the properties of `T`, for classes that can't be modified.
+- [domkit.CssClass](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/CssClass.md): A CSS selector part: component, class names, id and pseudo classes, with its parent selector.
+- [domkit.CssData](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/CssData.md): The rules of a `CssStyle`, sorted by priority, and the cache of the rules matching a set of components.
+- [domkit.CssOp](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/CssOp.md): An arithmetic operator in a CSS value.
+- [domkit.CssParser](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/CssParser.md): Parses CSS style sheets and values, with the DomKit extensions: nested rules (`&`, `>`), variables (`@name : value;`), mixins (`.name(args) { }` used as `.name(values);`), arithmetic, and `//` comments.
+- [domkit.CssRelation](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/CssRelation.md): The relation between a selector and its parent selector.
+- [domkit.CssRule](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/CssRule.md): A property set by a CSS rule, with its position in the source.
+- [domkit.CssSheet](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/CssSheet.md): A parsed style sheet.
+- [domkit.CssSheetElement](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/CssSheetElement.md): A CSS rule: its selectors, properties, transitions and nested rules.
+- [domkit.CssStyle](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/CssStyle.md): A style: CSS rules applied to objects with `Properties.applyStyle`, and the running transitions, updated with `updateTime`.
+- [domkit.CssTransition](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/CssTransition.md): A running transition of a property of an object.
+- [domkit.CssValue](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/CssValue.md): A parsed CSS value.
+- [domkit.Curve](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/Curve.md): An easing curve: linear.
+- [domkit.DMLChecker](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/DMLChecker.md): Parses and type checks the markup of a component (DML), and checks CSS rules against the components.
+- [domkit.Error](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/Error.md): An error while parsing markup or CSS, with its position in the source.
+- [domkit.FastBytes](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/FastBytes.md): Bytes used for the component bit sets of the style cache: `hl.Bytes` on HashLink, `haxe.io.Bytes` elsewhere.
+- [domkit.HSL](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/HSL.md): A color in the HSL color space, used by the `darken`, `lighten`, `saturate` and `desaturate` color functions.
+- [domkit.Identifier](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/Identifier.md): A string (class name or id) converted to a unique integer, for fast comparisons.
+- [domkit.Interp](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/Interp.md): Runs the markup of components with hscript instead of compiled code, to reload it while the program runs (hot reload).
+- [domkit.InvalidProperty](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/InvalidProperty.md): Thrown by a property parser when the CSS value is invalid.
+- [domkit.MToken](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/MToken.md): The states of the markup parser.
+- [domkit.Macros](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/Macros.md): The macros of DomKit: build the `domkit.Object` classes (`buildObject`), and the configuration functions to call from an initialization macro (`--macro`).
+- [domkit.Markup](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/Markup.md): A node of the markup tree.
+- [domkit.MarkupKind](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/MarkupKind.md): The kind of a markup node.
+- [domkit.MarkupParser](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/MarkupParser.md): Parses the XML-like markup of the components (`static var SRC = <comp>...</comp>`).
+- [domkit.MetaComponent](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/MetaComponent.md): The component of a `domkit.Object` class at compile time: reads its `@:p` properties and constructor, and generates its runtime `Component`.
+- [domkit.MetaError](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/MetaError.md): An error of the component macros.
+- [domkit.Model](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/Model.md): The base type of the objects of the UI, `T` being the base class of the components: implement it on your base class (with Heaps, `h2d.Object` is used).
+- [domkit.Object](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/Object.md): A class whose instances are built by DomKit: its `@:p` fields become CSS properties of its component, and its `static var SRC = <comp>...</comp>` markup is compiled into an `initComponent()` method creating the childr...
+- [domkit.ParserMode](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/ParserMode.md): How the value of a `@:p` property is parsed.
+- [domkit.PropParser](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/PropParser.md): How a property value is parsed, for the type checking of CSS values.
+- [domkit.Properties](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/Properties.md): The DomKit state of an object (its `dom` field): component, id, classes, pseudo class states (`hover`, `active`...) and the CSS values set on it.
+- [domkit.Property](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/Property.md): A CSS property name, registered once with a unique id (see `get`).
+- [domkit.PropertyHandler](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/PropertyHandler.md): How a component handles a CSS property: parses its value, applies it to the objects of type `O`, and interpolates it for the transitions.
+- [domkit.PseudoClass](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/PseudoClass.md): The pseudo classes of a CSS selector, as bit flags.
+- [domkit.Rule](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/Rule.md): A CSS rule for one selector, with its priority.
+- [domkit.RuleStyle](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/RuleStyle.md): A property set by a `Rule`.
+- [domkit.RuleTransition](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/RuleTransition.md): A transition set by a `Rule`.
+- [domkit.ScriptInterp](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/ScriptInterp.md): The hscript interpreter running the code of an interpreted component.
+- [domkit.SetAttributeResult](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/SetAttributeResult.md): The result of `Properties.setAttribute`.
+- [domkit.Token](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/Token.md): A token of the CSS lexer.
+- [domkit.Transition](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/Transition.md): A transition of a property, declared with the `transition` CSS property.
+- [domkit.TypedComponent](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/TypedComponent.md): A component, with the types of its class, properties and constructor arguments.
+- [domkit.TypedProperty](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/TypedProperty.md): A property of a component, with its type.
+- [domkit.ValueParser](https://jonathan-heteau.github.io/heapheapheaps/api/domkit/domkit/ValueParser.md): Converts CSS values to property values: the `parseXxx` methods are used by the `@:p(xxx)` fields (`@:p(color)` uses `parseColor`).

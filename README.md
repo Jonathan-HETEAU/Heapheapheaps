@@ -1,8 +1,8 @@
-# Heaps documentation portal
+# Heapheapheaps — Heaps documentation portal
 
 Unified documentation of the [Heaps](https://heaps.io) game engine and of its libraries (HxBit, DomKit, hlsteam, Hide), for humans and AI assistants.
 
-- Site: https://jonathan-heteau.github.io/heaps-docs/
+- Site: https://jonathan-heteau.github.io/heapheapheaps/
 - Start page (Markdown): [content/README.md](content/README.md)
 - For AI assistants: [content/llms.txt](content/llms.txt) ([llmstxt.org](https://llmstxt.org) format)
 
