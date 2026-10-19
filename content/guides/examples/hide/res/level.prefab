@@ -1,0 +1,38 @@
+{
+	"type": "prefab",
+	"children": [
+		{
+			"type": "light",
+			"name": "sun",
+			"rotationY": 50,
+			"rotationZ": 30,
+			"kind": "Directional",
+			"power": 0.8
+		},
+		{
+			"type": "box",
+			"name": "ground",
+			"z": -1,
+			"scaleX": 12,
+			"scaleY": 12,
+			"scaleZ": 0.2
+		},
+		{
+			"type": "spinner",
+			"name": "big",
+			"z": 0.5,
+			"scaleX": 2,
+			"scaleY": 2,
+			"scaleZ": 2,
+			"speed": 0.25
+		},
+		{
+			"type": "spinner",
+			"name": "small",
+			"x": 3.5,
+			"y": 2,
+			"speed": 1,
+			"color": 3381759
+		}
+	]
+}

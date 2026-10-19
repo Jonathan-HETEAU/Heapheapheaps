@@ -7,6 +7,7 @@ The API reference is generated from the doc comments of the sources. Every page 
 ## Guides
 
 - [Getting started](https://jonathan-heteau.github.io/heapheapheaps/guides/01-getting-started.md): Install Heaps, write a first application, compile it for the browser (WebGL) and for HashLink, and understand its life cycle.
+- [Using Hide, the Heaps editor](https://jonathan-heteau.github.io/heapheapheaps/guides/02-hide.md): Build and run Hide, make a level with it, load the level in a Heaps game, and add your own prefab types to the editor.
 
 ## API reference
 

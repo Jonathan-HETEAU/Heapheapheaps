@@ -1,0 +1,9 @@
+-cp src
+-lib heaps
+-lib hide
+-lib hlsdl
+-main Main
+# The Hide prefab types used by the levels: each one registers itself when compiled.
+hrt.prefab.Light
+hrt.prefab.l3d.Box
+-hl main.hl
