@@ -1,6 +1,7 @@
 site/
-src/
+/src/
 content/html/
 __pycache__/
 guides/examples/*/main.js
 guides/examples/*/main.hl
+guides/examples/*/hide-plugin.js

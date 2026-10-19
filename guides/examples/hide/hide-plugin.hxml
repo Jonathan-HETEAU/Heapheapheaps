@@ -1,0 +1,10 @@
+# The game prefabs, compiled for the editor: res/props.json loads hide-plugin.js.
+-cp src
+-lib hide
+-lib hxnodejs
+-lib domkit
+-lib castle
+--macro hide.Plugin.init()
+-js hide-plugin.js
+-dce no
+HideImports
