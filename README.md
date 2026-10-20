@@ -11,7 +11,7 @@ Unified documentation of the [Heaps](https://heaps.io) game engine and of its li
 | Path | Content |
 |---|---|
 | `sources.json` | The documented repositories (GitHub repository and branch) |
-| `guides/` | Hand-written guides (Markdown) |
+| `guides/` | Hand-written guides (Markdown); `guides/<lang>/` holds their translations, under the same file names |
 | `content/` | Generated Markdown: API reference per library (`api/<lib>/`), dependency maps (`deps/<lib>/`), `llms.txt` indexes (`llms/`) |
 | `tools/build.py` | Assembles `content/` from the repositories and renders the HTML site in `site/` |
 | `.github/workflows/pages.yml` | Rebuilds and publishes the site on push and every night |

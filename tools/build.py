@@ -170,11 +170,30 @@ def guides():
 	for f in sorted(os.listdir(gdir)) if os.path.isdir(gdir) else []:
 		if not f.endswith(".md") or f == "README.md":
 			continue
-		text = open(os.path.join(gdir, f), encoding="utf-8").read()
-		title = next((l[2:].strip() for l in text.split("\n") if l.startswith("# ")), f[:-3])
-		summary = next((l[2:].strip() for l in text.split("\n") if l.startswith("> ")), "")
-		res.append((f, title, summary))
+		res.append((f,) + guide_info(os.path.join(gdir, f)))
 	return res
+
+
+def guide_info(path):
+	"""(title, summary) of a guide: its "# " and "> " lines."""
+	text = open(path, encoding="utf-8").read()
+	title = next((l[2:].strip() for l in text.split("\n") if l.startswith("# ")), os.path.basename(path)[:-3])
+	summary = next((l[2:].strip() for l in text.split("\n") if l.startswith("> ")), "")
+	return title, summary
+
+
+def translations(f):
+	"""Languages of the translations of the guide f: guides/<lang>/f."""
+	gdir = os.path.join(ROOT, "guides")
+	return [d for d in sorted(os.listdir(gdir)) if os.path.isfile(os.path.join(gdir, d, f))]
+
+
+LANGUAGES = {"fr": "Français"}
+
+
+def translation_links(f, base=""):
+	"""Links to the translations of the guide f: " · [Français](fr/f)" for each one."""
+	return "".join(" · [%s](%s%s/%s)" % (LANGUAGES.get(l, l), base, l, f) for l in translations(f))
 
 
 def copy_guides():
@@ -183,7 +202,7 @@ def copy_guides():
 		return
 	L = ["# Guides", "", "Hand-written guides, with examples checked against the sources. The [API reference](../README.md) documents every type.", "", "| Guide | |", "|---|---|"]
 	for f, title, summary in guides():
-		L.append("| [%s](%s) | %s |" % (title, f, summary))
+		L.append("| [%s](%s) | %s%s |" % (title, f, summary, translation_links(f)))
 	write(os.path.join(CONTENT, "guides", "README.md"), "\n".join(L) + "\n")
 	for d, _, files in os.walk(gdir):
 		for f in files:
@@ -245,7 +264,7 @@ def write_home(src, stats):
 	if g:
 		L += ["## Guides", "", "| Guide | |", "|---|---|"]
 		for f, title, summary in g:
-			L.append("| [%s](guides/%s) | %s |" % (title, f, summary))
+			L.append("| [%s](guides/%s) | %s%s |" % (title, f, summary, translation_links(f, "guides/")))
 		L.append("")
 	L += ["## API reference", "", "| Library | Types | Reference | HTML (dox) | Dependencies | Sources |", "|---|---:|---|---|---|---|"]
 	for repo, n in stats:
@@ -352,6 +371,9 @@ def render():
 				search.append([m.group(1), (m.group(3) or "")[:160], url[:-3] + ".html" if url.endswith(".md") else url])
 	for f, title, summary in guides():
 		search.append(["Guide: " + title, summary[:160], "guides/" + f[:-3] + ".html"])
+		for lang in translations(f):
+			title, summary = guide_info(os.path.join(ROOT, "guides", lang, f))
+			search.append(["Guide (%s): %s" % (lang, title), summary[:160], "guides/%s/%s.html" % (lang, f[:-3])])
 	write(os.path.join(SITE, "search.json"), json.dumps(search, separators=(",", ":")))
 	md = markdown.Markdown(extensions=["fenced_code", "tables", "toc", "sane_lists"])
 	count = 0
