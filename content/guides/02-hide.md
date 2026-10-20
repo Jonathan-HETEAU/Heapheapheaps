@@ -2,6 +2,8 @@
 
 > Build and run Hide, make a level with it, load the level in a Heaps game, and add your own prefab types to the editor.
 
+*[Version française](fr/02-hide.md)*
+
 ![The level of this guide, loaded in the game](img/hide-level.png)
 
 The example of this guide is in [`examples/hide`](https://github.com/Jonathan-HETEAU/Heapheapheaps/tree/main/guides/examples/hide): a small project with its `res/` folder, a level made of Hide prefabs, a prefab type of the game (`Spinner`) and the game that loads the level.

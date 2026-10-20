@@ -7,7 +7,7 @@ Unified documentation of the [Heaps](https://heaps.io) game engine and of its li
 | Guide | |
 |---|---|
 | [Getting started](guides/01-getting-started.md) | Install Heaps, write a first application, compile it for the browser (WebGL) and for HashLink, and understand its life cycle. |
-| [Using Hide, the Heaps editor](guides/02-hide.md) | Build and run Hide, make a level with it, load the level in a Heaps game, and add your own prefab types to the editor. |
+| [Using Hide, the Heaps editor](guides/02-hide.md) | Build and run Hide, make a level with it, load the level in a Heaps game, and add your own prefab types to the editor. · [Français](guides/fr/02-hide.md) |
 
 ## API reference
 
