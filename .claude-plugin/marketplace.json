@@ -1,0 +1,14 @@
+{
+	"name": "heapheapheaps",
+	"owner": { "name": "Jonathan HETEAU" },
+	"description": "Claude Code skills for making games with Heaps (Haxe) and its libraries: HxBit, DomKit, hlsteam and Hide.",
+	"plugins": [
+		{
+			"name": "heaps",
+			"source": "./plugins/heaps",
+			"description": "Set up, write, test and document Heaps games: toolchain and new projects, API lookup, game structure, DomKit UI, Hide, HxBit, hlsteam, headless browser tests.",
+			"category": "development",
+			"tags": ["haxe", "heaps", "gamedev", "hashlink"]
+		}
+	]
+}

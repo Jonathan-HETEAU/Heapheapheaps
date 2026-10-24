@@ -1,0 +1,20 @@
+{
+	"name": "heaps",
+	"version": "1.0.0",
+	"description": "Skills for making games with the Heaps engine (Haxe): toolchain and new projects, API lookup, game structure and best practices, DomKit UI, the Hide editor, HxBit saves and networking, Steam with hlsteam, and tests in a headless browser.",
+	"author": {
+		"name": "Jonathan HETEAU"
+	},
+	"homepage": "https://github.com/Jonathan-HETEAU/Heapheapheaps",
+	"repository": "https://github.com/Jonathan-HETEAU/Heapheapheaps",
+	"keywords": [
+		"haxe",
+		"heaps",
+		"hashlink",
+		"gamedev",
+		"domkit",
+		"hxbit",
+		"hide",
+		"steam"
+	]
+}
